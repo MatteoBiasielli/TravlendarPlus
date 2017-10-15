@@ -17,13 +17,37 @@ assuming that activities' duration can be just an integer number of hours.
 */
 
 open util/integer
+abstract sig RegistrationState{}
+/*we represented the only useful registration states.
+Not registered state and deleted state were not useful in our Alloy representation*/
+one sig EMAIL_NOT_CONFIRMED extends RegistrationState{}
+one sig REGULAR extends RegistrationState{}
+one sig SUSPENDED extends RegistrationState{}
+
+/*This represents the actual day and time.
+It is useful to determine and assign states to activities*/
+one sig SystemTime{
+	day: one Int,
+	time:one Int
+}{
+	time>=0 && time<24 && day>=0
+}
+abstract sig EventState{}
+/*As for the registration states, we represented all and 
+only the states that are useful to our representation*/
+one sig ON_GOING extends EventState{}
+one sig NOT_STARTED extends EventState{}
+one sig TERMINATED extends EventState{}
+
 sig User{
-	calendar: one Calendar
+	calendar: one Calendar,
+	state: one RegistrationState
 }
 sig Calendar{
 	activities: set Activity
 }
 sig Activity{
+	state: one EventState,
 	startDay: one Int,
 	endDay: one Int,
 	startTime: one Int,
@@ -31,11 +55,23 @@ sig Activity{
 }{
 	/* The Activity start time must be prior to the end time. 
 	Same with the start day and end day*/
+
 	startDay>=0 && endDay>=startDay && 
 	(startTime<endTime || endDay>startDay) &&
 	startTime>=0 && startTime<24 && endTime>=0 && endTime<24
 }
-
+/*definition of the state of an activity*/
+fact activityState{
+	all a:Activity|((a.state=NOT_STARTED <=>(SystemTime.day<a.startDay || SystemTime.day=a.startDay && SystemTime.time<a.startTime))
+		&&
+	(a.state=TERMINATED <=>( SystemTime.day>a.endDay || SystemTime.day=a.endDay && SystemTime.time>=a.endTime))
+		&&
+	(a.state=ON_GOING <=> (a.state!=TERMINATED && a.state!=NOT_STARTED)))
+}
+/* users can't have activities in their calendar if their email has not been confirmed*/
+fact emptyCalendarIfNotConfirmed{
+	all u:User | #u.calendar.activities=0 <=> u.state=EMAIL_NOT_CONFIRMED
+}
 /*The relationshp between users and calendars is one-to-one */
 fact notSharedCalendars{
 	all disj u1,u2: User | u1.calendar!=u2.calendar
@@ -47,33 +83,32 @@ fact notSharedActivities{
 
 
 /*all the activities are associated to a calendar*/
-/*
+
 fact noActivitiesNotAssociated{
 	all a1: Activity| some c1:Calendar| a1 in c1.activities
 }
-*/
+
 /*all the calendars are associated to a user*/
-/*
+
 fact noCalendarsNotAssociated{
 	all c1: Calendar| some u1:User| c1 in u1.calendar
 }
-*
+
 
 
 /*in a certain calendar there are no overlapping activities, since a user can't be physically in two different activities at the same time.
 This happens when, comparing all the possible couples of activities, the end day of one comes before the start day of the other one.
 If the two activities are scheduled on the same day, the end time of one must come before the start time of the other one*/
 fact noOverlappingActivitiesOnAUser{
-	all c:Calendar| all disj a1, a2:c.activities | (a1.endDay=a2.startDay && a1.endTime<=a2.startTime || a2.endTime<=a1.startTime)
+	all c:Calendar| all disj a1, a2:c.activities | (a1.endDay=a2.startDay && (a1.endTime<=a2.startTime || a2.endTime<=a1.startTime))
 																	 ||  a1.endDay<a2.startDay || a2.endDay<a1.startDay
 }
 
 pred show{
-	some c:Calendar,a:Activity | deleteActivityFromCalendar[c,a]
 	#User=2
 	#Activity=6
 }
-//run show for 6 but 6 Int
+run show for 6 but 6 Int
 
 /*delete an activity from a calendar*/
 pred deleteActivityFromCalendar[c:Calendar, a:Activity]{
@@ -90,9 +125,9 @@ pred addActivityToCalendar[c:Calendar, a:Activity]{
 	themselves and when its activities (speaking about objects) are not contained into other calendars.
 */
 pred calendarIsConsistent[c:Calendar]{
-	 (all disj a1, a2:c.activities | (a1.endDay=a2.startDay && a1.endTime<=a2.startTime || a2.endTime<=a1.startTime)
+	 (all disj a1, a2:c.activities | (a1.endDay=a2.startDay &&( a1.endTime<=a2.startTime || a2.endTime<=a1.startTime))
 																	 ||  a1.endDay<a2.startDay || a2.endDay<a1.startDay)
-	&&
+		&&
 	(all c1:Calendar| c.activities & c1.activities!=none => c=c1)
 }
 /* Due to the facts expressed above, the only possible worlds will be the

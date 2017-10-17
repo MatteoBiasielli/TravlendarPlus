@@ -146,8 +146,8 @@ fact travelOptionsSatisfyPreferences{
 /*The travel option chosen for each activity must be the best one. 
 Among all the options that satisfy users' preferences, the best option is the one that takes less time*/
 fact bestTravelOption{
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// SEE CAR AVAILABLE AND BIKE AVAILABLE
+		all u:User|all a:u.calendar.activities| not( some t:TravelOption |
+			 travelSatisfyPreferences[u,a,t] && t.totalTime<a.travel.totalTime)
 }
 
 /*Users' email addresses are unique */
@@ -223,6 +223,18 @@ pred show{
 	#Place=6
 }
 run show for 6 but 6 Int
+
+/*Travel option satisfy preferences for a certain activity and a certain user*/
+pred travelSatisfyPreferences[u: User, a:Activity, t:TravelOption]{
+		t.startPlace=u.position && t.endPlace=a.place &&
+		t.walkingTime<=u.preferences.maxWalkingTime &&
+		t.bikeTime<=u.preferences.maxBikeTime &&
+		t.carTime<=u.preferences.maxCarTime &&
+		t.publicTransportTime<=u.preferences.maxPublicTransportTime &&
+		t.travelCost<=u.preferences.maxTravelCost &&
+		(u.preferences.carAvailable=FALSE implies t.carTime=0) &&
+		(u.preferences.bikeAvailable=FALSE implies t.bikeTime=0)
+}
 
 /*delete an activity from a calendar*/
 pred deleteActivityFromCalendar[c:Calendar, a:Activity]{

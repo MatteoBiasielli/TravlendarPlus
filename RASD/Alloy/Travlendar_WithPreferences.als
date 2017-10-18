@@ -47,7 +47,8 @@ one sig TRUE extends Boolean{}
 one sig FALSE extends Boolean{}
 
 /*Definition of the possible preferences.
-For now, only the simplest preferences are represented*/
+For now, only few of the simplest preferences are represented.
+This Representation, anyway, can be obviously and easily extended to all kinds of transportation*/
 sig Preferences_Set{
 	carAvailable: one Boolean,
 	bikeAvailable: one Boolean,
@@ -218,9 +219,10 @@ fact noOverlappingActivitiesOnAUser{
 }
 
 pred show{
-	#User=2
-	#Activity=6
-	#Place=6
+	#User=1
+	#Activity=1
+	#Place=2
+	#TravelOption=4
 }
 run show for 6 but 6 Int
 

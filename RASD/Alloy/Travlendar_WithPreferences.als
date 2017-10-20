@@ -127,7 +127,8 @@ sig TravelOption{
 /*There is at least one travel option between each user's position and
 its activities places*/
 fact placesAreConnected{
-	all u:User|( all a:u.calendar.activities|(some t:TravelOption| (t.startPlace=u.position && t.endPlace=a.place)))
+	all u:User|( all a:u.calendar.activities|(some t:TravelOption| (t.startPlace=u.position 
+		&& t.endPlace=a.place)))
 }
 
 /*Travel options chosen for each activity must satisfy user's preferences and must
@@ -166,17 +167,20 @@ fact allPreferencesSetsAssociated{
 	all p:Preferences_Set | some u:User | p=u.preferences
 }
 
-/*There are no places not associated to an activity or a user. This is not really useful for the representation
-but we need this for a matter of clarity, in order to avoid having useless places in the diagrams*/
+/*There are no places not associated to an activity or a user. This is not really useful for 
+the representation but we need this for a matter of clarity, in order to avoid having useless places 
+in the diagrams*/
 fact allPlacesAssociated{
 	User.position + Activity.place=Place
 }
 
 /*definition of the state of an activity*/
 fact activityState{
-	all a:Activity|((a.state=NOT_STARTED <=>(SystemTime.day<a.startDay || SystemTime.day=a.startDay && SystemTime.time<a.startTime))
+	all a:Activity|((a.state=NOT_STARTED <=>(SystemTime.day<a.startDay || 
+					SystemTime.day=a.startDay && SystemTime.time<a.startTime))
 		&&
-	(a.state=TERMINATED <=>( SystemTime.day>a.endDay || SystemTime.day=a.endDay && SystemTime.time>=a.endTime))
+	(a.state=TERMINATED <=>( SystemTime.day>a.endDay || SystemTime.day=a.endDay && 
+				SystemTime.time>=a.endTime))
 		&&
 	(a.state=ON_GOING <=> (a.state!=TERMINATED && a.state!=NOT_STARTED)))
 }
@@ -191,7 +195,7 @@ fact notSharedCalendars{
 	all disj u1,u2: User | u1.calendar!=u2.calendar
 }
 
-/*different calendars don't contain the same activities*/
+/*different calendars don't contain the same activities (speaking about objects)*/
 fact notSharedActivities{
 	all disj c1,c2: Calendar | no (c1.activities & c2.activities)
 }
@@ -210,12 +214,14 @@ fact noCalendarsNotAssociated{
 
 
 
-/*in a certain calendar there are no overlapping activities, since a user can't be physically in two different activities at the same time.
-This happens when, comparing all the possible couples of activities, the end day of one comes before the start day of the other one.
-If the two activities are scheduled on the same day, the end time of one must come before the start time of the other one*/
+/*in a certain calendar there are no overlapping activities, since a user can't be physically in two 
+different activities at the same time. This happens when, comparing all the possible couples of activities, 
+the end day of one comes before the start day of the other one.
+If the two activities are scheduled on the same day, the end time of one must come before the start 
+time of the other one*/
 fact noOverlappingActivitiesOnAUser{
-	all c:Calendar| all disj a1, a2:c.activities | (a1.endDay=a2.startDay && (a1.endTime<=a2.startTime || a2.endTime<=a1.startTime))
-																	 ||  a1.endDay<a2.startDay || a2.endDay<a1.startDay
+	all c:Calendar| all disj a1, a2:c.activities | (a1.endDay=a2.startDay && (a1.endTime<=a2.startTime ||
+				 a2.endTime<=a1.startTime)) ||  a1.endDay<a2.startDay || a2.endDay<a1.startDay
 }
 
 pred show{
@@ -253,16 +259,16 @@ pred addActivityToCalendar[c,c':Calendar, a:Activity]{
 	themselves and when its activities (speaking about objects) are not contained into other calendars.
 */
 pred calendarIsConsistent[c:Calendar]{
-	 (all disj a1, a2:c.activities | (a1.endDay=a2.startDay &&( a1.endTime<=a2.startTime || a2.endTime<=a1.startTime))
-																	 ||  a1.endDay<a2.startDay || a2.endDay<a1.startDay)
+	 (all disj a1, a2:c.activities | (a1.endDay=a2.startDay &&( a1.endTime<=a2.startTime || 
+			a2.endTime<=a1.startTime))	 ||  a1.endDay<a2.startDay || a2.endDay<a1.startDay)
 		&&
 	(all c1:Calendar| c.activities & c1.activities!=none => c=c1)
 }
 
 /* Due to the facts expressed above, the only possible worlds will be the
 only consistent ones that stay consistent even after adding an activity to a calendar 
-COMMENT THE noActivitiesNotAssociated FACT TO TEST THIS, OTHERWISE THERE WILL BE NO FREE ACTIVITIES
-TO ADD TO A CALENDAR*/
+COMMENT THE noActivitiesNotAssociated FACT TO TEST THIS, OTHERWISE THERE WILL BE NO 
+FREE ACTIVITIES TO ADD TO A CALENDAR*/
 assert addIsConsistent{
 	all c,c':Calendar, a:Activity | addActivityToCalendar[c,c',a] implies calendarIsConsistent[c']
 }

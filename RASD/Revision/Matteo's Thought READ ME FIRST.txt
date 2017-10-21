@@ -1,0 +1,20 @@
+Ciao cosi,
+
+ho messo nel RASD_RevisionMatteo in rosso le cose che penso possano essere aggiunte.
+Sono piccole cose, il resto mi pare vada tutto abbastanza bene.
+Potete usare quel documento quando vi vedete. Mettete le mie cose in verde se vi vanno bene o cancellatele, così
+quando finite so cosa avete approvato e cosa cancellato. Mettete poi le vostre modifiche in rosso così so anche cosa
+avete aggiunto voi.
+
+Visto che mancano i 3 BPMN + descrizione di Emilio (ho lasciato 6 pagine vuote per aggiungerli) quando li mettete
+fate caso che siano coerenti con le use case tables di Mattia.
+(Non vi scordate le descrizoni dele UI).
+
+
+Dovremmo aggiungere anche in "reference documents" il link alle API dei third party systems?
+
+
+
+Quando finite guardo anche io le cose che avete aggiunto voi e aggiorno il file finale.
+
+Star, tanti auguri a Luca Dondondondondodondondondondondondondondondondondondondondondondondondondondondondondondondodnoni.

@@ -1,0 +1,6 @@
+- desktop version?
+- reference to APIs where?
+- class diagram
+- bpmn emilio
+- UI activity creation  UI8
+- see alloy

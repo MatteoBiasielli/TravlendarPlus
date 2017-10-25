@@ -80,7 +80,8 @@ sig User{
 }
 
 sig Calendar{
-	activities: set Activity
+	activities: set Activity,
+	breaks: set FlexibleBreak
 }
 
 sig Activity{
@@ -98,6 +99,19 @@ sig Activity{
 	startDay>=0 && endDay>=startDay && 
 	(startTime<endTime || endDay>startDay) &&
 	startTime>=0 && startTime<24 && endTime>=0 && endTime<24
+}
+
+/*Flexible break is assmed to start and finish on the same day for a matter of semplicity*/
+sig FlexibleBreak{
+	day: one Int,
+	startTime: one Int,
+	endTime: one Int,
+	duration: one Int
+}{
+	/* The Activity start time must be prior to the end time.*/
+	startTime<endTime &&
+	startTime>=0 && startTime<24 && endTime>=0 && endTime<24 && duration>0
+	&& duration<=sub[endTime,startTime]
 }
 
 /*In this simplified model of a travel option, only times are represented.
@@ -162,6 +176,16 @@ fact allEmailsAssociated{
 	all e:Email| some u:User| e=u.email
 }
 
+/*There are no flexible breaks not associated to any calendar*/
+fact allBreaksAssociated{
+	all b:FlexibleBreak| some c:Calendar| b in c.breaks
+}
+
+/*two calendars don't share breaks*/
+fact notSharedBreaks{
+	all disj c1,c2:Calendar| c1.breaks & c2.breaks=none
+}
+
 /*There are no preferences without owner*/
 fact allPreferencesSetsAssociated{
 	all p:Preferences_Set | some u:User | p=u.preferences
@@ -215,8 +239,8 @@ fact noCalendarsNotAssociated{
 
 
 /*in a certain calendar there are no overlapping activities, since a user can't be physically in two 
-different activities at the same time. This happens when, comparing all the possible couples of activities, 
-the end day of one comes before the start day of the other one.
+different activities at the same time. This can happen when, comparing all the possible couples of 
+activities, the end day of one comes before the start day of the other one.
 If the two activities are scheduled on the same day, the end time of one must come before the start 
 time of the other one*/
 fact noOverlappingActivitiesOnAUser{
@@ -224,13 +248,69 @@ fact noOverlappingActivitiesOnAUser{
 				 a2.endTime<=a1.startTime)) ||  a1.endDay<a2.startDay || a2.endDay<a1.startDay
 }
 
+/*flexible breaks that are associated to the same calendar don't overlap*/
+fact noOverlappingBreaksOnUser{
+	all u:User, disj b1,b2: u.calendar.breaks |(b1.day!=b2.day || 
+		b1.day=b2.day &&(
+			sub[b2.endTime,b1.startTime]>=add[b1.duration,b2.duration] 
+				||
+			sub[b1.endTime,b2.startTime]>=add[b1.duration,b2.duration]))
+}
+
+/*flexible breaks must be coherent with activities. This means they don't have to overlap completely*/
+fact flexibleBreaksDontOverlapWithActivities{
+	(	all u: User, a1 : u.calendar.activities, b: u.calendar.breaks| not (
+			a1.startDay<b.day && a1.endDay>b.day ||
+			a1.startDay=b.day && a1.endDay>b.day && sub[a1.startTime,b.startTime]<b.duration ||
+			a1.startDay<b.day && a1.endDay=b.day && sub[b.endTime,a1.endTime]<b.duration ||
+			a1.startDay=b.day && a1.endDay=b.day &&
+				sub[a1.startTime,b.startTime]<b.duration &&
+				sub[b.endTime,a1.endTime]<b.duration)
+	)
+		&&
+	(all u: User, disj a1,a2 : u.calendar.activities, b: u.calendar.breaks|(
+		(a1.endDay<=a2.startDay && (a1.endDay=a2.startDay implies a1.endTime<=a2.startTime)) 
+			implies 
+		(((a1.endDay=a2.startDay && a1.endDay=b.day &&  a1.startDay=a1.endDay &&
+			a2.endDay=a2.startDay) 
+					implies
+			(sub[a2.startTime,a1.endTime]>=b.duration && b.startTime<=a1.endTime &&
+			b.endTime>=a2.startTime || sub[a1.startTime, b.startTime]>=b.duration || 
+			sub[b.endTime,a2.endTime]>=b.duration))
+
+				&&
+
+			((a1.endDay=a2.startDay && a1.endDay=b.day &&  a1.startDay=a1.endDay &&
+			a2.endDay!=a2.startDay) 
+					implies
+			(sub[a2.startTime,a1.endTime]>=b.duration && b.startTime<=a1.endTime &&
+			b.endTime>=a2.startTime || sub[a1.startTime, b.startTime]>=b.duration))
+
+				&&
+
+			((a1.endDay=a2.startDay && a1.endDay=b.day &&  a1.startDay!=a1.endDay &&
+			a2.endDay=a2.startDay) 
+					implies
+			(sub[a2.startTime,a1.endTime]>=b.duration && b.startTime<=a1.endTime &&
+			b.endTime>=a2.startTime || sub[b.endTime,a2.endTime]>=b.duration))
+			
+				&&
+
+			((a1.endDay=a2.startDay && a1.endDay=b.day &&  a1.startDay!=a1.endDay &&
+			a2.endDay!=a2.startDay) 
+					implies
+			(sub[a2.startTime,a1.endTime]>=b.duration && b.startTime<=a1.endTime &&
+			b.endTime>=a2.startTime)))))
+}
+
 pred show{
 	#User=1
-	#Activity=1
+	#Activity=2
 	#Place=2
 	#TravelOption=4
+	#FlexibleBreak=2
 }
-run show for 6 but 6 Int
+run show for 6 but 7 Int
 
 /*Travel option satisfy preferences for a certain activity and a certain user*/
 pred travelSatisfyPreferences[u: User, a:Activity, t:TravelOption]{
@@ -243,33 +323,4 @@ pred travelSatisfyPreferences[u: User, a:Activity, t:TravelOption]{
 		(u.preferences.carAvailable=FALSE implies t.carTime=0) &&
 		(u.preferences.bikeAvailable=FALSE implies t.bikeTime=0)
 }
-
-/*delete an activity from a calendar*/
-pred deleteActivityFromCalendar[c:Calendar, a:Activity]{
-	c.activities=c.activities-a	
-}
-
-/*Add an activity to a calendar. */
-pred addActivityToCalendar[c,c':Calendar, a:Activity]{
-	c'.activities=c.activities+a
-}
-
-/* Tells when a calendar is consistent 
-	we consider a calendar to be consistent when the activities it contains don't overlap among
-	themselves and when its activities (speaking about objects) are not contained into other calendars.
-*/
-pred calendarIsConsistent[c:Calendar]{
-	 (all disj a1, a2:c.activities | (a1.endDay=a2.startDay &&( a1.endTime<=a2.startTime || 
-			a2.endTime<=a1.startTime))	 ||  a1.endDay<a2.startDay || a2.endDay<a1.startDay)
-		&&
-	(all c1:Calendar| c.activities & c1.activities!=none => c=c1)
-}
-
-/* Due to the facts expressed above, the only possible worlds will be the
-only consistent ones that stay consistent even after adding an activity to a calendar 
-COMMENT THE noActivitiesNotAssociated FACT TO TEST THIS, OTHERWISE THERE WILL BE NO 
-FREE ACTIVITIES TO ADD TO A CALENDAR*/
-assert addIsConsistent{
-	all c,c':Calendar, a:Activity | addActivityToCalendar[c,c',a] implies calendarIsConsistent[c']
-}
-//check addIsConsistent for 10 but 6 Int
+ 

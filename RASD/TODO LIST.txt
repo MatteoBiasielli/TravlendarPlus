@@ -1,5 +1,0 @@
-- desktop version?
-- reference to APIs where?
-
-- bpmn emilio
-- UI activity creation  UI8

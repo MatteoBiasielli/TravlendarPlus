@@ -2,3 +2,4 @@ time <-> distance
 deployment apis
 mappa su clients
 protocols
+Direct references to Java, NginX and other specific components

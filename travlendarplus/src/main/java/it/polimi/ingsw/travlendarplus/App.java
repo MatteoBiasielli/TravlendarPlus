@@ -38,7 +38,7 @@ public class App
         FixedActivity a=new FixedActivity(new Date(), new Date(new Date().getTime()+60*60*3), "prova", "note di prova111", "via stefanardo da vimercate 95 milano", "via caduti di marcinelle 2 milano" , ActivityStatus.ON_GOING);
         a.setKey(5);
         //DataLayer.updateActivity(u,a ,null,null);
-        DataLayer.deleteActivity(u, a);
+        DataLayer.addActivity(u, a,null,null);
         
     }
 }

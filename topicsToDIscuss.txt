@@ -1,7 +1,2 @@
-time <-> distance
-deployment apis
-mappa su clients
-protocols
-interfacce
+
 Direct references to Java, NginX and other specific components in the RASD
-Component to log-in/register and to send emails (User Service Unit??)

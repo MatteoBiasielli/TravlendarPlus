@@ -1,0 +1,6 @@
+The purpose of this section is to show how the hardware deployment for our system has been designed. 
+Each node represented is physical and it possibly has a given execution environment and different components related to the various functionalities it offers or has access to.
+The reasons for our decisions are briefly listed here:
+1) The three-tiers architecture is a good compromise between security and complexity, keeping the presentation, application and data layers separated. This also permits a more coherent implementation of the MVC design pattern.
+2) The system has been deployed on different physical nodes in order to avoid overloads.
+3) The external API services have been modeled as a single external node for simplicity.

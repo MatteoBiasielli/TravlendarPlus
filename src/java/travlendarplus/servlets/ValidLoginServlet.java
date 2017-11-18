@@ -71,6 +71,6 @@ public class ValidLoginServlet extends HttpServlet{
         PrintWriter out=response.getWriter();
         out.println(u.getCalendar());
         out.println(u.getCalendar().getFixedActivities().get(0).getStartDate().getTime());
-        out.println(new Date(1510269834000L));*/
+        out.println(new Date(1510269834000L))*/
     }
 }

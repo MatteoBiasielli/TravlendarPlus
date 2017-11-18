@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    
     <session-config>
         <session-timeout>
             30
@@ -44,5 +45,40 @@
     <servlet-mapping>
         <servlet-name>ConectionProblemLogin</servlet-name>
         <url-pattern>/connectionerrorlogin</url-pattern>
+    </servlet-mapping>
+    
+    
+    
+    <servlet>
+        <servlet-name>RegisterServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.register.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ConnectionErrorRegisterServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.register.ConnectionErrorRegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConnectionErrorRegisterServlet</servlet-name>
+        <url-pattern>/connectionerrorregister</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AlreadyExistingUserRegisterServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.register.AlreadyExistingUserRegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AlreadyExistingUserRegisterServlet</servlet-name>
+        <url-pattern>/registerusernameexists</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidInputRegisterServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.register.InvalidInputRegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidInputRegisterServlet</servlet-name>
+        <url-pattern>/invalidinputregister</url-pattern>
     </servlet-mapping>
 </web-app>

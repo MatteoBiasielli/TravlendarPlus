@@ -99,7 +99,7 @@ public class DataLayer {
                 stmt.execute(query);
                 int id=DataLayer.getUserKeyID(username);
                 query="INSERT INTO BOOLEAN_PREFERENCES values "
-                                + "(NULL,"+id+"false,true,false,true,true,true,"+Modality.STANDARD.getValue()+")";
+                                + "(NULL,"+id+",false,true,false,true,true,true,"+Modality.STANDARD.getValue()+")";
                 stmt.execute(query);
                 con.close();
 	}

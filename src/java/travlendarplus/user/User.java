@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import travlendarplus.calendar.Calendar;
 import travlendarplus.data.DataLayer;
+import travlendarplus.exceptions.AlreadyExistingUserException;
 import travlendarplus.exceptions.InvalidInputException;
 import travlendarplus.exceptions.InvalidLoginException;
 import travlendarplus.exceptions.UnconsistentValueException;
@@ -44,7 +45,9 @@ public class User {
         public void getPreferencesFromDB() throws InvalidInputException, SQLException, InvalidLoginException, UnconsistentValueException{
             DataLayer.getPreferences(this);
         }
-        
+        public void registerInDB() throws InvalidInputException, SQLException, AlreadyExistingUserException {
+            DataLayer.registerUser(username, password, RegistrationStatus.REGULAR);
+        }   
 	/* SETTERS */
 	public void setCalendar(Calendar c){
 		this.calendar=c;
@@ -68,4 +71,6 @@ public class User {
 	public Calendar getCalendar(){
 		return this.calendar;
 	}
+
+    
 }

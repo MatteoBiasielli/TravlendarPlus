@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generato il: 18 nov, 2017 at 09:44 AM
+-- Generato il: 18 nov, 2017 at 07:31 PM
 -- Versione MySQL: 5.5.8
 -- Versione PHP: 5.3.5
 
@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `activity` (
   `START_DAY_TIME` bigint(20) NOT NULL,
   `END_DAY_TIME` bigint(20) NOT NULL,
   `STATUS` int(10) unsigned NOT NULL,
+  `ESTIMATED_TRAVEL_TIME` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'minutes',
   PRIMARY KEY (`KEY_ID`),
   KEY `LOCATION_TAG_ID` (`LOCATION_TAG_ID`),
   KEY `START_PLACE_TAG_ID` (`START_PLACE_TAG_ID`),
@@ -50,13 +51,13 @@ CREATE TABLE IF NOT EXISTS `activity` (
 -- Dump dei dati per la tabella `activity`
 --
 
-INSERT INTO `activity` (`KEY_ID`, `USER`, `LABEL`, `NOTES`, `LOCATION_TEXT`, `LOCATION_TAG_ID`, `START_PLACE_TEXT`, `START_PLACE_TAG_ID`, `FLEXIBLE`, `DURATION`, `START_DAY_TIME`, `END_DAY_TIME`, `STATUS`) VALUES
-(2, 1, 'aaa', 'bbb', 'politecnico di milano', NULL, 'via caduti di marcinelle 2 milano', NULL, 0, NULL, 1510269834746, 1510277035746, 1),
-(3, 1, 'br', 'br1', NULL, 1, NULL, 2, 0, NULL, 1510269834746, 1510277035746, 1),
-(4, 1, 'br', 'br1', NULL, 1, NULL, 2, 0, NULL, 1510269834746, 1510277035746, 1),
-(6, 1, 'prova', 'note di prova', NULL, 1, 'via caduti di marcinelle 2 milano', NULL, 0, 0, 1510306035081, 1510306045881, 2),
-(7, 1, 'prova', 'note di prova', NULL, 1, 'via caduti di marcinelle 2 milano', NULL, 0, 0, 1510306035315, 1510306046115, 2),
-(8, 1, 'prova', 'note di prova111', 'via stefanardo da vimercate 95 milano', NULL, 'via caduti di marcinelle 2 milano', NULL, 0, 0, 1510485804167, 1510485814967, 2);
+INSERT INTO `activity` (`KEY_ID`, `USER`, `LABEL`, `NOTES`, `LOCATION_TEXT`, `LOCATION_TAG_ID`, `START_PLACE_TEXT`, `START_PLACE_TAG_ID`, `FLEXIBLE`, `DURATION`, `START_DAY_TIME`, `END_DAY_TIME`, `STATUS`, `ESTIMATED_TRAVEL_TIME`) VALUES
+(2, 1, 'aaa', 'bbb', 'politecnico di milano', NULL, 'via caduti di marcinelle 2 milano', NULL, 0, NULL, 1510269834746, 1510277035746, 1, 0),
+(3, 1, 'br', 'br1', NULL, 1, NULL, 2, 0, NULL, 1510269834746, 1510277035746, 1, 0),
+(4, 1, 'br', 'br1', NULL, 1, NULL, 2, 0, NULL, 1510269834746, 1510277035746, 1, 0),
+(6, 1, 'prova', 'note di prova', NULL, 1, 'via caduti di marcinelle 2 milano', NULL, 0, 0, 1510306035081, 1510306045881, 2, 0),
+(7, 1, 'prova', 'note di prova', NULL, 1, 'via caduti di marcinelle 2 milano', NULL, 0, 0, 1510306035315, 1510306046115, 2, 0),
+(8, 1, 'prova', 'note di prova111', 'via stefanardo da vimercate 95 milano', NULL, 'via caduti di marcinelle 2 milano', NULL, 0, 0, 1510485804167, 1510485814967, 2, 0);
 
 -- --------------------------------------------------------
 

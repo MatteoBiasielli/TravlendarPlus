@@ -15,7 +15,7 @@ import travlendarplus.user.*;
 public class ResponseLogin extends Response{
     private final ResponseLoginType rlt;
     private final User u;
-    ResponseLogin(ResponseLoginType r, User u){
+    public ResponseLogin(ResponseLoginType r, User u){
         this.rlt=r;
         this.u=u;
     }

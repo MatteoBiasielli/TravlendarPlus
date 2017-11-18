@@ -1,8 +1,13 @@
 package travlendarplus.user;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import travlendarplus.calendar.Calendar;
+import travlendarplus.data.DataLayer;
+import travlendarplus.exceptions.InvalidInputException;
+import travlendarplus.exceptions.InvalidLoginException;
+import travlendarplus.exceptions.UnconsistentValueException;
 import travlendarplus.user.preferences.Preference;
 
 public class User {
@@ -18,6 +23,7 @@ public class User {
 	
 	
 	/**@return a string human-readable version of the Object**/
+        @Override
 	public String toString(){
 		String ris= "["+username+","+password+"] -> ";
 		if(preferences!=null)
@@ -26,6 +32,19 @@ public class User {
 		return ris;
 	}
 	
+        public boolean isValidLogin() throws InvalidInputException, SQLException{
+            return DataLayer.validLogin(username, password);
+        }
+        public boolean usernameExists() throws InvalidInputException, SQLException{
+            return DataLayer.usernameExists(username);
+        }
+        public void getCalendarFromDB() throws InvalidInputException, SQLException, InvalidLoginException, UnconsistentValueException{
+            DataLayer.getCalendar(this);
+        }
+        public void getPreferencesFromDB() throws InvalidInputException, SQLException, InvalidLoginException, UnconsistentValueException{
+            DataLayer.getPreferences(this);
+        }
+        
 	/* SETTERS */
 	public void setCalendar(Calendar c){
 		this.calendar=c;

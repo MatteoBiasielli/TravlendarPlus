@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    <servlet-mapping>
-        <servlet-name>Error</servlet-name>
-        <url-pattern>/Error</url-pattern>
-    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -11,18 +7,42 @@
     </session-config>
     <servlet>
         <servlet-name>ValidLoginServlet</servlet-name>
-        <servlet-class>travlendarplus.servlets.ValidLoginServlet</servlet-class>
+        <servlet-class>travlendarplus.servlets.login.ValidLoginServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>Error</servlet-name>
-        <servlet-class>travlendarplus.servlets.Error</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Error</servlet-name>
-        <url-pattern>/error</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ValidLoginServlet</servlet-name>
-        <url-pattern>/lol</url-pattern>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>WrongUsernameLoginServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.login.WrongUsernameLoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WrongUsernameLoginServlet</servlet-name>
+        <url-pattern>/notexistingusernamelogin</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>WrongPasswordLoginServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.login.WrongPasswordLoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WrongPasswordLoginServlet</servlet-name>
+        <url-pattern>/wrongpasswordlogin</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidInputLoginServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.login.InvalidInputLoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidInputLoginServlet</servlet-name>
+        <url-pattern>/invalidinputlogin</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ConectionProblemLogin</servlet-name>
+        <servlet-class>travlendarplus.servlets.login.ConectionProblemLogin</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConectionProblemLogin</servlet-name>
+        <url-pattern>/connectionerrorlogin</url-pattern>
     </servlet-mapping>
 </web-app>

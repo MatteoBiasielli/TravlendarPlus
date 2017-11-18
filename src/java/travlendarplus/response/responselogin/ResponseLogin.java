@@ -13,8 +13,8 @@ import travlendarplus.user.*;
  * @author matteo
  */
 public class ResponseLogin extends Response{
-    private ResponseLoginType rlt;
-    private User u;
+    private final ResponseLoginType rlt;
+    private final User u;
     ResponseLogin(ResponseLoginType r, User u){
         this.rlt=r;
         this.u=u;

@@ -6,8 +6,9 @@ import travlendarplus.calendar.Calendar;
 import travlendarplus.exceptions.InvalidInputException;
 
 public class FixedActivity extends Activity{
-	
-	
+    
+	/**MINUTES*/
+	private int estimatedTravelTime;
 	/* ****************CONSTRUCTORS**********************/
 	/**
 	 * @param s is the start date
@@ -15,6 +16,7 @@ public class FixedActivity extends Activity{
 	 */
 	public FixedActivity(Date s, Date e,String l, String n, String lA, String sP, ActivityStatus actSt){
 		super(s,e,l,n,lA,sP,actSt);
+                this.estimatedTravelTime=0;
 	}
 	/**
 	 * @param act is the FixedActivity to copy
@@ -29,6 +31,7 @@ public class FixedActivity extends Activity{
 		this.actStatus=fa.actStatus;
 		this.key=fa.key;
 		this.keySet=fa.keySet;
+                this.estimatedTravelTime=fa.estimatedTravelTime;
 	}
 	
 	/*************************************************/
@@ -136,12 +139,21 @@ public class FixedActivity extends Activity{
 			ret.add(new FixedActivity(act));
 		return ret;
 	}
-	
+	/* SETTERS */
+        public void setEstimatedTravelTime(int ett){
+            this.estimatedTravelTime=ett;
+        }
 	/* GETTERS */
+        @Override
 	public boolean isFlexible(){
 		return false;
 	}
+        @Override
 	public long getDuration(){
 		return 0;
 	}
+        @Override
+        public int getEstimatedTravelTime(){
+            return this.estimatedTravelTime;
+        }
 }

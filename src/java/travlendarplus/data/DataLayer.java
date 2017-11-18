@@ -1,6 +1,6 @@
 package travlendarplus.data;
 
-import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.ejb.Stateless;
-
 import travlendarplus.apimanager.APIManager;
 import travlendarplus.calendar.Calendar;
 import travlendarplus.calendar.activities.*;
@@ -22,11 +20,11 @@ import travlendarplus.user.preferences.*;
 
 public class DataLayer {
 	/**DBMS username**/
-	private static String USERNAME="admin";
+	private static final String USERNAME="admin";
 	/**DBMS password**/
-	private static String PASSWORD="giorgio";
+	private static final String PASSWORD="giorgio";
 	/**DBMS url**/
-	private static String DB_URL="jdbc:mysql://localhost/travlendar?serverTimezone=GMT";
+	private static final String DB_URL="jdbc:mysql://localhost/travlendar?serverTimezone=GMT";
 	
 	/**Queries the DB to see if a given username exists
 	 * @param username is the username for which existance has to be checked
@@ -38,17 +36,17 @@ public class DataLayer {
 		if(!username.matches("([a-z]|[A-Z])+"))
 			throw new InvalidInputException("Invalid username.");
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
-        Statement stmt = con.createStatement();
-        String query="SELECT * "
+                Statement stmt = con.createStatement();
+                String query="SELECT * "
         		+ "FROM user "
         		+ "WHERE user.username='" + username+"'";
-        ResultSet rs = stmt.executeQuery(query);
-        boolean ris=false;
-        if(rs.next())
-        	ris=true;
-        rs.close();
-        con.close();
-        return ris;
+                ResultSet rs = stmt.executeQuery(query);
+                boolean ris=false;
+                if(rs.next())
+                        ris=true;
+                rs.close();
+                con.close();
+                return ris;
 	}
 	
 	/**Queries the DB to see if a given pair username-password is valid
@@ -202,27 +200,27 @@ public class DataLayer {
 			throw new InvalidLoginException("Invalid Username or Password");
 		ArrayList<Preference> pref= new ArrayList<>();
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
-        Statement stmt = con.createStatement();
-        String query="SELECT * FROM USER,BOOLEAN_PREFERENCES WHERE"
+                Statement stmt = con.createStatement();
+                String query="SELECT * FROM USER,BOOLEAN_PREFERENCES WHERE"
         		+ " USER.ID=BOOLEAN_PREFERENCES.USER_ID"
         		+ " AND USER.USERNAME='"+u.getUsername()+"'";
-        ResultSet rs = stmt.executeQuery(query);
-        while(rs.next()){
-        	Preference p= new BooleanPreferencesSet(rs.getBoolean("PERSONAL_CAR"),rs.getBoolean("CAR_SHARING"),rs.getBoolean("PERSONAL_BIKE"),rs.getBoolean("BIKE_SHARING"),rs.getBoolean("PUBLIC_TRANSPORT"),rs.getBoolean("UBER_TAXI"),Modality.getForValue(rs.getInt("MODALITY")));
-        	pref.add(p);
-        }
-        rs.close();
-        query="SELECT * FROM USER,RANGED_PREFERENCES WHERE"
-        		+ " USER.ID=RANGED_PREFERENCES.USER_ID"
-        		+ " AND USER.USERNAME='"+u.getUsername()+"'";
-        rs = stmt.executeQuery(query);
-        while(rs.next()){
-        	Preference p= new RangedPreference(RangedPreferenceType.getForValue(rs.getInt("PREF_TYPE")),rs.getInt("VALUE"));
-        	pref.add(p);
-        }
-        rs.close();
-        con.close();
-        u.setPreferences(pref);
+                ResultSet rs = stmt.executeQuery(query);
+                while(rs.next()){
+                        Preference p= new BooleanPreferencesSet(rs.getBoolean("PERSONAL_CAR"),rs.getBoolean("CAR_SHARING"),rs.getBoolean("PERSONAL_BIKE"),rs.getBoolean("BIKE_SHARING"),rs.getBoolean("PUBLIC_TRANSPORT"),rs.getBoolean("UBER_TAXI"),Modality.getForValue(rs.getInt("MODALITY")));
+                        pref.add(p);
+                }
+                rs.close();
+                query="SELECT * FROM USER,RANGED_PREFERENCES WHERE"
+                                + " USER.ID=RANGED_PREFERENCES.USER_ID"
+                                + " AND USER.USERNAME='"+u.getUsername()+"'";
+                rs = stmt.executeQuery(query);
+                while(rs.next()){
+                        Preference p= new RangedPreference(RangedPreferenceType.getForValue(rs.getInt("PREF_TYPE")),rs.getInt("VALUE"));
+                        pref.add(p);
+                }
+                rs.close();
+                con.close();
+                u.setPreferences(pref);
 	}
 	
 	/**Retrieves a user's calendar in the DB. At the end of the method, the result is put in the input object
@@ -236,58 +234,59 @@ public class DataLayer {
 		if(!validLogin(u.getUsername(),u.getPassword()))
 			throw new InvalidLoginException("Invalid Username or Password");
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
-        Statement stmt = con.createStatement();
-        String query="SELECT * FROM USER,ACTIVITY WHERE "
+                Statement stmt = con.createStatement();
+                String query="SELECT * FROM USER,ACTIVITY WHERE "
         		+ "USER.ID=ACTIVITY.USER "
         		+ "AND USER.username='"+u.getUsername()+"'";
-        ResultSet rs = stmt.executeQuery(query);
-        ArrayList<FixedActivity> fix=new ArrayList<>();
-        ArrayList<Break> breaks= new ArrayList<>();
-        while(rs.next()){
-        	Date s=new Date(rs.getLong("START_DAY_TIME"));
-        	Date e=new Date(rs.getLong("END_DAY_TIME"));
-        	String l=rs.getString("LABEL");
-        	String n=rs.getString("NOTES");
-        	Integer tagIdSP=rs.getInt("START_PLACE_TAG_ID");
-        	String sP="";
-        	if(tagIdSP!=0){
-        		try {
-					sP=APIManager.googleReverseGeocodingRequest(DataLayer.getPositionFromID(tagIdSP));
-				} catch (InvalidPositionException e1) {
-					throw new UnconsistentValueException("Database contains unconsistencies in positions values.");
-				}
-        	}
-        	else
-        		sP=rs.getString("START_PLACE_TEXT");
-        	Integer tagIdLA=rs.getInt("LOCATION_TAG_ID");
-        	String lA="";
-        	if(tagIdLA!=0){
-                    try {
-			lA=APIManager.googleReverseGeocodingRequest(DataLayer.getPositionFromID(tagIdLA));
-                    } catch (InvalidPositionException e1) {
-			throw new UnconsistentValueException("Database contains unconsistencies in positions values.");
-                    }
-        	}
-        	else
-                        lA=rs.getString("LOCATION_TEXT");
-        	ActivityStatus stat=ActivityStatus.getForValue(rs.getInt("STATUS"));
-        	boolean flex=rs.getBoolean("FLEXIBLE");
-        	if(flex){
-        		int d=rs.getInt("DURATION");
-        		Break b= new Break(s,e,l,n,lA,sP,stat,d);
-        		b.setKey(rs.getInt("KEY_ID"));
-        		breaks.add(b);
-        	}
-        	else{
-        		FixedActivity fa=new FixedActivity(s,e,l,n,lA,sP,stat);
-        		fa.setKey(rs.getInt("KEY_ID"));
-        		fix.add(fa);
-        	}
-        }
-        Calendar c=new Calendar(fix,breaks);
-        u.setCalendar(c);
-        rs.close();
-        con.close();
+                ResultSet rs = stmt.executeQuery(query);
+                ArrayList<FixedActivity> fix=new ArrayList<>();
+                ArrayList<Break> breaks= new ArrayList<>();
+                while(rs.next()){
+                        Date s=new Date(rs.getLong("START_DAY_TIME"));
+                        Date e=new Date(rs.getLong("END_DAY_TIME"));
+                        String l=rs.getString("LABEL");
+                        String n=rs.getString("NOTES");
+                        Integer tagIdSP=rs.getInt("START_PLACE_TAG_ID");
+                        String sP="";
+                        if(tagIdSP!=0){
+                                try {
+                                        sP=APIManager.googleReverseGeocodingRequest(DataLayer.getPositionFromID(tagIdSP));
+                                } catch (InvalidPositionException e1) {
+                                        throw new UnconsistentValueException("Database contains unconsistencies in positions values.");
+                                }
+                        }
+                        else
+                                sP=rs.getString("START_PLACE_TEXT");
+                        Integer tagIdLA=rs.getInt("LOCATION_TAG_ID");
+                        String lA="";
+                        if(tagIdLA!=0){
+                            try {
+                                lA=APIManager.googleReverseGeocodingRequest(DataLayer.getPositionFromID(tagIdLA));
+                            } catch (InvalidPositionException e1) {
+                                throw new UnconsistentValueException("Database contains unconsistencies in positions values.");
+                            }
+                        }
+                        else
+                                lA=rs.getString("LOCATION_TEXT");
+                        ActivityStatus stat=ActivityStatus.getForValue(rs.getInt("STATUS"));
+                        boolean flex=rs.getBoolean("FLEXIBLE");
+                        if(flex){
+                                int d=rs.getInt("DURATION");
+                                Break b= new Break(s,e,l,n,lA,sP,stat,d);
+                                b.setKey(rs.getInt("KEY_ID"));
+                                breaks.add(b);
+                        }
+                        else{
+                                FixedActivity fa=new FixedActivity(s,e,l,n,lA,sP,stat);
+                                fa.setKey(rs.getInt("KEY_ID"));
+                                fa.setEstimatedTravelTime(rs.getInt("ESTIMATED_TRAVEL_TIME"));
+                                fix.add(fa);
+                        }
+                }
+                Calendar c=new Calendar(fix,breaks);
+                u.setCalendar(c);
+                rs.close();
+                con.close();
 	}
 	
 	/**Retrieves a position in the DB, given its tuple key id.
@@ -299,17 +298,17 @@ public class DataLayer {
 	 */
 	private static Position getPositionFromID(Integer id) throws SQLException, UnconsistentValueException{
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
-        Statement stmt = con.createStatement();
-        String query="SELECT * FROM FAVPOSITIONS WHERE"
-        		+ " FAVPOSITIONS.KEY_ID="+id;
-        ResultSet rs = stmt.executeQuery(query);
-        if(!rs.next())
-        	throw new UnconsistentValueException("Database contains unconsistencies in positions ids.");
-        Position res=new Position(rs.getDouble("LATITUDE"), rs.getDouble("LONGITUDE"));
-        rs.close();
-        con.close();
-        return res;
-    }
+                Statement stmt = con.createStatement();
+                String query="SELECT * FROM FAVPOSITIONS WHERE"
+                                + " FAVPOSITIONS.KEY_ID="+id;
+                ResultSet rs = stmt.executeQuery(query);
+                if(!rs.next())
+                        throw new UnconsistentValueException("Database contains unconsistencies in positions ids.");
+                Position res=new Position(rs.getDouble("LATITUDE"), rs.getDouble("LONGITUDE"));
+                rs.close();
+                con.close();
+                return res;
+        }
 	
 	/**Retrieves a user's favorite place's id in the DB.
 	 * @param u is an object containing username and password of the user that owns the tag
@@ -323,17 +322,17 @@ public class DataLayer {
 		if(!validLogin(u.getUsername(),u.getPassword()))
 			throw new InvalidLoginException("Invalid Username or Password");
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
-        Statement stmt = con.createStatement();
-        String query="SELECT * FROM FAVPOSITIONS WHERE"
+                Statement stmt = con.createStatement();
+                String query="SELECT * FROM FAVPOSITIONS WHERE"
         		+ " FAVPOSITIONS.TAG='"+tag+"'"
         		+ " AND FAVPOSITIONS.USER_ID="+DataLayer.getUserKeyID(u.getUsername());
-        ResultSet rs = stmt.executeQuery(query);
-        if(!rs.next())
-        	throw new InvalidInputException("There's no tuple associating the given tag to the given user");
-        int res=rs.getInt("KEY_ID");
-        rs.close();
-        con.close();
-        return res;
+                ResultSet rs = stmt.executeQuery(query);
+                if(!rs.next())
+                        throw new InvalidInputException("There's no tuple associating the given tag to the given user");
+                int res=rs.getInt("KEY_ID");
+                rs.close();
+                con.close();
+                return res;
 	}
 	
 	/**Adds an activity to a user's calendar in the DB.
@@ -349,21 +348,21 @@ public class DataLayer {
 		if(!validLogin(u.getUsername(),u.getPassword()))
 			throw new InvalidLoginException("Invalid Username or Password");
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
-        Statement stmt = con.createStatement();
-        int userKey=DataLayer.getUserKeyID(u.getUsername());
-        String query="INSERT INTO ACTIVITY values (NULL,"+userKey+",'"
-        		+a.getLabel()+"','"+a.getNotes()+"'";
-        if(tagLocation!=null)
-        	query+=",NULL,"+getIDFromTag(u,tagLocation);
-        else
-        	query+=",'"+a.getLocationAddress()+"',NULL";
-        if(tagStart!=null)
-        	query+=",NULL,"+getIDFromTag(u,tagStart);
-        else
-        	query+=",'"+a.getStartPlaceAddress()+"',NULL";
-        query+=","+a.isFlexible()+","+a.getDuration()+","+a.getStartDate().getTime()+","+ a.getEndDate().getTime()+","+a.getStatus().getValue()+")";
-        stmt.execute(query);
-        con.close();
+                Statement stmt = con.createStatement();
+                int userKey=DataLayer.getUserKeyID(u.getUsername());
+                String query="INSERT INTO ACTIVITY values (NULL,"+userKey+",'"
+                                +a.getLabel()+"','"+a.getNotes()+"'";
+                if(tagLocation!=null)
+                        query+=",NULL,"+getIDFromTag(u,tagLocation);
+                else
+                        query+=",'"+a.getLocationAddress()+"',NULL";
+                if(tagStart!=null)
+                        query+=",NULL,"+getIDFromTag(u,tagStart);
+                else
+                        query+=",'"+a.getStartPlaceAddress()+"',NULL";
+                query+=","+a.isFlexible()+","+a.getDuration()+","+a.getStartDate().getTime()+","+ a.getEndDate().getTime()+","+a.getStatus().getValue()+","+a.getEstimatedTravelTime()+")";
+                stmt.execute(query);
+                con.close();
 	}
 	
 	/**Updates an activity from a user's calendar in the DB.
@@ -379,37 +378,38 @@ public class DataLayer {
 		if(!validLogin(u.getUsername(),u.getPassword()))
 			throw new InvalidLoginException("Invalid Username or Password");
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
-        Statement stmt = con.createStatement();
-        int userKey=DataLayer.getUserKeyID(u.getUsername());
-        String query="UPDATE ACTIVITY SET "
+                Statement stmt = con.createStatement();
+                int userKey=DataLayer.getUserKeyID(u.getUsername());
+                String query="UPDATE ACTIVITY SET "
         		+ "LABEL='"+a.getLabel()+"', "
         		+ "NOTES='"+a.getNotes()+"', "
         		+ "LABEL='"+a.getLabel()+"', ";
-        if(tagLocation!=null){
-        	query+="LOCATION_TEXT=NULL, " +
-        			"LOCATION_TAG_ID=" + getIDFromTag(u,tagLocation)+", ";
-        }
-        else{
-        	query+="LOCATION_TEXT='"+a.getLocationAddress()+ "', " +
-        			"LOCATION_TAG_ID=NULL, ";
-        }
-        if(tagStart!=null){
-        	query+="START_PLACE_TEXT=NULL, " +
-        			"START_PLACE_TAG_ID=" + getIDFromTag(u,tagStart)+", ";
-        }
-        else{
-        	query+="START_PLACE_TEXT='"+a.getStartPlaceAddress()+ "', " +
-        			"START_PLACE_TAG_ID=NULL, ";
-        }
-        query+="FLEXIBLE="+a.isFlexible()+", "
+                if(tagLocation!=null){
+                        query+="LOCATION_TEXT=NULL, " +
+                                        "LOCATION_TAG_ID=" + getIDFromTag(u,tagLocation)+", ";
+                }
+                else{
+                        query+="LOCATION_TEXT='"+a.getLocationAddress()+ "', " +
+                                        "LOCATION_TAG_ID=NULL, ";
+                }
+                if(tagStart!=null){
+                        query+="START_PLACE_TEXT=NULL, " +
+                                        "START_PLACE_TAG_ID=" + getIDFromTag(u,tagStart)+", ";
+                }
+                else{
+                        query+="START_PLACE_TEXT='"+a.getStartPlaceAddress()+ "', " +
+                                        "START_PLACE_TAG_ID=NULL, ";
+                }
+                query+="FLEXIBLE="+a.isFlexible()+", "
         		+"DURATION="+a.getDuration()+", "
         		+"START_DAY_TIME="+ a.getStartDate().getTime()+", "
         		+"END_DAY_TIME="+ a.getEndDate().getTime()+", "
-        		+"STATUS=" +a.getStatus().getValue()+
+        		+"STATUS=" +a.getStatus().getValue()+ ", "
+                        +"ESTIMATED_TRAVEL_TIME=" + a.getEstimatedTravelTime()+
         		" WHERE ACTIVITY.KEY_ID="+a.getKey()+
         		" AND ACTIVITY.USER="+userKey;
-        stmt.execute(query);
-        con.close();
+                stmt.execute(query);
+                con.close();
 	}
 	
 	/**Deletes an activity from a user's calendar in the DB.
@@ -423,10 +423,10 @@ public class DataLayer {
 		if(!validLogin(u.getUsername(),u.getPassword()))
 			throw new InvalidLoginException("Invalid Username or Password");
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
-        Statement stmt = con.createStatement();
-        int userKey=DataLayer.getUserKeyID(u.getUsername());
-        String query="DELETE FROM ACTIVITY WHERE KEY_ID="+a.getKey()+" AND USER="+userKey;
-        stmt.execute(query);
-        con.close();
+                Statement stmt = con.createStatement();
+                int userKey=DataLayer.getUserKeyID(u.getUsername());
+                String query="DELETE FROM ACTIVITY WHERE KEY_ID="+a.getKey()+" AND USER="+userKey;
+                stmt.execute(query);
+                con.close();
 	}
 }

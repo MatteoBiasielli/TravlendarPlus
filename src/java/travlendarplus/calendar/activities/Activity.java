@@ -89,4 +89,5 @@ public abstract class Activity {
 	}
 	public abstract boolean isFlexible();
 	public abstract long getDuration();
+        public abstract int getEstimatedTravelTime();
 }

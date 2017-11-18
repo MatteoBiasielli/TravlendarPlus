@@ -64,14 +64,21 @@ public class Break extends Activity{
 	}
 	
 	/**@return a string human-readable version of the Object**/
+        @Override
 	public String toString(){
 		return super.toString()+", DUR="+duration+"m";
 	}
 	/* ************GETTERS******************/
+        @Override
 	public long getDuration(){
 		return duration;
 	}	
+        @Override
 	public boolean isFlexible(){
 		return true;
 	}
+        @Override
+        public int getEstimatedTravelTime(){
+            return 0;
+        }
 }

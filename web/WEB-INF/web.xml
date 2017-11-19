@@ -159,4 +159,54 @@
         <servlet-name>ConnectionProblemAddTagServlet</servlet-name>
         <url-pattern>/connectionerroraddtag</url-pattern>
     </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>OverlappingAddActivity</servlet-name>
+        <servlet-class>travlendarplus.servlets.addactivity.OverlappingAddActivity</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OverlappingAddActivity</servlet-name>
+        <url-pattern>/overlappingaddactivity</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidLoginAddActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.addactivity.InvalidLoginAddActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidLoginAddActivityServlet</servlet-name>
+        <url-pattern>/invalidloginaddactivity</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PastAddActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.addactivity.PastAddActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PastAddActivityServlet</servlet-name>
+        <url-pattern>/pastaddactivity</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidInputAddActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.addactivity.InvalidInputAddActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidInputAddActivityServlet</servlet-name>
+        <url-pattern>/invalidinputaddactivity</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ConnectionProblemAddActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.addactivity.ConnectionProblemAddActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConnectionProblemAddActivityServlet</servlet-name>
+        <url-pattern>/connectionproblemaddactivity</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AddActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.addactivity.AddActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddActivityServlet</servlet-name>
+        <url-pattern>/addactivity</url-pattern>
+    </servlet-mapping>
 </web-app>

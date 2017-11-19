@@ -425,6 +425,8 @@ public class DataLayer {
 	public static void addActivity(User u, Activity a, String tagLocation, String tagStart) throws InvalidInputException, SQLException, InvalidLoginException{
 		if(!validLogin(u.getUsername(),u.getPassword()))
 			throw new InvalidLoginException("Invalid Username or Password");
+                if(!a.getLabel().matches("([a-z]|[A-Z])+"))
+                        throw new InvalidInputException("Invalid label.");
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
                 Statement stmt = con.createStatement();
                 int userKey=DataLayer.getUserKeyID(u.getUsername());
@@ -455,6 +457,8 @@ public class DataLayer {
 	public static void updateActivity(User u, Activity a, String tagLocation, String tagStart) throws InvalidInputException, SQLException, InvalidLoginException{
 		if(!validLogin(u.getUsername(),u.getPassword()))
 			throw new InvalidLoginException("Invalid Username or Password");
+                if(!a.getLabel().matches("([a-z]|[A-Z])+"))
+                        throw new InvalidInputException("Invalid label.");
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
                 Statement stmt = con.createStatement();
                 int userKey=DataLayer.getUserKeyID(u.getUsername());

@@ -4,6 +4,7 @@ import java.util.*;
 
 import travlendarplus.calendar.Calendar;
 import travlendarplus.exceptions.InvalidInputException;
+import travlendarplus.response.responseaddactivity.ResponseAddActivityNotification;
 
 public class FixedActivity extends Activity{
     
@@ -19,7 +20,7 @@ public class FixedActivity extends Activity{
                 this.estimatedTravelTime=0;
 	}
 	/**
-	 * @param act is the FixedActivity to copy
+	 * @param fa is the FixedActivity to copy
 	 */
 	public FixedActivity(FixedActivity fa){
 		this.startDate=new Date(fa.startDate.getTime());
@@ -85,6 +86,7 @@ public class FixedActivity extends Activity{
 		ArrayList<FixedActivity> fixApp=new ArrayList<>();
 		ArrayList<Break> breaks=new ArrayList<>();
 		boundSubCalendar(c,fixApp, breaks);
+                fixApp=copyList(fixApp);
 		fixApp.add(this);
 		return c.canBeACalendar(fixApp,breaks);
 	}
@@ -116,20 +118,21 @@ public class FixedActivity extends Activity{
 		for(FixedActivity fAct: fa){
 			for(Break br:breaks){
 				if((br.getStartDate().after(fAct.startDate) || br.getStartDate().equals(fAct.startDate))
-						&& br.getStartDate().before(fAct.endDate) ||
-						br.getEndDate().after(fAct.startDate) && 
-					(br.getEndDate().before(fAct.endDate) || br.getEndDate().equals(fAct.endDate))){
+                                    && br.getStartDate().before(fAct.endDate) ||
+                                    br.getEndDate().after(fAct.startDate) && 
+                                    (br.getEndDate().before(fAct.endDate) || br.getEndDate().equals(fAct.endDate)) 
+                                        || (br.getStartDate().before(fAct.startDate) ||  br.getStartDate().equals(fAct.startDate))
+                                            && (br.getEndDate().after(fAct.endDate) ||  br.getEndDate().equals(fAct.endDate))){
 					fixApp.add(fAct);
 					break;
 				}
 			}
 		}
-		fixApp=copyList(fixApp);
 	}
 	
 	
 	/**
-	 * @param b is the array list of FixedActivity to copy
+	 * @param fa is the array list of FixedActivity to copy
 	 * @return a new ArrayList object containing a copy of all
 	 * the FixedActivities in the ArrayList given as parameter
 	 */
@@ -139,6 +142,23 @@ public class FixedActivity extends Activity{
 			ret.add(new FixedActivity(act));
 		return ret;
 	}
+        
+        /**Calculates the esitmated travel time for the activity.
+         * This is used for activities that have to be added to the calendar.
+         * @return the estimated travel time
+         */
+        @Override
+        public int calculateEstimatedTravelTime(){
+            //TODO
+            this.estimatedTravelTime=5;
+            return 5;
+        }
+        
+        @Override
+        public ResponseAddActivityNotification generateRequiredNotification(Calendar c) {
+            return ResponseAddActivityNotification.NO;
+        }
+        
 	/* SETTERS */
         public void setEstimatedTravelTime(int ett){
             this.estimatedTravelTime=ett;
@@ -156,4 +176,6 @@ public class FixedActivity extends Activity{
         public int getEstimatedTravelTime(){
             return this.estimatedTravelTime;
         }
+
+        
 }

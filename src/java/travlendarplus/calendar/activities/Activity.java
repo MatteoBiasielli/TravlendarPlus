@@ -4,6 +4,7 @@ import java.util.Date;
 
 import travlendarplus.calendar.Calendar;
 import travlendarplus.exceptions.UnsopportedOperationException;
+import travlendarplus.response.responseaddactivity.ResponseAddActivityNotification;
 
 public abstract class Activity {
 	protected Date startDate;
@@ -43,7 +44,7 @@ public abstract class Activity {
 	 *@return true if the activity doesn't make the calendar become inconsistent, false otherwise 
 	 */
 	public abstract boolean canBeAddedTo(Calendar c);
-	
+	public abstract ResponseAddActivityNotification generateRequiredNotification(Calendar c);
 	/**@return a string human-readable version of the Object**/
 	public String toString(){
 		return "START="+startDate+", END="+endDate+","+label+","+notes+","+locationAddress+","+startPlaceAddress+","+actStatus.name();
@@ -90,4 +91,5 @@ public abstract class Activity {
 	public abstract boolean isFlexible();
 	public abstract long getDuration();
         public abstract int getEstimatedTravelTime();
+        public abstract int calculateEstimatedTravelTime();
 }

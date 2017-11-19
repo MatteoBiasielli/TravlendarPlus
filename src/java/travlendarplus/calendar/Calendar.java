@@ -8,9 +8,9 @@ import travlendarplus.exceptions.*;
 
 public class Calendar {
 	/** Fixed Activities list**/
-	private ArrayList<FixedActivity> fixedActivities;
+	private final ArrayList<FixedActivity> fixedActivities;
 	/** breaks list **/
-	private ArrayList<Break> breaks;
+	private final ArrayList<Break> breaks;
 	
 	/**Written in minutes, SCATTO represents and must be equal to the minimum time
 	 * granularity of the activities*/
@@ -34,7 +34,6 @@ public class Calendar {
 	 */
 	public void addActivity(FixedActivity a) throws CannotBeAddedException{
 		if(a.canBeAddedTo(this)){
-			fixedActivities.add(a);
 			return;
 		}
 		throw new CannotBeAddedException("The activity cannot be added to the calendar");
@@ -46,7 +45,6 @@ public class Calendar {
 	 */
 	public void addActivity(Break a) throws CannotBeAddedException{
 		if(a.canBeAddedTo(this)){
-			breaks.add(a);
 			return;
 		}
 		throw new CannotBeAddedException("The activity cannot be added to the calendar");
@@ -109,6 +107,7 @@ public class Calendar {
 	}
 	
 	/**@return a string human-readable version of the Object**/
+        @Override
 	public String toString(){
 		String ris="FIXED:\n";
 		for(FixedActivity fa:this.fixedActivities)

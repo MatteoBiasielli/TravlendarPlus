@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import travlendarplus.calendar.Calendar;
+import travlendarplus.response.responseaddactivity.ResponseAddActivityNotification;
 
 public class Break extends Activity{
 	
@@ -63,6 +64,20 @@ public class Break extends Activity{
 		return ret;
 	}
 	
+        /**Should calculate the esitmated travel time for the activity.
+         * Since breaks don't support/need this, it just returns 0.
+         * @return 0, always. 
+         */
+        @Override
+        public int calculateEstimatedTravelTime(){
+            return 0;
+        }
+        
+        @Override
+        public ResponseAddActivityNotification generateRequiredNotification(Calendar c) {
+            return ResponseAddActivityNotification.NO;
+        }
+        
 	/**@return a string human-readable version of the Object**/
         @Override
 	public String toString(){
@@ -81,4 +96,6 @@ public class Break extends Activity{
         public int getEstimatedTravelTime(){
             return 0;
         }
+
+    
 }

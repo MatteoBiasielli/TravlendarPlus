@@ -5,14 +5,14 @@
  */
 package travlendarplus.response.responselogin;
 
-import travlendarplus.response.Response;
+
 import travlendarplus.user.*;
 
 /**
  *
  * @author matteo
  */
-public class ResponseLogin extends Response{
+public class ResponseLogin{
     private final ResponseLoginType rlt;
     private final User u;
     public ResponseLogin(ResponseLoginType r, User u){

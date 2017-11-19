@@ -8,6 +8,7 @@ import travlendarplus.data.DataLayer;
 import travlendarplus.exceptions.AlreadyExistingUserException;
 import travlendarplus.exceptions.InvalidInputException;
 import travlendarplus.exceptions.InvalidLoginException;
+import travlendarplus.exceptions.InvalidPositionException;
 import travlendarplus.exceptions.UnconsistentValueException;
 import travlendarplus.user.preferences.Preference;
 
@@ -16,6 +17,7 @@ public class User {
 	private String password;
 	private RegistrationStatus status;
 	private ArrayList<Preference> preferences;
+        private ArrayList<FavouritePosition> favPos;
 	private Calendar calendar;
 	public User(String u, String p){
 		this.username=u;
@@ -47,7 +49,10 @@ public class User {
         }
         public void registerInDB() throws InvalidInputException, SQLException, AlreadyExistingUserException {
             DataLayer.registerUser(username, password, RegistrationStatus.REGULAR);
-        }   
+        }
+        public void getfavPositionsFromDB() throws InvalidInputException,InvalidPositionException, SQLException, InvalidLoginException{
+            DataLayer.getFavPositions(this);
+        }
 	/* SETTERS */
 	public void setCalendar(Calendar c){
 		this.calendar=c;
@@ -55,7 +60,9 @@ public class User {
 	public void setPreferences(ArrayList<Preference> pSet){
 		this.preferences=pSet;
 	}
-	
+	public void setFavPositions(ArrayList<FavouritePosition> fp){
+                this.favPos=fp;
+        }
 	/* GETTERS **/
 	public String getUsername(){
 		return username;
@@ -71,6 +78,8 @@ public class User {
 	public Calendar getCalendar(){
 		return this.calendar;
 	}
-
+        public ArrayList<FavouritePosition> getFavPositions(){
+                return this.favPos;
+        }
     
 }

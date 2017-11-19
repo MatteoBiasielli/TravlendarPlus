@@ -318,7 +318,7 @@ public class DataLayer {
 	 * @throws SQLException  if a database access error occurs
 	 * @throws InvalidLoginException  if the object u doesn't represent a valid login
 	 */
-	public static int getIDFromTag(User u, String tag) throws InvalidInputException, SQLException, InvalidLoginException{
+	private static int getIDFromTag(User u, String tag) throws InvalidInputException, SQLException, InvalidLoginException{
 		if(!validLogin(u.getUsername(),u.getPassword()))
 			throw new InvalidLoginException("Invalid Username or Password");
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
@@ -335,6 +335,50 @@ public class DataLayer {
                 return res;
 	}
 	
+        
+        /**Deletes a user's favorite place's from the DB.
+	 * @param u is an object containing username and password of the user that owns the tag
+         * @param tag is the tag to delete
+	 * @throws InvalidInputException if the given username/password in the input object u or the tag are not strings containing only letters
+	 * @throws SQLException  if a database access error occurs
+	 * @throws InvalidLoginException  if the object u doesn't represent a valid login
+	 */
+        public static void deleteFavPosition(User u, String tag) throws InvalidInputException, SQLException, InvalidLoginException{
+                if(!validLogin(u.getUsername(),u.getPassword()))
+                    throw new InvalidLoginException("Invalid Username or Password");
+                if(!tag.matches("([a-z]|[A-Z])+"))
+                    throw new InvalidInputException("Invalid tag.");
+                Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
+                Statement stmt = con.createStatement();
+                String query="DELETE FROM FAVPOSITIONS WHERE"
+        		+ " FAVPOSITIONS.TAG='"+tag+"'"
+        		+ " AND FAVPOSITIONS.USER_ID="+DataLayer.getUserKeyID(u.getUsername());
+                stmt.execute(query);
+                con.close();
+        }
+        
+        public static void getFavPositions(User u) throws InvalidInputException, SQLException, InvalidLoginException, InvalidPositionException{
+                if(!validLogin(u.getUsername(),u.getPassword()))
+			throw new InvalidLoginException("Invalid Username or Password");
+		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
+                Statement stmt = con.createStatement();
+                String query="SELECT * FROM FAVPOSITIONS WHERE "
+        		+ "FAVPOSITIONS.USER_ID="+DataLayer.getUserKeyID(u.getUsername());
+                ResultSet rs = stmt.executeQuery(query);
+                ArrayList<FavouritePosition> favpos= new ArrayList<>();
+                while(rs.next()){
+                    String tag=rs.getString("TAG");
+                    double lat=rs.getDouble("LATITUDE");
+                    double lon=rs.getDouble("LONGITUDE");
+                    Position p= new Position(lat,lon);
+                    String addr=APIManager.googleReverseGeocodingRequest(p);
+                    favpos.add(new FavouritePosition(addr,tag));
+                }
+                u.setFavPositions(favpos);
+                rs.close();
+                con.close();
+        }
+        
 	/**Adds an activity to a user's calendar in the DB.
 	 * @param u is an object containing username and password of the user that needs to add the activity
 	 * @param a is the activity to add

@@ -81,4 +81,41 @@
         <servlet-name>InvalidInputRegisterServlet</servlet-name>
         <url-pattern>/invalidinputregister</url-pattern>
     </servlet-mapping>
+    
+    
+    
+    <servlet>
+        <servlet-name>DeleteTagServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.deletetag.DeleteTagServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteTagServlet</servlet-name>
+        <url-pattern>/deletetag</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ConnectionProblemDeleteTagServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.deletetag.ConnectionProblemDeleteTagServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConnectionProblemDeleteTagServlet</servlet-name>
+        <url-pattern>/connectionerrordeletetag</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidInputDeleteTagServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.deletetag.InvalidInputDeleteTagServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidInputDeleteTagServlet</servlet-name>
+        <url-pattern>/invalidinputdeletetag</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidLoginDeleteTagServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.deletetag.InvalidLoginDeleteTagServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidLoginDeleteTagServlet</servlet-name>
+        <url-pattern>/invalidlogindeletetag</url-pattern>
+    </servlet-mapping>
+    
+    
 </web-app>

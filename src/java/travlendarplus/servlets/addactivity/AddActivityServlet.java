@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -66,10 +64,14 @@ public class AddActivityServlet extends HttpServlet{
             Date startDate=new Date(Long.parseLong(request.getParameter("start")));
             Date endDate=new Date(Long.parseLong(request.getParameter("end")));
             Activity actToAdd;
-            if(locationText==null && locationTag==null || startText==null && startTag==null)
+            if(locationText==null && locationTag==null || startText==null && startTag==null || endDate.before(startDate) || endDate.equals(startDate)){
                 request.getRequestDispatcher("/invalidinputaddactivity").forward(request, response);
-            if(new Date().getTime()>startDate.getTime())
+                return;
+            }
+            if(new Date().getTime()>startDate.getTime()){
                 request.getRequestDispatcher("/pastaddactivity").forward(request, response);
+                return;
+            }
             User u=new User(p1,p2);
             u.getCalendarFromDB();
             if(flexible){

@@ -46,6 +46,7 @@ public abstract class Activity {
 	public abstract boolean canBeAddedTo(Calendar c);
 	public abstract ResponseAddActivityNotification generateRequiredNotification(Calendar c);
 	/**@return a string human-readable version of the Object**/
+        @Override
 	public String toString(){
 		return "START="+startDate+", END="+endDate+","+label+","+notes+","+locationAddress+","+startPlaceAddress+","+actStatus.name();
 	}
@@ -62,6 +63,15 @@ public abstract class Activity {
 		this.keySet=true;
 	}
 	
+        public static boolean fixedBreakOverlap(FixedActivity fAct, Break br){
+            return (br.getStartDate().after(fAct.startDate) || br.getStartDate().equals(fAct.startDate))
+                                    && br.getStartDate().before(fAct.endDate) ||
+                                    br.getEndDate().after(fAct.startDate) && 
+                                    (br.getEndDate().before(fAct.endDate) || br.getEndDate().equals(fAct.endDate)) 
+                                        || (br.getStartDate().before(fAct.startDate) ||  br.getStartDate().equals(fAct.startDate))
+                                            && (br.getEndDate().after(fAct.endDate) ||  br.getEndDate().equals(fAct.endDate));
+        } 
+        
 	/* ******GETTERS**********/
 	public int getKey(){
 		return this.key;

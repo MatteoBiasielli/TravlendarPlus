@@ -117,6 +117,17 @@ public class Calendar {
 			ris+="("+fa.toString()+")\n";
 		return ris;
 	}
+        
+        public static Calendar modifyCalendarWithEstimatedTravelTimes(Calendar c){
+            ArrayList<FixedActivity> fa=c.getFixedActivities();
+            ArrayList<FixedActivity> modified= new ArrayList<>();
+            for(FixedActivity act:fa){
+                FixedActivity mod=new FixedActivity(new Date(act.getStartDate().getTime()-act.getEstimatedTravelTime()*60*1000),act.getEndDate(),null,null,null,null,null);
+                modified.add(mod);
+            }
+            ArrayList<Break> b= Break.copyList(c.getBreaks());
+            return new Calendar(modified,b);
+        }
 	/*********************GETTERS**********************************/
 	public ArrayList<FixedActivity> getFixedActivities(){
 		return fixedActivities;

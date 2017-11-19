@@ -25,10 +25,10 @@ public class FixedActivity extends Activity{
 	public FixedActivity(FixedActivity fa){
 		this.startDate=new Date(fa.startDate.getTime());
 		this.endDate=new Date(fa.endDate.getTime());
-		this.label=new String(fa.label);
-		this.notes=new String(fa.notes);
-		this.locationAddress=new String(fa.locationAddress);
-		this.startPlaceAddress=new String(fa.startPlaceAddress);
+		this.label=fa.label==null?null:new String(fa.label);
+		this.notes=fa.notes==null?null:new String(fa.notes);
+		this.locationAddress=fa.locationAddress==null?null:new String(fa.locationAddress);
+		this.startPlaceAddress=fa.startPlaceAddress==null?null:new String(fa.startPlaceAddress);
 		this.actStatus=fa.actStatus;
 		this.key=fa.key;
 		this.keySet=fa.keySet;
@@ -107,27 +107,13 @@ public class FixedActivity extends Activity{
 	private void boundSubCalendar(Calendar c,ArrayList<FixedActivity> fixApp, ArrayList<Break> breaks) {
 		ArrayList<FixedActivity> fa=c.getFixedActivities();
 		ArrayList<Break> b=c.getBreaks();
-		for(Break br:b){
-			if((br.getStartDate().after(this.startDate) || br.getStartDate().equals(this.startDate))
-					&& br.getStartDate().before(this.endDate) ||
-					br.getEndDate().after(this.startDate) && 
-				(br.getEndDate().before(this.endDate) || br.getEndDate().equals(this.endDate))){
+		for(Break br:b)
+			if(Activity.fixedBreakOverlap(this, br))
 				breaks.add(br);
-			}
-		}
-		for(FixedActivity fAct: fa){
-			for(Break br:breaks){
-				if((br.getStartDate().after(fAct.startDate) || br.getStartDate().equals(fAct.startDate))
-                                    && br.getStartDate().before(fAct.endDate) ||
-                                    br.getEndDate().after(fAct.startDate) && 
-                                    (br.getEndDate().before(fAct.endDate) || br.getEndDate().equals(fAct.endDate)) 
-                                        || (br.getStartDate().before(fAct.startDate) ||  br.getStartDate().equals(fAct.startDate))
-                                            && (br.getEndDate().after(fAct.endDate) ||  br.getEndDate().equals(fAct.endDate))){
+		for(FixedActivity fAct: fa)
+			for(Break br:breaks)
+				if(Activity.fixedBreakOverlap(fAct, br))
 					fixApp.add(fAct);
-					break;
-				}
-			}
-		}
 	}
 	
 	
@@ -154,10 +140,28 @@ public class FixedActivity extends Activity{
             return 5;
         }
         
+        //TOFIX
         @Override
         public ResponseAddActivityNotification generateRequiredNotification(Calendar c) {
+            Calendar mod= Calendar.modifyCalendarWithEstimatedTravelTimes(c);
+            FixedActivity thisMod= new FixedActivity(new Date(this.startDate.getTime()-this.estimatedTravelTime*60*1000),this.endDate,null,null,null,null,null);
+            ArrayList<FixedActivity> calendarActivities= mod.getFixedActivities();
+            for(FixedActivity fa:calendarActivities)
+                    if(!thisMod.isBefore(fa) && !thisMod.isAfter(fa)){
+                        if(fa.endDate.after(thisMod.endDate))
+                            return ResponseAddActivityNotification.CANNOT_BE_ON_TIME_NEXT;
+                        else
+                            return ResponseAddActivityNotification.CANNOT_BE_ON_TIME;
+                    }     
+            ArrayList<FixedActivity> fixApp=new ArrayList<>();
+            ArrayList<Break> breaks=new ArrayList<>();
+            boundSubCalendar(mod,fixApp, breaks);
+            fixApp.add(thisMod);
+            if(!c.canBeACalendar(fixApp,breaks))
+                return ResponseAddActivityNotification.OTHER;
             return ResponseAddActivityNotification.NO;
         }
+        
         
 	/* SETTERS */
         public void setEstimatedTravelTime(int ett){

@@ -28,10 +28,10 @@ public class Break extends Activity{
 		this.startDate=new Date(act.startDate.getTime());
 		this.endDate=new Date(act.endDate.getTime());
 		this.duration=act.duration;
-		this.label=new String(act.label);
-		this.notes=new String(act.notes);
-		this.locationAddress=new String(act.locationAddress);
-		this.startPlaceAddress=new String(act.startPlaceAddress);
+                this.label=act.label==null?null:new String(act.label);
+		this.notes=act.notes==null?null:new String(act.notes);
+		this.locationAddress=act.locationAddress==null?null:new String(act.locationAddress);
+		this.startPlaceAddress=act.startPlaceAddress==null?null:new String(act.startPlaceAddress);
 		this.actStatus=act.actStatus;
 		this.key=act.key;
 		this.keySet=act.keySet;
@@ -75,6 +75,9 @@ public class Break extends Activity{
         
         @Override
         public ResponseAddActivityNotification generateRequiredNotification(Calendar c) {
+            Calendar mod= Calendar.modifyCalendarWithEstimatedTravelTimes(c);
+            if(!this.canBeAddedTo(mod))
+                return ResponseAddActivityNotification.OTHER;
             return ResponseAddActivityNotification.NO;
         }
         

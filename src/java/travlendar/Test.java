@@ -8,11 +8,13 @@ package travlendar;
 import java.io.PrintStream;
 import java.sql.SQLException;
 import java.util.Date;
+import travlendarplus.calendar.activities.Break;
 import travlendarplus.data.DataLayer;
 import travlendarplus.exceptions.InvalidInputException;
 import travlendarplus.exceptions.InvalidLoginException;
 import travlendarplus.exceptions.InvalidPositionException;
 import travlendarplus.exceptions.UnconsistentValueException;
+import travlendarplus.user.User;
 
 /**
  *
@@ -23,6 +25,10 @@ public class Test {
         /*User u=new User("cane","cane");
         String tag="CANION";
         DataLayer.deleteFavPosition(u, tag);*/
-        System.out.println(new Date().getTime());
+        User u=new User("cane", "cane");
+        u.getCalendarFromDB();
+        Break b=u.getCalendar().getBreaks().get(0);
+        b.generateRequiredNotification(u.getCalendar());
+        
     }
 }

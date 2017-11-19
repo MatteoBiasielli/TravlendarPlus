@@ -118,4 +118,45 @@
     </servlet-mapping>
     
     
+    
+    <servlet>
+        <servlet-name>AddTagServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.addtag.AddTagServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddTagServlet</servlet-name>
+        <url-pattern>/addtag</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AlreadyExistingTagAddTagServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.addtag.AlreadyExistingTagAddTagServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AlreadyExistingTagAddTagServlet</servlet-name>
+        <url-pattern>/tagexistsaddtag</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidLoginAddTagServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.addtag.InvalidLoginAddTagServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidLoginAddTagServlet</servlet-name>
+        <url-pattern>/invalidloginaddtag</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidInputAddTagServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.addtag.InvalidInputAddTagServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidInputAddTagServlet</servlet-name>
+        <url-pattern>/invalidinputaddtag</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ConnectionProblemAddTagServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.addtag.ConnectionProblemAddTagServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConnectionProblemAddTagServlet</servlet-name>
+        <url-pattern>/connectionerroraddtag</url-pattern>
+    </servlet-mapping>
 </web-app>

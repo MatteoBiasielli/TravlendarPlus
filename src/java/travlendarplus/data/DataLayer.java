@@ -342,21 +342,55 @@ public class DataLayer {
 	 * @throws InvalidInputException if the given username/password in the input object u or the tag are not strings containing only letters
 	 * @throws SQLException  if a database access error occurs
 	 * @throws InvalidLoginException  if the object u doesn't represent a valid login
+         * @throws UnconsistentValueException if there are mismatches between ids and tags in the db
+         * @throws InvalidPositionException if the coordinates associated don't correspond t any valid address on Earth
 	 */
-        public static void deleteFavPosition(User u, String tag) throws InvalidInputException, SQLException, InvalidLoginException{
+        public static void deleteFavPosition(User u, String tag) throws InvalidInputException, SQLException, InvalidLoginException, UnconsistentValueException, InvalidPositionException{
                 if(!validLogin(u.getUsername(),u.getPassword()))
                     throw new InvalidLoginException("Invalid Username or Password");
                 if(!tag.matches("([a-z]|[A-Z])+"))
                     throw new InvalidInputException("Invalid tag.");
                 Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
                 Statement stmt = con.createStatement();
-                String query="DELETE FROM FAVPOSITIONS WHERE"
+                int tID=DataLayer.getIDFromTag(u, tag);
+                String textAddr= APIManager.googleReverseGeocodingRequest(DataLayer.getPositionFromID(tID));
+                String query="UPDATE ACTIVITY SET START_PLACE_TAG_ID=NULL, START_PLACE_TEXT='"+textAddr+"' WHERE START_PLACE_TAG_ID="+tID;
+                stmt.execute(query);
+                query="UPDATE ACTIVITY SET LOCATION_TAG_ID=NULL, LOCATION_TEXT='"+textAddr+"' WHERE LOCATION_TAG_ID="+tID;
+                stmt.execute(query);
+                query="DELETE FROM FAVPOSITIONS WHERE"
         		+ " FAVPOSITIONS.TAG='"+tag+"'"
         		+ " AND FAVPOSITIONS.USER_ID="+DataLayer.getUserKeyID(u.getUsername());
                 stmt.execute(query);
                 con.close();
         }
         
+        public static void addFavPosition(User u, Position pos, String tag) throws InvalidLoginException, InvalidInputException, SQLException, AlreadyExistingTagException{
+                if(!validLogin(u.getUsername(),u.getPassword()))
+                    throw new InvalidLoginException("Invalid Username or Password");
+                if(!tag.matches("([a-z]|[A-Z])+"))
+                    throw new InvalidInputException("Invalid tag.");
+                try{
+                    DataLayer.getIDFromTag(u, tag);
+                    throw new AlreadyExistingTagException("The tag already exists");
+                }catch(InvalidInputException e){
+                    Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
+                    Statement stmt = con.createStatement();
+                    int userID=DataLayer.getUserKeyID(u.getUsername());
+                    String query="INSERT INTO FAVPOSITIONS VALUES "
+                            +"(NULL,"+userID+","+pos.getLatitude()+","+pos.getLongitude()+",'"+tag+"')";
+                    stmt.execute(query);
+                    con.close();
+                }                
+        }
+        
+        /**Retrieves a user's favourite positions in the DB. At the end of the method, the result is put in the input object
+	 * @param u is an object containing username and password of the user for which to retrieve the tags
+	 * @throws InvalidInputException if the given username/password in the input object u are not strings containing only letters
+	 * @throws SQLException  if a database access error occurs
+	 * @throws InvalidLoginException  if the object u doesn't represent a valid login
+         * @throws InvalidPositionException if the coordinates associated don't correspond t any valid address on Earth
+	 */
         public static void getFavPositions(User u) throws InvalidInputException, SQLException, InvalidLoginException, InvalidPositionException{
                 if(!validLogin(u.getUsername(),u.getPassword()))
 			throw new InvalidLoginException("Invalid Username or Password");

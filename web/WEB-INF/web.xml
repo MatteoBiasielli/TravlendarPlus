@@ -209,4 +209,42 @@
         <servlet-name>AddActivityServlet</servlet-name>
         <url-pattern>/addactivity</url-pattern>
     </servlet-mapping>
+
+
+
+    <servlet>
+        <servlet-name>DeleteActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.deleteactivity.DeleteActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteActivityServlet</servlet-name>
+        <url-pattern>/deleteactivity</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>InvalidInputDeleteActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.deleteactivity.InvalidInputDeleteActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidInputDeleteActivityServlet</servlet-name>
+        <url-pattern>/invalidinputdeleteactivity</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>InvalidLoginDeleteActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.deleteactivity.InvalidLoginDeleteActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidLoginDeleteActivityServlet</servlet-name>
+        <url-pattern>/invalidlogindeleteactivity</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ConnectionProblemDeleteActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.deleteactivity.ConnectionProblemDeleteActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConnectionProblemDeleteActivityServlet</servlet-name>
+        <url-pattern>/connectionerrordeleteactivity</url-pattern>
+    </servlet-mapping>
 </web-app>

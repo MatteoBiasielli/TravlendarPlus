@@ -34,6 +34,14 @@ public class FixedActivity extends Activity{
 		this.keySet=fa.keySet;
                 this.estimatedTravelTime=fa.estimatedTravelTime;
 	}
+
+	/**
+	 *
+	 */
+	public FixedActivity(){
+		key = 0;
+		keySet = false;
+	}
 	
 	/*************************************************/
 	

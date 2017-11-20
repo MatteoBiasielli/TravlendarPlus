@@ -35,21 +35,61 @@ public class User {
 		return ris;
 	}
 	
+        /**
+         * 
+         * @return true if the user represents a valid login
+         * @throws InvalidInputException if the given username/password are not a string containing only letters
+         * @throws SQLException is a database access error occurs
+         */
         public boolean isValidLogin() throws InvalidInputException, SQLException{
             return DataLayer.validLogin(username, password);
         }
+        
+        /**
+         * 
+         * @return true if the username exists in the DB
+         * @throws InvalidInputException if the given username is not a string containing only letters
+         * @throws SQLException is a database access error occurs
+         */
         public boolean usernameExists() throws InvalidInputException, SQLException{
             return DataLayer.usernameExists(username);
         }
+        
+        /**Retrieves a user's calendar in the DB. At the end of the method, the result is put in the caller object
+	 * @throws InvalidInputException if the given username/password in this object are not strings containing only letters
+	 * @throws SQLException  if a database access error occurs
+	 * @throws InvalidLoginException  if the caller object doesn't represent a valid login
+	 * @throws UnconsistentValueException is there's an inconsistency among favorite position's values in the database
+	 */
         public void getCalendarFromDB() throws InvalidInputException, SQLException, InvalidLoginException, UnconsistentValueException{
             DataLayer.getCalendar(this);
         }
+        
+        /**Retrieves the caller object's preferences in the DB. At the end of the method, the result is put in the caller object
+	 * @throws InvalidInputException if the given username/password in the caller object are not strings containing only letters
+	 * @throws SQLException  if a database access error occurs
+	 * @throws InvalidLoginException  if the caller object doesn't represent a valid login
+	 * @throws UnconsistentValueException is there's a mismatch between values in the database and RangedPreferencedType's values
+	 */
         public void getPreferencesFromDB() throws InvalidInputException, SQLException, InvalidLoginException, UnconsistentValueException{
             DataLayer.getPreferences(this);
         }
+        
+        /**Registers the user in the DB
+	 * @throws InvalidInputException if the given username/password are not a string containing only letters or if rst is null
+	 * @throws SQLException  if a database access error occurs
+	 * @throws AlreadyExistingUserException  if the DB already contains the given username
+	 */
         public void registerInDB() throws InvalidInputException, SQLException, AlreadyExistingUserException {
             DataLayer.registerUser(username, password, RegistrationStatus.REGULAR);
         }
+        
+        /**Retrieves the caller object's favourite positions in the DB. At the end of the method, the result is put in the caller object
+	 * @throws InvalidInputException if the given username/password in the caller object u are not strings containing only letters
+	 * @throws SQLException  if a database access error occurs
+	 * @throws InvalidLoginException  if the caller object doesn't represent a valid login
+         * @throws InvalidPositionException if the coordinates associated to some position don't correspond to any valid address on Earth
+	 */
         public void getfavPositionsFromDB() throws InvalidInputException,InvalidPositionException, SQLException, InvalidLoginException{
             DataLayer.getFavPositions(this);
         }

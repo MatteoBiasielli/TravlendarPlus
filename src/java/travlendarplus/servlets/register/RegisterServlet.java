@@ -39,6 +39,15 @@ public class RegisterServlet extends HttpServlet {
        computeResponse(request,response);
     }
     
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     private void computeResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         try{
             PrintWriter out=response.getWriter();

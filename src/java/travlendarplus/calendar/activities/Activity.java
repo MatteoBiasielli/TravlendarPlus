@@ -63,6 +63,12 @@ public abstract class Activity {
 		this.keySet=true;
 	}
 	
+        /**
+         * Verifies if a fixed activity and a break overlap
+         * @param fAct is the fixed activity
+         * @param br is the break
+         * @return true if the two activities overlap, false otherwise
+         */
         public static boolean fixedBreakOverlap(FixedActivity fAct, Break br){
             return (br.getStartDate().after(fAct.startDate) || br.getStartDate().equals(fAct.startDate))
                                     && br.getStartDate().before(fAct.endDate) ||

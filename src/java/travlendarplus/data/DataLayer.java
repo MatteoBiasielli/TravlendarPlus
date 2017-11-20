@@ -365,11 +365,22 @@ public class DataLayer {
                 con.close();
         }
         
+        /**Adds a user's favorite place in the DB.
+	 * @param u is an object containing username and password of the user that owns the tag
+         * @param pos is the position on Earth corresponding to the tag
+         * @param tag is the tag to add
+	 * @throws InvalidInputException if the given username/password in the input object u or the tag are not strings containing only letters
+	 * @throws SQLException  if a database access error occurs
+	 * @throws InvalidLoginException  if the object u doesn't represent a valid login or pos is null
+         * @throws AlreadyExistingTagException is the user already owns a tag with the same name in the db
+	 */
         public static void addFavPosition(User u, Position pos, String tag) throws InvalidLoginException, InvalidInputException, SQLException, AlreadyExistingTagException{
                 if(!validLogin(u.getUsername(),u.getPassword()))
                     throw new InvalidLoginException("Invalid Username or Password");
-                if(!tag.matches("([a-z]|[A-Z])+"))
+                if(tag==null || !tag.matches("([a-z]|[A-Z])+"))
                     throw new InvalidInputException("Invalid tag.");
+                if(pos==null)
+                    throw new InvalidInputException("Invalid position.");
                 try{
                     DataLayer.getIDFromTag(u, tag);
                     throw new AlreadyExistingTagException("The tag already exists");
@@ -389,7 +400,7 @@ public class DataLayer {
 	 * @throws InvalidInputException if the given username/password in the input object u are not strings containing only letters
 	 * @throws SQLException  if a database access error occurs
 	 * @throws InvalidLoginException  if the object u doesn't represent a valid login
-         * @throws InvalidPositionException if the coordinates associated don't correspond t any valid address on Earth
+         * @throws InvalidPositionException if the coordinates associated to some position don't correspond t any valid address on Earth
 	 */
         public static void getFavPositions(User u) throws InvalidInputException, SQLException, InvalidLoginException, InvalidPositionException{
                 if(!validLogin(u.getUsername(),u.getPassword()))

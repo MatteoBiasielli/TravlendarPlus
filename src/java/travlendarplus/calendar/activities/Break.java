@@ -15,7 +15,12 @@ public class Break extends Activity{
 	/**
 	 * @param s is the start date
 	 * @param e is the ending date
+         * @param l is the label
+         * @param n is the notes
 	 * @param d is the duration
+         * @param lA is the location address. this is not considered in breaks
+         * @param sP is the start place address. this is not considered in breaks
+         * @param actSt is the activity status
 	 */
 	public Break(Date s, Date e,String l, String n, String lA, String sP, ActivityStatus actSt, long d){
 		super(s,e,l,n,lA,sP,actSt);
@@ -73,6 +78,13 @@ public class Break extends Activity{
             return 0;
         }
         
+        /**
+         * Computes the notification that would be generated when this activity
+         * is added to the calendar given as parameter.
+         * @param c the caledar mentioned above.
+         * @return the notification that would be generated when this activity 
+         * is added to the calendar given as parameter.
+         */
         @Override
         public ResponseAddActivityNotification generateRequiredNotification(Calendar c) {
             Calendar mod= Calendar.modifyCalendarWithEstimatedTravelTimes(c);

@@ -118,6 +118,14 @@ public class Calendar {
 		return ris;
 	}
         
+        /** This method is used in the process of calculating the proper notification
+         * to send to the user in case the activity he wants to insert will not allow him
+         * to be on time to the activity itself or another activity.
+         * The method creates a new calendar where fixed activities are extended to take 
+         * into account also the estimated travel time.
+         * @param c is the calendar to modify.
+         * @return a new calendar where fixed activities are extended to take into account also the estimated travel time.
+         */
         public static Calendar modifyCalendarWithEstimatedTravelTimes(Calendar c){
             ArrayList<FixedActivity> fa=c.getFixedActivities();
             ArrayList<FixedActivity> modified= new ArrayList<>();

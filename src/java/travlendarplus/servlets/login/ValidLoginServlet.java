@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,7 @@ import travlendarplus.user.User;
  *
  * @author matteo
  */
+@WebServlet(name = "ValidLoginServlet", urlPatterns = {"/login"})
 public class ValidLoginServlet extends HttpServlet{
 
     
@@ -45,6 +47,15 @@ public class ValidLoginServlet extends HttpServlet{
        computeResponse(request,response);
     }
     
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     private void computeResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         try{
             PrintWriter out=response.getWriter();

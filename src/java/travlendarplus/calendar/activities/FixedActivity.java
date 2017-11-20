@@ -149,6 +149,13 @@ public class FixedActivity extends Activity{
         }
         
         //TOFIX
+        /**
+         * Computes the notification that would be generated when this activity
+         * is added to the calendar given as parameter.
+         * @param c the caledar mentioned above.
+         * @return the notification that would be generated when this activity 
+         * is added to the calendar given as parameter.
+         */
         @Override
         public ResponseAddActivityNotification generateRequiredNotification(Calendar c) {
             Calendar mod= Calendar.modifyCalendarWithEstimatedTravelTimes(c);

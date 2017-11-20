@@ -247,4 +247,42 @@
         <servlet-name>ConnectionProblemDeleteActivityServlet</servlet-name>
         <url-pattern>/connectionerrordeleteactivity</url-pattern>
     </servlet-mapping>
+
+
+
+    <servlet>
+        <servlet-name>GetCalendarServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.getcalendar.GetCalendarServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetCalendarServlet</servlet-name>
+        <url-pattern>/getcalendar</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ConnectionProblemGetCalendarServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.getcalendar.ConnectionProblemGetCalendarServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConnectionProblemGetCalendarServlet</servlet-name>
+        <url-pattern>/connectionerrorgetcalendar</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>InvalidInputGetCalendarServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.getcalendar.InvalidInputGetCalendarServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidInputGetCalendarServlet</servlet-name>
+        <url-pattern>/invalidinputgetcalendar</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>InvalidLoginGetCalendarServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.getcalendar.InvalidLoginGetCalendarServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidLoginGetCalendarServlet</servlet-name>
+        <url-pattern>/invalidlogingetcalendar</url-pattern>
+    </servlet-mapping>
 </web-app>

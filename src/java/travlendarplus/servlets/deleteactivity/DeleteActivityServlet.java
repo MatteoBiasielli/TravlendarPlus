@@ -34,7 +34,6 @@ public class DeleteActivityServlet extends HttpServlet{
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         computeResponse(request,response);
-
     }
 
     private void computeResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -47,7 +46,7 @@ public class DeleteActivityServlet extends HttpServlet{
             act.setKey(Integer.parseInt(request.getParameter("activityid")));
 
             User u = new User(usr, pss);
-
+            //LOGIN CHECK
             if(!u.isValidLogin())
                 request.getRequestDispatcher("/invalidlogindeleteactivity").forward(request, response);
             //DELETE ACTIVITY
@@ -61,7 +60,7 @@ public class DeleteActivityServlet extends HttpServlet{
 
         }catch (IOException | SQLException | UnconsistentValueException e){
             request.getRequestDispatcher("/connectionerrordeleteactivity").forward(request, response);
-        }catch (InvalidInputException | NumberFormatException e){
+        }catch (InvalidInputException | NumberFormatException | NullPointerException e){
             request.getRequestDispatcher("/invalidinputdeleteactivity").forward(request, response);
         }catch (InvalidLoginException e) {
             request.getRequestDispatcher("/invalidlogindeleteactivity").forward(request, response);

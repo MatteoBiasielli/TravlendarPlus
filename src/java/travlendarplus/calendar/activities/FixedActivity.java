@@ -1,10 +1,25 @@
 package travlendarplus.calendar.activities;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import travlendarplus.apimanager.APIManager;
+import travlendarplus.apimanager.Language;
 
 import travlendarplus.calendar.Calendar;
 import travlendarplus.exceptions.InvalidInputException;
+import travlendarplus.exceptions.InvalidLoginException;
+import travlendarplus.exceptions.InvalidPositionException;
+import travlendarplus.exceptions.NoPathFoundException;
+import travlendarplus.exceptions.UnconsistentValueException;
 import travlendarplus.response.responseaddactivity.ResponseAddActivityNotification;
+import travlendarplus.travel.Route;
+import travlendarplus.travel.TravelMode;
+import travlendarplus.user.FavouritePosition;
+import travlendarplus.user.User;
+import travlendarplus.user.preferences.BooleanPreferencesSet;
 
 public class FixedActivity extends Activity{
     
@@ -137,15 +152,65 @@ public class FixedActivity extends Activity{
 		return ret;
 	}
         
+        
+        //TOFIX
         /**Calculates the esitmated travel time for the activity.
          * This is used for activities that have to be added to the calendar.
+         * @param tagStart is the starting location tag
+         * @param tagLoc is the activity location tag
+         * @param u is the user for which the calulus has to be performed
          * @return the estimated travel time
          */
         @Override
-        public int calculateEstimatedTravelTime(){
-            //TODO
-            this.estimatedTravelTime=5;
-            return 5;
+        public int calculateEstimatedTravelTime(String tagStart, String tagLoc, User u) throws IOException, InvalidInputException, SQLException, InvalidLoginException, UnconsistentValueException, InvalidPositionException{
+            String startAddress=null;
+            String endAddress=null;
+            int carTime=0;
+            int transportTime=0;
+            int bikeTime=0;
+            int count=0;
+            u.getPreferencesFromDB();
+            u.getfavPositionsFromDB();
+            if(tagStart==null)
+                startAddress=this.startPlaceAddress;
+            else
+                for(FavouritePosition pos:u.getFavPositions())
+                    if(tagStart.equals(pos.getTag()))
+                        startAddress=pos.getAddress();
+            if(tagLoc==null)
+                endAddress=this.locationAddress;
+            else
+                for(FavouritePosition pos:u.getFavPositions())
+                    if(tagLoc.equals(pos.getTag()))
+                        endAddress=pos.getAddress();
+            if(startAddress==null || endAddress==null)
+                throw new InvalidInputException();
+            BooleanPreferencesSet userPrefs=u.getBoolPreferences();
+            if(userPrefs.personalCar() || userPrefs.carSharing() || userPrefs.uberTaxi()){
+                try{
+                    Route r=APIManager.googleDirectionsRequest(startAddress, endAddress, TravelMode.DRIVING, false, Language.EN);
+                    count++;
+                    carTime=r.getDuration();
+                }catch(NoPathFoundException e){}
+            }
+            //FOR THE MOMENT, BIKE IS HALF OF WALKING
+            /*if(userPrefs.personalBike() || userPrefs.bikeSharing()){
+                Route r=APIManager.googleDirectionsRequest(startAddress, endAddress, TravelMode.WALKING, false, Language.EN);
+                count++;
+                bikeTime=r.getDuration()/2;
+            }*/
+            if(userPrefs.publicTrasport()){
+                try{
+                    Route r=APIManager.googleDirectionsRequest(startAddress, endAddress, TravelMode.TRANSIT, false, Language.EN);
+                    count++;
+                    transportTime=r.getDuration();
+                }catch(NoPathFoundException e){}
+            }
+            if(count>0)
+                this.estimatedTravelTime=(int)((carTime+transportTime+bikeTime)/count);
+            else
+                this.estimatedTravelTime=0;
+            return this.estimatedTravelTime;
         }
         
         //TOFIX

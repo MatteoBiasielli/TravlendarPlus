@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Route {
 	private TravelMode mode;
-	private ArrayList<Leg> legs;
+	private final ArrayList<Leg> legs;
 	public Route(){
 		legs=new ArrayList<>();
 	}
@@ -15,6 +15,7 @@ public class Route {
 	}
 	
 	/**@return a string human-readable version of the Object**/
+        @Override
 	public String toString(){
 		String out=mode.toString()+"\n";
 		for(Leg l:legs){
@@ -25,4 +26,15 @@ public class Route {
 	public void setMode(TravelMode m){
 		mode=m;
 	}
+        
+        /**
+         * 
+         * @return the total duration of the route
+         */
+        public int getDuration(){
+            int acc=0;
+            for(Leg l:legs)
+                acc=acc+l.getDuration();
+            return (int)(acc/60);
+        }
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import travlendarplus.calendar.Calendar;
 import travlendarplus.response.responseaddactivity.ResponseAddActivityNotification;
+import travlendarplus.user.User;
 
 public class Break extends Activity{
 	
@@ -71,10 +72,13 @@ public class Break extends Activity{
 	
         /**Should calculate the esitmated travel time for the activity.
          * Since breaks don't support/need this, it just returns 0.
+         * @param tagStart is the starting location tag
+         * @param tagLoc is the activity location tag
+         * @param u is the user for which the calulus has to be performed
          * @return 0, always. 
          */
         @Override
-        public int calculateEstimatedTravelTime(){
+        public int calculateEstimatedTravelTime(String tagStart, String tagLoc, User u){
             return 0;
         }
         

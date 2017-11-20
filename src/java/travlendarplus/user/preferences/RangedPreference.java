@@ -21,4 +21,9 @@ public class RangedPreference extends Preference{
 	public int getValue(){
 		return value;
 	}
+
+        @Override
+        public boolean isRanged() {
+            return true;
+        }
 }

@@ -11,6 +11,7 @@ package travlendarplus.response.responseaddactivity;
  */
 public enum ResponseAddActivityType {
     OK("ok"),
+    OK_ESTIMATED_TIME("The activity has been added to your calendar but doe to your too strict travel preferences it was not possible to calculate the estimated travel time. You may not be notified if you'll risk to be late due to the addition of another activity to the calendar."),
     ADD_ACTIVITY_LOGIN_ERROR("The login data are invalid."),
     ADD_ACTIVITY_OVERLAPPING("The activity overlaps with the others"),
     ADD_ACTIVITY_PAST("Cannot add Activities in the past."),

@@ -1,13 +1,13 @@
 package travlendarplus.user.preferences;
 
 public class BooleanPreferencesSet extends Preference{
-	private boolean personalCar;
-	private boolean carSharing;
-	private boolean personalBike;
-	private boolean bikeSharing;
-	private boolean publicTransport;
-	private boolean uberTaxi;
-	private Modality mode;
+	private final boolean personalCar;
+	private final boolean carSharing;
+	private final boolean personalBike;
+	private final boolean bikeSharing;
+	private final boolean publicTransport;
+	private final boolean uberTaxi;
+	private final Modality mode;
 	
 	public BooleanPreferencesSet(boolean pC, boolean cS, boolean pB, boolean bS, boolean pT, boolean uT, Modality m){
 		this.personalCar=pC;
@@ -18,8 +18,7 @@ public class BooleanPreferencesSet extends Preference{
 		this.uberTaxi=uT;
 		this.mode=m;
 	}
-	
-	
+
 	/**@return a string human-readable version of the Object**/
 	public String toString(){
 		return personalCar+","+carSharing+","+personalBike+","+bikeSharing+","+publicTransport+","+ uberTaxi+","+mode.name();
@@ -47,5 +46,10 @@ public class BooleanPreferencesSet extends Preference{
 	public Modality mode(){
 		return this.mode;
 	}
+
+        @Override
+        public boolean isRanged() {
+            return false;
+        }
 	
 }

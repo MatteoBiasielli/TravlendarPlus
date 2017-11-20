@@ -24,6 +24,8 @@ import travlendarplus.data.DataLayer;
 import travlendarplus.exceptions.CannotBeAddedException;
 import travlendarplus.exceptions.InvalidInputException;
 import travlendarplus.exceptions.InvalidLoginException;
+import travlendarplus.exceptions.InvalidPositionException;
+import travlendarplus.exceptions.NoPathFoundException;
 import travlendarplus.exceptions.UnconsistentValueException;
 import travlendarplus.response.responseaddactivity.ResponseAddActivity;
 import travlendarplus.response.responseaddactivity.ResponseAddActivityNotification;
@@ -49,6 +51,7 @@ public class AddActivityServlet extends HttpServlet{
 
     private void computeResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
+            int travelTime;
             PrintWriter out=response.getWriter();
             //GET PARAMETERS
             String p1=request.getParameter("user");
@@ -77,20 +80,26 @@ public class AddActivityServlet extends HttpServlet{
             if(flexible){
                 actToAdd=new Break(startDate, endDate,label, notes,locationText, startText, ActivityStatus.NOT_STARTED, duration);
                 u.getCalendar().addActivity((Break)actToAdd);
+                travelTime=1;
             }else{
-                actToAdd=new FixedActivity(startDate, endDate,label, notes,locationText, startText, ActivityStatus.NOT_STARTED);
-                actToAdd.calculateEstimatedTravelTime();
+                actToAdd=new FixedActivity(startDate, endDate,label, notes,locationText, startText, ActivityStatus.NOT_STARTED); 
+                travelTime=actToAdd.calculateEstimatedTravelTime(startTag,locationTag,u);
                 u.getCalendar().addActivity((FixedActivity)actToAdd);
             }
             DataLayer.addActivity(u, actToAdd, locationTag, startTag);
             ResponseAddActivityNotification notif= actToAdd.generateRequiredNotification(u.getCalendar());
             u.getCalendarFromDB();
-            ResponseAddActivity raa= new ResponseAddActivity(u,ResponseAddActivityType.OK,notif);
+            ResponseAddActivityType type;
+            if(travelTime==0)
+                type=ResponseAddActivityType.OK_ESTIMATED_TIME;
+            else
+                type=ResponseAddActivityType.OK;
+            ResponseAddActivity raa= new ResponseAddActivity(u,type,notif);
             Gson gson= new GsonBuilder().create();
             gson.toJson(raa,out);
         } catch (IOException|SQLException|UnconsistentValueException ex) {
             request.getRequestDispatcher("/connectionproblemaddactivity").forward(request, response);
-        } catch (InvalidInputException|NullPointerException|NumberFormatException ex) {
+        } catch (InvalidInputException|NullPointerException|NumberFormatException|InvalidPositionException ex) {
             request.getRequestDispatcher("/invalidinputaddactivity").forward(request, response);
         } catch (InvalidLoginException ex) {
             request.getRequestDispatcher("/invalidloginaddactivity").forward(request, response);

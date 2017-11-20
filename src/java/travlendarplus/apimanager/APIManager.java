@@ -16,9 +16,9 @@ import travlendarplus.travel.*;
 
 public class APIManager {
     /**Our Google API directions key **/
-    private static String GOOGLE_DIRECTIONS_KEY="AIzaSyD4fwbgFzeyR1QwFAWDkxr9VPhEIu4asb4";
+    private static final String GOOGLE_DIRECTIONS_KEY="AIzaSyD4fwbgFzeyR1QwFAWDkxr9VPhEIu4asb4";
     /**Our Google API geocoding key **/
-    private static String GOOGLE_GEOCODING_KEY="AIzaSyAwj27Z9huHhxLe1LWW5-gzx8iOcJf78QE";
+    private static final String GOOGLE_GEOCODING_KEY="AIzaSyAwj27Z9huHhxLe1LWW5-gzx8iOcJf78QE";
 
     /**
      * Public method that masks the http request that is done to the Google Directions service to get the travel options.
@@ -58,7 +58,7 @@ public class APIManager {
 
     /**
      * Public method that masks the http request that is done to the Google reverse geocoding service
-     * @param position is the position to convert into address
+     * @param p is the position to convert into address
      * @returns a String object representing the formatted complete address
      * @throws InvalidPositionException if the given position doesn't correspond to any address
      */

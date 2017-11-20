@@ -17,10 +17,14 @@ public class Leg {
 	}
 	
 	/**@return a string human-readable version of the Object**/
+        @Override
 	public String toString(){
 		String ris=start+" -> "+end+" - "+duration;
 		for(Step s:steps)
 			ris+="\n      " + s.toString();
 		return ris+"\n";
 	}
+        public int getDuration(){
+            return this.durationInt;
+        }
 }

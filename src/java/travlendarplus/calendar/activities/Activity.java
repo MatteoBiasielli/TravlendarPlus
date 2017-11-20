@@ -1,10 +1,18 @@
 package travlendarplus.calendar.activities;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 
 import travlendarplus.calendar.Calendar;
+import travlendarplus.exceptions.InvalidInputException;
+import travlendarplus.exceptions.InvalidLoginException;
+import travlendarplus.exceptions.InvalidPositionException;
+import travlendarplus.exceptions.NoPathFoundException;
+import travlendarplus.exceptions.UnconsistentValueException;
 import travlendarplus.exceptions.UnsopportedOperationException;
 import travlendarplus.response.responseaddactivity.ResponseAddActivityNotification;
+import travlendarplus.user.User;
 
 public abstract class Activity {
 	protected Date startDate;
@@ -107,5 +115,5 @@ public abstract class Activity {
 	public abstract boolean isFlexible();
 	public abstract long getDuration();
         public abstract int getEstimatedTravelTime();
-        public abstract int calculateEstimatedTravelTime();
+        public abstract int calculateEstimatedTravelTime(String tagStart, String tagLoc, User u) throws IOException, InvalidInputException, SQLException, InvalidLoginException, UnconsistentValueException, InvalidPositionException;
 }

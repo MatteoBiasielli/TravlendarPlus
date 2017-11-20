@@ -10,6 +10,7 @@ import travlendarplus.exceptions.InvalidInputException;
 import travlendarplus.exceptions.InvalidLoginException;
 import travlendarplus.exceptions.InvalidPositionException;
 import travlendarplus.exceptions.UnconsistentValueException;
+import travlendarplus.user.preferences.BooleanPreferencesSet;
 import travlendarplus.user.preferences.Preference;
 
 public class User {
@@ -121,5 +122,10 @@ public class User {
         public ArrayList<FavouritePosition> getFavPositions(){
                 return this.favPos;
         }
-    
+        public BooleanPreferencesSet getBoolPreferences(){
+                for(Preference p:this.preferences)
+                    if(!p.isRanged())
+                        return (BooleanPreferencesSet)p;
+                return null;
+        }
 }

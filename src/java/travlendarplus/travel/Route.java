@@ -1,6 +1,7 @@
 package travlendarplus.travel;
 
 import java.util.ArrayList;
+import travlendarplus.user.preferences.Preference;
 
 
 
@@ -37,4 +38,21 @@ public class Route {
                 acc=acc+l.getDuration();
             return (int)(acc/60);
         }
+        
+        /**
+        * @param m is the modality
+        * @return the total travel time with the specified modality*/
+        public int getTimeByModality(TravelMode m){
+            int acc=0;
+            for(Leg l:legs)
+                acc=acc+l.getTimeByModality(m);
+            return (int)(acc/60);
+        }
+
+    public boolean respects(ArrayList<Preference> preferences) {
+        for(Preference p:preferences)
+            if(!p.isRespectedBy(this))
+                return false;
+        return true;    
+    }
 }

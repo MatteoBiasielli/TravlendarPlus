@@ -285,4 +285,56 @@
         <servlet-name>InvalidLoginGetCalendarServlet</servlet-name>
         <url-pattern>/invalidlogingetcalendar</url-pattern>
     </servlet-mapping>
+    
+    
+    
+    
+    <servlet>
+        <servlet-name>TravelServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.travel.TravelServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TravelServlet</servlet-name>
+        <url-pattern>/travel</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>NoActivityTravelServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.travel.NoActivityTravelServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NoActivityTravelServlet</servlet-name>
+        <url-pattern>/noactivitytravel</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>NoRouteTravelServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.travel.NoRouteTravelServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NoRouteTravelServlet</servlet-name>
+        <url-pattern>/noroutetravel</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ConnectionErrorTravelServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.travel.ConnectionErrorTravelServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConnectionErrorTravelServlet</servlet-name>
+        <url-pattern>/connectionerrortravel</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidInputTravelServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.travel.InvalidInputTravelServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidInputTravelServlet</servlet-name>
+        <url-pattern>/invalidinputtravel</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidLoginTravelServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.travel.InvalidLoginTravelServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidLoginTravelServlet</servlet-name>
+        <url-pattern>/invalidlogintravel</url-pattern>
+    </servlet-mapping>
 </web-app>

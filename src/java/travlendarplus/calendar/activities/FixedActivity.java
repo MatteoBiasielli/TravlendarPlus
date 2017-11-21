@@ -3,8 +3,6 @@ package travlendarplus.calendar.activities;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import travlendarplus.apimanager.APIManager;
 import travlendarplus.apimanager.Language;
 
@@ -243,6 +241,39 @@ public class FixedActivity extends Activity{
         }
         
         
+        
+        public ArrayList<Route> computeTravels(User u) throws NoPathFoundException, IOException{
+            ArrayList<Route> ris=new ArrayList<>();
+            BooleanPreferencesSet userPref=u.getBoolPreferences();
+            //DRIVING TRAVEL MEAN
+            if(userPref.personalCar()){
+                try{
+                        Route r=APIManager.googleDirectionsRequest(startPlaceAddress, locationAddress, TravelMode.DRIVING, false, Language.EN);
+                        if(r.respects(u.getPreferences()))
+                            ris.add(r);
+                }catch(NoPathFoundException e){}
+            }
+            //PUBLIC TRANSPORT TRAVEL MEAN
+            if(userPref.publicTrasport()){
+                try{
+                        Route r=APIManager.googleDirectionsRequest(startPlaceAddress, locationAddress, TravelMode.TRANSIT, false, Language.EN);
+                        if(r.respects(u.getPreferences()))
+                            ris.add(r);
+                }catch(NoPathFoundException e){}
+            }
+            //WALKING TRAVEL MEAN
+            try{
+                    Route r=APIManager.googleDirectionsRequest(startPlaceAddress, locationAddress, TravelMode.TRANSIT, false, Language.EN);
+                    if(r.respects(u.getPreferences()))
+                        ris.add(r);
+            }catch(NoPathFoundException e){}
+            
+            if(ris.isEmpty())
+                throw new NoPathFoundException("No routes were found.");
+            return ris;
+        }
+        
+        
 	/* SETTERS */
         public void setEstimatedTravelTime(int ett){
             this.estimatedTravelTime=ett;
@@ -260,6 +291,8 @@ public class FixedActivity extends Activity{
         public int getEstimatedTravelTime(){
             return this.estimatedTravelTime;
         }
+
+        
 
         
 }

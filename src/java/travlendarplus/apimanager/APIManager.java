@@ -182,13 +182,18 @@ public class APIManager {
                     int tv=jsonSteps.getJSONObject(z).getJSONObject("duration").getInt("value");
                     String inst=jsonSteps.getJSONObject(z).getString("html_instructions");
                     String mode=jsonSteps.getJSONObject(z).getString("travel_mode");
+                    Step st;
                     if("TRANSIT".equals(mode)){
                         String arrival=jsonSteps.getJSONObject(z).getJSONObject("transit_details").getJSONObject("arrival_stop").getString("name");
                         int nStops=jsonSteps.getJSONObject(z).getJSONObject("transit_details").getInt("num_stops");
-                        steps.add(new TransitStep(dt,dv,tt,tv,inst,nStops,arrival));
+                        st=new TransitStep(dt,dv,tt,tv,inst,nStops,arrival);
+                        steps.add(st);
                     }
-                    else
-                        steps.add(new Step(dt,dv,tt,tv,inst));
+                    else{
+                        st=new Step(dt,dv,tt,tv,inst);
+                        steps.add(st);
+                    }
+                    st.setMode(TravelMode.valueOf(mode));
                 }
                 leg=new Leg(s,e,d,dur,steps);
                 res.getLegs().add(leg);

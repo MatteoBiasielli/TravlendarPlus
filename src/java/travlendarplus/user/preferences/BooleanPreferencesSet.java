@@ -1,5 +1,7 @@
 package travlendarplus.user.preferences;
 
+import travlendarplus.travel.Route;
+
 public class BooleanPreferencesSet extends Preference{
 	private final boolean personalCar;
 	private final boolean carSharing;
@@ -24,6 +26,11 @@ public class BooleanPreferencesSet extends Preference{
 		return personalCar+","+carSharing+","+personalBike+","+bikeSharing+","+publicTransport+","+ uberTaxi+","+mode.name();
 	}
 	
+        @Override
+        public boolean isRespectedBy(Route r) {
+            return true;
+        }
+        
 	/*GETTERS*/
 	public boolean personalCar(){
 		return this.personalCar;
@@ -51,5 +58,7 @@ public class BooleanPreferencesSet extends Preference{
         public boolean isRanged() {
             return false;
         }
+
+        
 	
 }

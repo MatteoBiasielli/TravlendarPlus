@@ -9,21 +9,26 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import travlendarplus.exceptions.InvalidInputException;
+import travlendarplus.exceptions.InvalidLoginException;
+import travlendarplus.exceptions.UnconsistentValueException;
 import travlendarplus.response.responsegetpreferences.ResponseGetPreferences;
 import travlendarplus.response.responsegetpreferences.ResponseGetPreferencesType;
+import travlendarplus.user.User;
 
 /**
  *
  * @author Emilio
  */
-@WebServlet(name = "InvalidInputGetPreferencesServlet", urlPatterns = {"/invalidinputgetpreferences"})
-public class InvalidInputGetPreferencesServlet extends HttpServlet {
-
+@WebServlet(name = "GetPreferencesServlet", urlPatterns = {"/getpreferences"})
+public class GetPreferencesServlet extends HttpServlet {
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -58,9 +63,24 @@ public class InvalidInputGetPreferencesServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void computeResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out= new PrintWriter(response.getWriter());
-        ResponseGetPreferences rr= new ResponseGetPreferences(ResponseGetPreferencesType.GET_PREFERENCES_WRONG_INPUT);
-        Gson gson= new GsonBuilder().create();
-        gson.toJson(rr,out);
+        try{
+            PrintWriter out = response.getWriter();
+            //GETPARAMETERS
+            String p1 = request.getParameter("user");
+            String p2 = request.getParameter("pass");
+            User u = new User(p1, p2);
+            //COMPUTE
+            u.getPreferencesFromDB();
+            //RESPONSE
+            ResponseGetPreferences rr = new ResponseGetPreferences(ResponseGetPreferencesType.OK);
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(rr, out);
+        } catch (IOException|SQLException|UnconsistentValueException e){
+            request.getRequestDispatcher("/connectionerrorgetpreferences").forward(request, response);
+        } catch (InvalidInputException e){
+            request.getRequestDispatcher("/invalidinputgetpreferences").forward(request, response);
+        } catch (InvalidLoginException e){
+            request.getRequestDispatcher("/invalidlogingetpreferences").forward(request, response);
+        }
     }
 }

@@ -263,7 +263,7 @@ public class FixedActivity extends Activity{
             }
             //WALKING TRAVEL MEAN
             try{
-                    Route r=APIManager.googleDirectionsRequest(startPlaceAddress, locationAddress, TravelMode.TRANSIT, false, Language.EN);
+                    Route r=APIManager.googleDirectionsRequest(startPlaceAddress, locationAddress, TravelMode.WALKING, false, Language.EN);
                     if(r.respects(u.getPreferences()))
                         ris.add(r);
             }catch(NoPathFoundException e){}

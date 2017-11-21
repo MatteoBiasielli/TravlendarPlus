@@ -26,8 +26,8 @@ import travlendarplus.user.User;
  *
  * @author Emilio
  */
-@WebServlet(name = "getPreferencesServlet", urlPatterns = {"/getpreferences"})
-public class getPreferencesServlet extends HttpServlet {
+@WebServlet(name = "GetPreferencesServlet", urlPatterns = {"/getpreferences"})
+public class GetPreferencesServlet extends HttpServlet {
     
     /**
      * Handles the HTTP <code>POST</code> method.

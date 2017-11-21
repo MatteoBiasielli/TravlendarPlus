@@ -336,6 +336,7 @@
     <servlet-mapping>
         <servlet-name>InvalidLoginTravelServlet</servlet-name>
         <url-pattern>/invalidlogintravel</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>GetPreferencesServlet</servlet-name>
         <servlet-class>travlendarplus.servlets.getpreferences.GetPreferencesServlet</servlet-class>
@@ -346,7 +347,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>ConnectionErrorGetPreferencesServlet</servlet-name>
-        <servlet-class>travlendarplus.servlets.getcalendar.ConnectionErrorGetPreferencesServlet</servlet-class>
+        <servlet-class>travlendarplus.servlets.getpreferences.ConnectionErrorGetPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ConnectionErrorGetPreferencesServlet</servlet-name>
@@ -354,7 +355,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>InvalidLoginGetPreferencesServlet</servlet-name>
-        <servlet-class>travlendarplus.servlets.getcalendar.InvalidLoginGetPreferencesServlet</servlet-class>
+        <servlet-class>travlendarplus.servlets.getpreferences.InvalidLoginGetPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>InvalidLoginGetPreferencesServlet</servlet-name>
@@ -362,7 +363,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>InvalidInputGetPreferencesServlet</servlet-name>
-        <servlet-class>travlendarplus.servlets.getcalendar.InvalidInputGetPreferencesServlet</servlet-class>
+        <servlet-class>travlendarplus.servlets.getpreferences.InvalidInputGetPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>InvalidInputGetPreferencesServlet</servlet-name>

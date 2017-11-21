@@ -77,7 +77,7 @@ public class GetPreferencesServlet extends HttpServlet {
             gson.toJson(rr, out);
         } catch (IOException|SQLException|UnconsistentValueException e){
             request.getRequestDispatcher("/connectionerrorgetpreferences").forward(request, response);
-        } catch (InvalidInputException e){
+        } catch (InvalidInputException|NullPointerException e){
             request.getRequestDispatcher("/invalidinputgetpreferences").forward(request, response);
         } catch (InvalidLoginException e){
             request.getRequestDispatcher("/invalidlogingetpreferences").forward(request, response);

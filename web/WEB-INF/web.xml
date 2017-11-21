@@ -337,6 +337,7 @@
         <servlet-name>InvalidLoginTravelServlet</servlet-name>
         <url-pattern>/invalidlogintravel</url-pattern>
     </servlet-mapping>
+    
     <servlet>
         <servlet-name>GetPreferencesServlet</servlet-name>
         <servlet-class>travlendarplus.servlets.getpreferences.GetPreferencesServlet</servlet-class>
@@ -368,5 +369,38 @@
     <servlet-mapping>
         <servlet-name>InvalidInputGetPreferencesServlet</servlet-name>
         <url-pattern>/invalidinputgetpreferences</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>UpdateBooleanPreferencesServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.updatebooleanpreferences.UpdateBooleanPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetPreferencesServlet</servlet-name>
+        <url-pattern>/updatebooleanpreferences</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ConnectionErrorUpdateBooleanPreferencesServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.updatebooleanpreferences.ConnectionErrorUpdateBooleanPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConnectionErrorUpdateBooleanPreferencesServlet</servlet-name>
+        <url-pattern>/connectionerrorupdatebooleanpreferences</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidLoginUpdateBooleanPreferencesServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.updatebooleanpreferences.InvalidLoginUpdateBooleanPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidLoginUpdateBooleanPreferencesServlet</servlet-name>
+        <url-pattern>/invalidloginupdatebooleanpreferences</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidInputUpdatebooleanPreferencesServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.updatebooleanpreferences.InvalidInputUpdateBooleanPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidInputGetPreferencesServlet</servlet-name>
+        <url-pattern>/invalidinputupdatebooleanpreferences</url-pattern>
     </servlet-mapping>
 </web-app>

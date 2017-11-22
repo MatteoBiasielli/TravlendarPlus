@@ -376,7 +376,7 @@
         <servlet-class>travlendarplus.servlets.updatebooleanpreferences.UpdateBooleanPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>GetPreferencesServlet</servlet-name>
+        <servlet-name>UpdateBooleanPreferencesServlet</servlet-name>
         <url-pattern>/updatebooleanpreferences</url-pattern>
     </servlet-mapping>
     <servlet>

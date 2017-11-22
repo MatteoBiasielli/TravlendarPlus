@@ -88,9 +88,9 @@ public class APIManager {
     private static ArrayList<Forecast> parseYahooWeatherResponse(String json) {
         ArrayList<Forecast> ris= new ArrayList<>();
         JSONObject jsonData = new JSONObject(json);
+        try{
         JSONObject result= jsonData.getJSONObject("query").getJSONObject("results");
-        if(result==null)
-            return ris;
+        
         JSONObject item=result.getJSONObject("channel").getJSONObject("item");
         JSONArray forecasts=item.getJSONArray("forecast");
         for(int i=0; i<forecasts.length();i++){
@@ -100,6 +100,10 @@ public class APIManager {
             int max=Integer.parseInt(forecasts.getJSONObject(i).getString("high"));
             int min=Integer.parseInt(forecasts.getJSONObject(i).getString("low"));
             ris.add(new Forecast(day,max,min,text,date));
+        }
+        }catch(JSONException e){
+            ris.clear();
+            return ris;
         }
         return ris;
     }

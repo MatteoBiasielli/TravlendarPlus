@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generato il: 18 nov, 2017 at 07:31 PM
+-- Generato il: 22 nov, 2017 at 08:17 PM
 -- Versione MySQL: 5.5.8
 -- Versione PHP: 5.3.5
 
@@ -45,19 +45,27 @@ CREATE TABLE IF NOT EXISTS `activity` (
   KEY `START_PLACE_TAG_ID` (`START_PLACE_TAG_ID`),
   KEY `STATUS` (`STATUS`),
   KEY `USER` (`USER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=34 ;
 
 --
 -- Dump dei dati per la tabella `activity`
 --
 
 INSERT INTO `activity` (`KEY_ID`, `USER`, `LABEL`, `NOTES`, `LOCATION_TEXT`, `LOCATION_TAG_ID`, `START_PLACE_TEXT`, `START_PLACE_TAG_ID`, `FLEXIBLE`, `DURATION`, `START_DAY_TIME`, `END_DAY_TIME`, `STATUS`, `ESTIMATED_TRAVEL_TIME`) VALUES
-(2, 1, 'aaa', 'bbb', 'politecnico di milano', NULL, 'via caduti di marcinelle 2 milano', NULL, 0, NULL, 1510269834746, 1510277035746, 1, 0),
-(3, 1, 'br', 'br1', NULL, 1, NULL, 2, 0, NULL, 1510269834746, 1510277035746, 1, 0),
-(4, 1, 'br', 'br1', NULL, 1, NULL, 2, 0, NULL, 1510269834746, 1510277035746, 1, 0),
-(6, 1, 'prova', 'note di prova', NULL, 1, 'via caduti di marcinelle 2 milano', NULL, 0, 0, 1510306035081, 1510306045881, 2, 0),
-(7, 1, 'prova', 'note di prova', NULL, 1, 'via caduti di marcinelle 2 milano', NULL, 0, 0, 1510306035315, 1510306046115, 2, 0),
-(8, 1, 'prova', 'note di prova111', 'via stefanardo da vimercate 95 milano', NULL, 'via caduti di marcinelle 2 milano', NULL, 0, 0, 1510485804167, 1510485814967, 2, 0);
+(9, 1, 'a', '', 'milano via caduti di marcinelle 2', NULL, 'torino via po', NULL, 0, 0, 1520000000000, 1530000000000, 1, 5),
+(12, 1, 'a', '', 'milano', NULL, 'torino', NULL, 0, 0, 1530000000000, 1530800000000, 1, 5),
+(13, 1, 'a', '', NULL, 7, 'torino', NULL, 0, 0, 1540000000000, 1550000000000, 1, 5),
+(14, 1, 'a', '', NULL, 7, 'torino', NULL, 0, 0, 1550000000000, 1560000000000, 1, 5),
+(15, 1, 'a', '', NULL, 7, 'torino', NULL, 0, 0, 1560000000000, 1570000000000, 1, 5),
+(16, 1, 'a', '', NULL, 7, 'torino', NULL, 0, 0, 1580000000000, 1590000000000, 1, 5),
+(17, 1, 'a', '', NULL, 7, 'torino', NULL, 0, 0, 1579999999000, 1580000000000, 1, 5),
+(18, 1, 'a', '', NULL, 7, 'torino', NULL, 0, 0, 1600000000000, 1620001940000, 1, 5),
+(21, 1, 'a', '', NULL, 7, 'torino', NULL, 0, 0, 1620002299999, 1630002000000, 1, 5),
+(22, 1, 'a', '', NULL, 7, 'torino', NULL, 0, 0, 1650002299999, 1660002000000, 1, 5),
+(23, 1, 'a', '', NULL, 7, 'torino', NULL, 0, 0, 1670000000000, 1680000000000, 1, 5),
+(31, 1, 'a', '', NULL, 7, 'torino', NULL, 1, 1, 1669999940000, 1670000000000, 1, 0),
+(32, 1, 'a', '', 'milano', NULL, 'torino', NULL, 0, 0, 1800000000000, 1810000000000, 1, 0),
+(33, 1, 'a', '', 'via stefanardo da vimercate 8 milano', NULL, 'via caduti di marcinelle 2 milano', NULL, 0, 0, 1810000000000, 1820000000000, 1, 28);
 
 -- --------------------------------------------------------
 
@@ -100,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `boolean_preferences` (
   PRIMARY KEY (`KEY_ID`),
   UNIQUE KEY `USER_ID` (`USER_ID`),
   KEY `MODALITY` (`MODALITY`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Dump dei dati per la tabella `boolean_preferences`
@@ -112,7 +120,8 @@ INSERT INTO `boolean_preferences` (`KEY_ID`, `USER_ID`, `PERSONAL_CAR`, `CAR_SHA
 (9, 3, 1, 1, 0, 0, 0, 0, 1),
 (10, 4, 0, 1, 0, 1, 0, 0, 1),
 (11, 6, 0, 1, 1, 0, 0, 0, 1),
-(12, 7, 1, 1, 1, 0, 1, 1, 1);
+(12, 7, 1, 1, 1, 0, 1, 1, 1),
+(14, 11, 0, 1, 0, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -128,15 +137,17 @@ CREATE TABLE IF NOT EXISTS `favpositions` (
   `TAG` text NOT NULL,
   PRIMARY KEY (`KEY_ID`),
   KEY `USER_ID` (`USER_ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dump dei dati per la tabella `favpositions`
 --
 
 INSERT INTO `favpositions` (`KEY_ID`, `USER_ID`, `LATITUDE`, `LONGITUDE`, `TAG`) VALUES
-(1, 1, 40.4781071, -100.2272764, 'CANION'),
-(2, 2, 40.4781071, -112.2272764, 'GIUSTO CANYON');
+(7, 1, 51.46427, 9.18951, 'nonloso'),
+(8, 1, 5.55555, 12.18951, 'testtre'),
+(9, 1, 51.46427, 19.18951, 'nonlosodue'),
+(10, 1, 45.4800783, 9.2472984, 'testtrequattro');
 
 -- --------------------------------------------------------
 
@@ -164,6 +175,28 @@ INSERT INTO `modality` (`KEY_ID`, `MODALITY_NAME`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `notification`
+--
+
+CREATE TABLE IF NOT EXISTS `notification` (
+  `KEY_ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `USER_ID` int(10) unsigned DEFAULT NULL,
+  `ACTIVITY _ID` int(10) unsigned DEFAULT NULL,
+  `TEXT` varchar(300) NOT NULL,
+  `TIMESTAMP` bigint(20) NOT NULL,
+  PRIMARY KEY (`KEY_ID`),
+  KEY `USER_ID` (`USER_ID`,`ACTIVITY _ID`),
+  KEY `ACTIVITY _ID` (`ACTIVITY _ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dump dei dati per la tabella `notification`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `ranged_preferences`
 --
 
@@ -182,9 +215,7 @@ CREATE TABLE IF NOT EXISTS `ranged_preferences` (
 --
 
 INSERT INTO `ranged_preferences` (`KEY_ID`, `USER_ID`, `PREF_TYPE`, `VALUE`) VALUES
-(2, 1, 4, 6),
-(3, 2, 1, 6),
-(4, 1, 1, 5);
+(3, 2, 1, 6);
 
 -- --------------------------------------------------------
 
@@ -245,7 +276,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `REGISTRATION_STATUS` int(10) unsigned NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `REGISTRATION_STATUS` (`REGISTRATION_STATUS`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dump dei dati per la tabella `user`
@@ -257,7 +288,8 @@ INSERT INTO `user` (`ID`, `USERNAME`, `PASSWORD`, `REGISTRATION_STATUS`) VALUES
 (3, 'LUCA', 'DONDONDONDONDONDONDONDONDONDONDONDONDODNODNODNODNDONDONDODNODNDONDONDODNODNDONDONI', 1),
 (4, 'MATTIA', 'CULO', 1),
 (6, 'xfgf', 'xdx', 3),
-(7, 'cande', 's', 1);
+(7, 'cande', 's', 1),
+(11, 'bigdog', 'bigdog', 1);
 
 --
 -- Limiti per le tabelle scaricate
@@ -284,6 +316,13 @@ ALTER TABLE `boolean_preferences`
 --
 ALTER TABLE `favpositions`
   ADD CONSTRAINT `favpositions_ibfk_1` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `notification`
+--
+ALTER TABLE `notification`
+  ADD CONSTRAINT `notification_ibfk_2` FOREIGN KEY (`ACTIVITY _ID`) REFERENCES `activity` (`KEY_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `ranged_preferences`

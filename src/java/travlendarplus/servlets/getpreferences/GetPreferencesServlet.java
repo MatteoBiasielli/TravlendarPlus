@@ -72,7 +72,7 @@ public class GetPreferencesServlet extends HttpServlet {
             //COMPUTE
             u.getPreferencesFromDB();
             //RESPONSE
-            ResponseGetPreferences rr = new ResponseGetPreferences(ResponseGetPreferencesType.OK);
+            ResponseGetPreferences rr = new ResponseGetPreferences(ResponseGetPreferencesType.OK, u.getPreferences());
             Gson gson = new GsonBuilder().create();
             gson.toJson(rr, out);
         } catch (IOException|SQLException|UnconsistentValueException e){

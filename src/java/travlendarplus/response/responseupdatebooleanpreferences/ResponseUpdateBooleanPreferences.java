@@ -5,16 +5,27 @@
  */
 package travlendarplus.response.responseupdatebooleanpreferences;
 
+import travlendarplus.user.preferences.BooleanPreferencesSet;
+
 /**
  *
  * @author Emilio
  */
 public class ResponseUpdateBooleanPreferences {
-    private final ResponseUpdateBooleanPreferencesType rrt;
+    private final ResponseUpdateBooleanPreferencesType rubpt;
+    private final BooleanPreferencesSet rbp;
+    
     public ResponseUpdateBooleanPreferences(ResponseUpdateBooleanPreferencesType r){
-        this.rrt=r;
+        this.rubpt = r;
+        this.rbp = null;
     }
+    
+    public ResponseUpdateBooleanPreferences(ResponseUpdateBooleanPreferencesType r, BooleanPreferencesSet bp){
+        this.rubpt = r;
+        this.rbp = bp;
+    }
+    
     public ResponseUpdateBooleanPreferencesType getType(){
-        return rrt;
+        return rubpt;
     }
 }

@@ -400,7 +400,7 @@
         <servlet-class>travlendarplus.servlets.updatebooleanpreferences.InvalidInputUpdateBooleanPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>InvalidInputGetPreferencesServlet</servlet-name>
+        <servlet-name>InvalidInputUpdateBooleanPreferencesServlet</servlet-name>
         <url-pattern>/invalidinputupdatebooleanpreferences</url-pattern>
     </servlet-mapping>
 </web-app>

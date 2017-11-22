@@ -84,12 +84,12 @@ public class UpdateBooleanPreferencesServlet extends HttpServlet {
             //COMPUTE
             DataLayer.updatePreference(u, p);
             //RESPONSE
-            ResponseUpdateBooleanPreferences rr = new ResponseUpdateBooleanPreferences(ResponseUpdateBooleanPreferencesType.OK);
+            ResponseUpdateBooleanPreferences rr = new ResponseUpdateBooleanPreferences(ResponseUpdateBooleanPreferencesType.OK, p);
             Gson gson = new GsonBuilder().create();
             gson.toJson(rr, out);
         } catch (IOException|SQLException e){
             request.getRequestDispatcher("/connectionerrorupdatebooleanpreferences").forward(request, response);
-        } catch (InvalidInputException|UnconsistentValueException e){
+        } catch (InvalidInputException|UnconsistentValueException|NullPointerException e){
             request.getRequestDispatcher("/invalidinputupdatebooleanpreferences").forward(request, response);
         } catch (InvalidLoginException e){
             request.getRequestDispatcher("/invalidloginupdatebooleanpreferences").forward(request, response);

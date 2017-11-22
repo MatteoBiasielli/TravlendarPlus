@@ -396,7 +396,7 @@
         <url-pattern>/invalidloginupdatebooleanpreferences</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>InvalidInputUpdatebooleanPreferencesServlet</servlet-name>
+        <servlet-name>InvalidInputUpdateBooleanPreferencesServlet</servlet-name>
         <servlet-class>travlendarplus.servlets.updatebooleanpreferences.InvalidInputUpdateBooleanPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>

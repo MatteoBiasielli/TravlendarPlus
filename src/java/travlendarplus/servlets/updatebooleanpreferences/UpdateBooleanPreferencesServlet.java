@@ -29,7 +29,7 @@ import travlendarplus.user.preferences.Modality;
  *
  * @author Emilio
  */
-@WebServlet(name = "UpdateBooleanPreferencesServlet", urlPatterns = {"/updatebooleanpreferencesservlet"})
+@WebServlet(name = "UpdateBooleanPreferencesServlet", urlPatterns = {"/updatebooleanpreferences"})
 public class UpdateBooleanPreferencesServlet extends HttpServlet {
 
     /**

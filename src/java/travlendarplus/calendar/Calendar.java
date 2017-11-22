@@ -49,6 +49,40 @@ public class Calendar {
 		}
 		throw new CannotBeAddedException("The activity cannot be added to the calendar");
 	}
+
+	/**
+	 *
+	 */
+	public void deleteActivity(FixedActivity a) throws NoSuchActivityException {
+		FixedActivity toDelete = null;
+		for(FixedActivity act : this.fixedActivities){
+			if(act.getKey() == a.getKey()) {
+				toDelete = act;
+				break;
+			}
+		}
+		if(toDelete != null)
+			this.fixedActivities.remove(toDelete);
+		else
+			throw new NoSuchActivityException("The activity with id "+a.getKey()+" cannot be found.");
+	}
+
+	/**
+	 *
+	 */
+	public void deleteActivity(Break a) throws NoSuchActivityException {
+		Break toDelete = null;
+		for(Break br : this.breaks){
+			if(br.getKey() == a.getKey()){
+				toDelete = br;
+				break;
+			}
+		}
+		if(toDelete != null)
+			this.breaks.remove(toDelete);
+		else
+			throw new NoSuchActivityException("The activity with id" +a.getKey()+" cannot be found");
+	}
 	
 	/**
 	 * Verifies if a list of FixedActivities is consinstent

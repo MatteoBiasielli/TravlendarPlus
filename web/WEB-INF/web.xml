@@ -403,4 +403,56 @@
         <servlet-name>InvalidInputUpdateBooleanPreferencesServlet</servlet-name>
         <url-pattern>/invalidinputupdatebooleanpreferences</url-pattern>
     </servlet-mapping>
+
+
+
+
+    <servlet>
+        <servlet-name>UpdateActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.updateactivity.UpdateActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateActivityServlet</servlet-name>
+        <url-pattern>/updateactivity</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ConnectionProblemUpdateActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.updateactivity.ConnectionProblemUpdateActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConnectionProblemUpdateActivityServlet</servlet-name>
+        <url-pattern>/connectionerrorupdateactivity</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidLoginUpdateActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.updateactivity.InvalidLoginUpdateActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidLoginUpdateActivityServlet</servlet-name>
+        <url-pattern>/invalidloginupdateactivity</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidInputUpdateActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.updateactivity.InvalidInputUpdateActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidInputUpdateActivityServlet</servlet-name>
+        <url-pattern>/invalidinputupdateactivity</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>OverlappingUpdateActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.updateactivity.OverlappingUpdateActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OverlappingUpdateActivityServlet</servlet-name>
+        <url-pattern>/overlappingupdateactivity</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PastInsertionUpdateActivityServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.updateactivity.PastInsertionUpdateActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PastInsertionUpdateActivityServlet</servlet-name>
+        <url-pattern>/pastupdateactivity</url-pattern>
+    </servlet-mapping>
 </web-app>

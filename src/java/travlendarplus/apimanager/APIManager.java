@@ -73,24 +73,36 @@ public class APIManager {
         }
     }
     
-    
+    /**
+     * Public method that masks the http request that is done to the Yahoo!Weather service
+     * @param city is the city for which to get the weather forecasts
+     * @return an ArraList<Forecast> object representing the forecasts for the 
+     * present and next days.
+     * @throws InvalidInputException if forecasts were not available or the given location is invalid.
+     */
     public static ArrayList<Forecast> getYahooWeatherForcast(String city) throws InvalidInputException{
         try{
+            city=city.replace(' ', '+');
             URL url= urlCreatorYahooWeather(city);
             String json=requestHTTP(url);
-            System.out.println(json);
             return parseYahooWeatherResponse(json);
         }catch(IOException e){
             throw new InvalidInputException("The city is invalid");
         }
     }
     
-    private static ArrayList<Forecast> parseYahooWeatherResponse(String json) {
+    /**
+     * Given the JSON code that is the result of a request to the Yahoo!Weather service, reads the data.
+     * @param json is the JSON code
+     * @return an ArraList<Forecast> object representing the forecast for the 
+     * present and next days.
+     * @throws IOException if forecasts were not available or the given location is invalid.
+     */
+    private static ArrayList<Forecast> parseYahooWeatherResponse(String json) throws IOException {
         ArrayList<Forecast> ris= new ArrayList<>();
         JSONObject jsonData = new JSONObject(json);
         try{
         JSONObject result= jsonData.getJSONObject("query").getJSONObject("results");
-        
         JSONObject item=result.getJSONObject("channel").getJSONObject("item");
         JSONArray forecasts=item.getJSONArray("forecast");
         for(int i=0; i<forecasts.length();i++){
@@ -102,8 +114,7 @@ public class APIManager {
             ris.add(new Forecast(day,max,min,text,date));
         }
         }catch(JSONException e){
-            ris.clear();
-            return ris;
+            throw new IOException();
         }
         return ris;
     }

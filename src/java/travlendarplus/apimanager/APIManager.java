@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import travlendarplus.exceptions.*;
+import travlendarplus.notification.weather.Forecast;
 import travlendarplus.travel.*;
 
 public class APIManager {
@@ -71,7 +72,38 @@ public class APIManager {
             throw new InvalidPositionException("The position is invalid");
         }
     }
-
+    
+    
+    public static ArrayList<Forecast> getYahooWeatherForcast(String city) throws InvalidInputException{
+        try{
+            URL url= urlCreatorYahooWeather(city);
+            String json=requestHTTP(url);
+            System.out.println(json);
+            return parseYahooWeatherResponse(json);
+        }catch(IOException e){
+            throw new InvalidInputException("The city is invalid");
+        }
+    }
+    
+    private static ArrayList<Forecast> parseYahooWeatherResponse(String json) {
+        ArrayList<Forecast> ris= new ArrayList<>();
+        JSONObject jsonData = new JSONObject(json);
+        JSONObject result= jsonData.getJSONObject("query").getJSONObject("results");
+        if(result==null)
+            return ris;
+        JSONObject item=result.getJSONObject("channel").getJSONObject("item");
+        JSONArray forecasts=item.getJSONArray("forecast");
+        for(int i=0; i<forecasts.length();i++){
+            String date=forecasts.getJSONObject(i).getString("date");
+            String text=forecasts.getJSONObject(i).getString("text");
+            String day=forecasts.getJSONObject(i).getString("day");
+            int max=Integer.parseInt(forecasts.getJSONObject(i).getString("high"));
+            int min=Integer.parseInt(forecasts.getJSONObject(i).getString("low"));
+            ris.add(new Forecast(day,max,min,text,date));
+        }
+        return ris;
+    }
+    
     /**
      * Given the JSON code that is the result of a request to the Google ReverseGeocoding Service, reads the data.
      * @param json is the JSON code
@@ -219,4 +251,16 @@ public class APIManager {
     private static URL urlCreatorReverseGeocoding(Position p) throws MalformedURLException{
         return new URL("https://maps.googleapis.com/maps/api/geocode/json?latlng="+p.getLatitude()+","+p.getLongitude()+"&key="+GOOGLE_GEOCODING_KEY);
     }
+    
+    /**
+     * formats the URL for the request to the Yahoo!Weather service, basing on the parameters
+     * @param citiName is the city
+     * @return an URL object representing the url
+     */
+    private static URL urlCreatorYahooWeather(String cityName) throws MalformedURLException{
+        return new URL("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D\""+cityName+"\")&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys");
+    }
+
+    
+    
 }

@@ -7,13 +7,16 @@ package travlendar;
 
 import java.io.PrintStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import travlendarplus.apimanager.APIManager;
 import travlendarplus.calendar.activities.Break;
 import travlendarplus.data.DataLayer;
 import travlendarplus.exceptions.InvalidInputException;
 import travlendarplus.exceptions.InvalidLoginException;
 import travlendarplus.exceptions.InvalidPositionException;
 import travlendarplus.exceptions.UnconsistentValueException;
+import travlendarplus.notification.weather.Forecast;
 import travlendarplus.user.User;
 
 /**
@@ -25,10 +28,13 @@ public class Test {
         /*User u=new User("cane","cane");
         String tag="CANION";
         DataLayer.deleteFavPosition(u, tag);*/
-        User u=new User("cane", "cane");
+        /*User u=new User("cane", "cane");
         u.getCalendarFromDB();
         Break b=u.getCalendar().getBreaks().get(0);
-        b.generateRequiredNotification(u.getCalendar());
-        
+        b.generateRequiredNotification(u.getCalendar());*/
+        ArrayList<Forecast> f=APIManager.getYahooWeatherForcast("milano");
+        for(Forecast fore:f)
+            System.out.println(fore);
+        System.out.println(Boolean.parseBoolean(null));
     }
 }

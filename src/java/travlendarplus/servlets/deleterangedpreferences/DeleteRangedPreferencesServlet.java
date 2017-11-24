@@ -5,61 +5,33 @@
  */
 package travlendarplus.servlets.deleterangedpreferences;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import travlendarplus.data.DataLayer;
+import travlendarplus.exceptions.InvalidInputException;
+import travlendarplus.exceptions.InvalidLoginException;
+import travlendarplus.exceptions.UnconsistentValueException;
+import travlendarplus.response.responsedeleterangedpreferences.ResponseDeleteRangedPreferences;
+import travlendarplus.response.responsedeleterangedpreferences.ResponseDeleteRangedPreferencesType;
+import travlendarplus.user.User;
+import travlendarplus.user.preferences.Preference;
+import travlendarplus.user.preferences.RangedPreference;
+import travlendarplus.user.preferences.RangedPreferenceType;
 
 /**
  *
  * @author Emilio
  */
-@WebServlet(name = "DeleteRangedPreferencesServlet", urlPatterns = {"/DeleteRangedPreferencesServlet"})
+@WebServlet(name = "DeleteRangedPreferencesServlet", urlPatterns = {"/deleterangedpreferences"})
 public class DeleteRangedPreferencesServlet extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet DeleteRangedPreferencesServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet DeleteRangedPreferencesServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -70,19 +42,62 @@ public class DeleteRangedPreferencesServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        computeResponse(request, response);
     }
-
     /**
-     * Returns a short description of the servlet.
+     * Handles the HTTP <code>GET</code> method.
      *
-     * @return a String containing servlet description
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        computeResponse(request, response);
+    }
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void computeResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try{
+            final int RANGSIZE = 5;
+            PrintWriter out = response.getWriter();
+            RangedPreference[] ranprefs = new RangedPreference[RANGSIZE];
+            Preference[] pret;
+            int curr, i;
+            //GETPARAMETERS
+            String p1 = request.getParameter("user");
+            String p2 = request.getParameter("pass");
+            String[] prefs = request.getParameterValues("pref");
+            User u = new User(p1, p2);
+            //COMPUTE
+            for(i = 0; i < RANGSIZE; i++){
+                curr = Integer.parseInt(prefs[i]);
+                ranprefs[i] = new RangedPreference(RangedPreferenceType.getForValue(curr), 0);
+            }
+            for(RangedPreference r : ranprefs)
+                if(r!=null)
+                    DataLayer.deletePreference(u, r);
+            
+            DataLayer.getPreferences(u);
+            //RESPONSE
+            ResponseDeleteRangedPreferences rr = new ResponseDeleteRangedPreferences(ResponseDeleteRangedPreferencesType.OK, ranprefs);
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(rr, out);
+        } catch (IOException|SQLException e){
+            request.getRequestDispatcher("/connectionerrordeleterangedpreferences").forward(request, response);
+        } catch (InvalidInputException|UnconsistentValueException|NullPointerException|NumberFormatException e){
+            request.getRequestDispatcher("/invalidinputdeleterangedpreferences").forward(request, response);
+        } catch (InvalidLoginException e){
+            request.getRequestDispatcher("/invalidlogindeleterangedpreferences").forward(request, response);
+        }
+    }
 }

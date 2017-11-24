@@ -403,6 +403,18 @@
         <servlet-name>InvalidInputUpdateBooleanPreferencesServlet</servlet-name>
         <url-pattern>/invalidinputupdatebooleanpreferences</url-pattern>
     </servlet-mapping>
+    
+    <!--
+    *****EMPTY SERVLET XML SPECIFICATION*****
+    <servlet>
+    <servlet-name></servlet-name>
+    <servlet-class></servlet-class>
+    </servlet>
+    <servlet-name></servlet-name>
+    <url-pattern></url-pattern>
+    <servlet>
+    </servlet>
+    -->
 
 
 

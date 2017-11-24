@@ -31,7 +31,7 @@ import travlendarplus.user.preferences.Modality;
  */
 @WebServlet(name = "UpdateBooleanPreferencesServlet", urlPatterns = {"/updatebooleanpreferences"})
 public class UpdateBooleanPreferencesServlet extends HttpServlet {
-
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -88,11 +88,11 @@ public class UpdateBooleanPreferencesServlet extends HttpServlet {
             Gson gson = new GsonBuilder().create();
             gson.toJson(rr, out);
         } catch (IOException|SQLException e){
-            request.getRequestDispatcher("/connectionerrorupdatebooleanpreferences").forward(request, response);
+            request.getRequestDispatcher("/connectionerrordeleterangedpreferences").forward(request, response);
         } catch (InvalidInputException|UnconsistentValueException|NullPointerException e){
-            request.getRequestDispatcher("/invalidinputupdatebooleanpreferences").forward(request, response);
+            request.getRequestDispatcher("/invalidinputdeleterangedpreferences").forward(request, response);
         } catch (InvalidLoginException e){
-            request.getRequestDispatcher("/invalidloginupdatebooleanpreferences").forward(request, response);
+            request.getRequestDispatcher("/invalidlogindeleterangedpreferences").forward(request, response);
         }
     }
 }

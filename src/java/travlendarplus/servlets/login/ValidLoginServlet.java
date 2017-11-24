@@ -64,10 +64,14 @@ public class ValidLoginServlet extends HttpServlet{
             String p2=request.getParameter("pass");
             User u= new User(p1,p2);
             //COMPUTE
-            if(!u.usernameExists())
+            if(!u.usernameExists()){
                 request.getRequestDispatcher("/notexistingusernamelogin").forward(request,response);
-            if(!u.isValidLogin())
+                return;
+            }
+            if(!u.isValidLogin()){
                 request.getRequestDispatcher("/wrongpasswordlogin").forward(request,response);
+                return;
+            }
             u.getCalendarFromDB();
             u.getPreferencesFromDB();
             u.getfavPositionsFromDB();

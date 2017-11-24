@@ -10,6 +10,7 @@ import travlendarplus.exceptions.InvalidInputException;
 import travlendarplus.exceptions.InvalidLoginException;
 import travlendarplus.exceptions.InvalidPositionException;
 import travlendarplus.exceptions.UnconsistentValueException;
+import travlendarplus.notification.Notification;
 import travlendarplus.user.preferences.BooleanPreferencesSet;
 import travlendarplus.user.preferences.Preference;
 import travlendarplus.user.preferences.RangedPreference;
@@ -22,6 +23,8 @@ public class User {
         private ArrayList<RangedPreference> rangedPreferences;
         private ArrayList<FavouritePosition> favPos;
 	private Calendar calendar;
+	private ArrayList<Notification> notifications;
+
 	public User(String u, String p){
 		this.username=u;
 		this.password=p;
@@ -103,6 +106,9 @@ public class User {
 	public void setFavPositions(ArrayList<FavouritePosition> fp){
                 this.favPos=fp;
         }
+	public void setNotifications(ArrayList<Notification> notif){
+		this.notifications = notif;
+	}
 	/* GETTERS **/
 	public String getUsername(){
 		return username;
@@ -131,4 +137,8 @@ public class User {
         public ArrayList<RangedPreference> getRangedPreferences(){
             return this.rangedPreferences;
         }
+
+	public ArrayList<Notification> getNotifications() {
+		return this.notifications;
+	}
 }

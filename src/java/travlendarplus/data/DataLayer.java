@@ -12,6 +12,7 @@ import travlendarplus.apimanager.APIManager;
 import travlendarplus.calendar.Calendar;
 import travlendarplus.calendar.activities.*;
 import travlendarplus.exceptions.*;
+import travlendarplus.notification.Notification;
 import travlendarplus.travel.Position;
 import travlendarplus.user.*;
 import travlendarplus.user.preferences.*;
@@ -522,6 +523,38 @@ public class DataLayer {
                 stmt.execute(query);
                 con.close();
 	}
+
+	public static void getNotification(User u) throws SQLException, InvalidLoginException, InvalidInputException {
+	    if(!validLogin(u.getUsername(), u.getPassword()))
+	        throw new InvalidLoginException("Invalid Username or Password");
+
+	    Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+	    Statement statement = conn.createStatement();
+	    String query = "SELECT * FROM ( SELECT KEY_ID, USER_ID, ACTIVITY_ID, TEXT, TIMESTAMP "
+                +"FROM NOTIFICATION, USER "
+                +"WHERE USER.ID = NOTIFICATION.USER_ID AND "
+                +"USER.USERNAME='"+u.getUsername()+"' "
+                +"UNION "
+                +"SELECT * "
+                +"FROM NOTIFICATION "
+                +"WHERE USER_ID IS NULL) AS NOTIF "
+	            +"ORDER BY TIMESTAMP";
+	    ResultSet rs = statement.executeQuery(query);
+	    ArrayList<Notification> notif = new ArrayList<>();
+
+	    while(rs.next()){
+	        int user_id = rs.getInt("USER_ID");
+	        int activity_id = rs.getInt("ACTIVITY_ID");
+	        String text = rs.getString("TEXT");
+	        long timestamp = rs.getLong("TIMESTAMP");
+	        Notification notification = new Notification(user_id, activity_id, text, timestamp);
+	        notif.add(notification);
+        }
+
+        u.setNotifications(notif);
+	    rs.close();
+	    conn.close();
+    }
         
         
 }

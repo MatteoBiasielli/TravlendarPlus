@@ -12,6 +12,7 @@ import travlendarplus.apimanager.APIManager;
 import travlendarplus.calendar.Calendar;
 import travlendarplus.calendar.activities.*;
 import travlendarplus.exceptions.*;
+import travlendarplus.notification.Notification;
 import travlendarplus.travel.Position;
 import travlendarplus.user.*;
 import travlendarplus.user.preferences.*;
@@ -198,29 +199,30 @@ public class DataLayer {
 	public static void getPreferences(User u) throws InvalidInputException, SQLException, InvalidLoginException, UnconsistentValueException{
 		if(!validLogin(u.getUsername(),u.getPassword()))
 			throw new InvalidLoginException("Invalid Username or Password");
-		ArrayList<Preference> pref= new ArrayList<>();
+		ArrayList<RangedPreference> pref= new ArrayList<>();
+                BooleanPreferencesSet b;
 		Connection con = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
                 Statement stmt = con.createStatement();
                 String query="SELECT * FROM USER,BOOLEAN_PREFERENCES WHERE"
         		+ " USER.ID=BOOLEAN_PREFERENCES.USER_ID"
         		+ " AND USER.USERNAME='"+u.getUsername()+"'";
                 ResultSet rs = stmt.executeQuery(query);
-                while(rs.next()){
-                        Preference p= new BooleanPreferencesSet(rs.getBoolean("PERSONAL_CAR"),rs.getBoolean("CAR_SHARING"),rs.getBoolean("PERSONAL_BIKE"),rs.getBoolean("BIKE_SHARING"),rs.getBoolean("PUBLIC_TRANSPORT"),rs.getBoolean("UBER_TAXI"),Modality.getForValue(rs.getInt("MODALITY")));
-                        pref.add(p);
-                }
+                if(rs.next())
+                        b= new BooleanPreferencesSet(rs.getBoolean("PERSONAL_CAR"),rs.getBoolean("CAR_SHARING"),rs.getBoolean("PERSONAL_BIKE"),rs.getBoolean("BIKE_SHARING"),rs.getBoolean("PUBLIC_TRANSPORT"),rs.getBoolean("UBER_TAXI"),Modality.getForValue(rs.getInt("MODALITY")));
+                else
+                        throw new UnconsistentValueException("");
                 rs.close();
                 query="SELECT * FROM USER,RANGED_PREFERENCES WHERE"
                                 + " USER.ID=RANGED_PREFERENCES.USER_ID"
                                 + " AND USER.USERNAME='"+u.getUsername()+"'";
                 rs = stmt.executeQuery(query);
                 while(rs.next()){
-                        Preference p= new RangedPreference(RangedPreferenceType.getForValue(rs.getInt("PREF_TYPE")),rs.getInt("VALUE"));
+                        RangedPreference p= new RangedPreference(RangedPreferenceType.getForValue(rs.getInt("PREF_TYPE")),rs.getInt("VALUE"));
                         pref.add(p);
                 }
                 rs.close();
                 con.close();
-                u.setPreferences(pref);
+                u.setPreferences(pref,b);
 	}
 	
 	/**Retrieves a user's calendar in the DB. At the end of the method, the result is put in the input object
@@ -522,6 +524,38 @@ public class DataLayer {
                 stmt.execute(query);
                 con.close();
 	}
+
+	public static void getNotification(User u) throws SQLException, InvalidLoginException, InvalidInputException {
+	    if(!validLogin(u.getUsername(), u.getPassword()))
+	        throw new InvalidLoginException("Invalid Username or Password");
+
+	    Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+	    Statement statement = conn.createStatement();
+	    String query = "SELECT * FROM ( SELECT KEY_ID, USER_ID, ACTIVITY_ID, TEXT, TIMESTAMP "
+                +"FROM NOTIFICATION, USER "
+                +"WHERE USER.ID = NOTIFICATION.USER_ID AND "
+                +"USER.USERNAME='"+u.getUsername()+"' "
+                +"UNION "
+                +"SELECT * "
+                +"FROM NOTIFICATION "
+                +"WHERE USER_ID IS NULL) AS NOTIF "
+	            +"ORDER BY TIMESTAMP";
+	    ResultSet rs = statement.executeQuery(query);
+	    ArrayList<Notification> notif = new ArrayList<>();
+
+	    while(rs.next()){
+	        int user_id = rs.getInt("USER_ID");
+	        int activity_id = rs.getInt("ACTIVITY_ID");
+	        String text = rs.getString("TEXT");
+	        long timestamp = rs.getLong("TIMESTAMP");
+	        Notification notification = new Notification(user_id, activity_id, text, timestamp);
+	        notif.add(notification);
+            }
+
+        u.setNotifications(notif);
+	    rs.close();
+	    conn.close();
+        }
         
         
 }

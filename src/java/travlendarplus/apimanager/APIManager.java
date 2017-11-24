@@ -159,7 +159,7 @@ public class APIManager {
 
 
     /**
-     * private method that executes the request to a Google service and returns the JSON code expected in return
+     * private method that executes the request to a Google or Yahoo service and returns the JSON code expected in return
      * @param url is the already formatted url that has to be used to build the request 
      * @return the JSON code containing result
      * @throws IOException

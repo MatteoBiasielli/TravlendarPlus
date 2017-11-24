@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generato il: 22 nov, 2017 at 08:17 PM
+-- Generato il: 24 nov, 2017 at 05:41 PM
 -- Versione MySQL: 5.5.8
 -- Versione PHP: 5.3.5
 
@@ -181,12 +181,12 @@ INSERT INTO `modality` (`KEY_ID`, `MODALITY_NAME`) VALUES
 CREATE TABLE IF NOT EXISTS `notification` (
   `KEY_ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `USER_ID` int(10) unsigned DEFAULT NULL,
-  `ACTIVITY _ID` int(10) unsigned DEFAULT NULL,
+  `ACTIVITY_ID` int(10) unsigned DEFAULT NULL,
   `TEXT` varchar(300) NOT NULL,
   `TIMESTAMP` bigint(20) NOT NULL,
   PRIMARY KEY (`KEY_ID`),
-  KEY `USER_ID` (`USER_ID`,`ACTIVITY _ID`),
-  KEY `ACTIVITY _ID` (`ACTIVITY _ID`)
+  KEY `USER_ID` (`USER_ID`,`ACTIVITY_ID`),
+  KEY `ACTIVITY_ID` (`ACTIVITY_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `ranged_preferences` (
   PRIMARY KEY (`KEY_ID`),
   KEY `PREF_TYPE` (`PREF_TYPE`),
   KEY `USER_ID` (`USER_ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dump dei dati per la tabella `ranged_preferences`
@@ -321,7 +321,7 @@ ALTER TABLE `favpositions`
 -- Limiti per la tabella `notification`
 --
 ALTER TABLE `notification`
-  ADD CONSTRAINT `notification_ibfk_2` FOREIGN KEY (`ACTIVITY _ID`) REFERENCES `activity` (`KEY_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `notification_ibfk_2` FOREIGN KEY (`ACTIVITY_ID`) REFERENCES `activity` (`KEY_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

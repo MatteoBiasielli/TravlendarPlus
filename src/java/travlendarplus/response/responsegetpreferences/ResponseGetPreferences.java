@@ -5,8 +5,8 @@
  */
 package travlendarplus.response.responsegetpreferences;
 
-import java.util.ArrayList;
-import travlendarplus.user.preferences.Preference;
+
+import travlendarplus.user.User;
 
 /**
  *
@@ -14,19 +14,19 @@ import travlendarplus.user.preferences.Preference;
  */
 public class ResponseGetPreferences {
     private final ResponseGetPreferencesType rpt;
-    private final ArrayList<Preference> rbp;
+    private final User rbp;
     
     public ResponseGetPreferences(ResponseGetPreferencesType r){
         this.rpt = r;
         this.rbp = null;
     }
     
-    public ResponseGetPreferences(ResponseGetPreferencesType r, ArrayList<Preference> bp){
+    public ResponseGetPreferences(ResponseGetPreferencesType r, User bp){
         this.rpt = r;
         this.rbp = bp;
     }
     
-    public ArrayList<Preference> getPreferences(){
+    public User getUser(){
         return rbp;
     }
     

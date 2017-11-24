@@ -32,8 +32,9 @@ public class Test {
         u.getCalendarFromDB();
         Break b=u.getCalendar().getBreaks().get(0);
         b.generateRequiredNotification(u.getCalendar());*/
-        ArrayList<Forecast> f=APIManager.getYahooWeatherForcast("via caduti di marcinelle milano");
+        /*ArrayList<Forecast> f=APIManager.getYahooWeatherForcast("via caduti di marcinelle milano");
         for(Forecast fore:f)
-            System.out.println(fore);
+            System.out.println(fore);*/
+        DataLayer.getNotification(new User("cane","cane"));
     }
 }

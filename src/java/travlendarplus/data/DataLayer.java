@@ -552,7 +552,7 @@ public class DataLayer {
 	        notif.add(notification);
             }
 
-        u.setNotifications(notif);
+            u.setNotifications(notif);
 	    rs.close();
 	    conn.close();
         }

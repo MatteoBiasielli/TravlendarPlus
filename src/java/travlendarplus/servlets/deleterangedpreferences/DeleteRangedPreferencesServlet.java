@@ -22,7 +22,6 @@ import travlendarplus.exceptions.UnconsistentValueException;
 import travlendarplus.response.responsedeleterangedpreferences.ResponseDeleteRangedPreferences;
 import travlendarplus.response.responsedeleterangedpreferences.ResponseDeleteRangedPreferencesType;
 import travlendarplus.user.User;
-import travlendarplus.user.preferences.Preference;
 import travlendarplus.user.preferences.RangedPreference;
 import travlendarplus.user.preferences.RangedPreferenceType;
 

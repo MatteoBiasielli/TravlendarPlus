@@ -21,7 +21,7 @@ import travlendarplus.response.responsedeleterangedpreferences.ResponseDeleteRan
  *
  * @author Emilio
  */
-@WebServlet(name = "InvalidLoginDeletePreferencesServlet", urlPatterns = {"/invalidlogindeleterangedpreferences"})
+@WebServlet(name = "InvalidLoginDeleteRangedPreferencesServlet", urlPatterns = {"/invalidlogindeleterangedpreferences"})
 public class InvalidLoginDeleteRangedPreferencesServlet extends HttpServlet {
 
        /**

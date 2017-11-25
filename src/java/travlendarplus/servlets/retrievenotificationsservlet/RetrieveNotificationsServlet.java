@@ -42,8 +42,10 @@ public class RetrieveNotificationsServlet extends HttpServlet{
             String pss = request.getParameter("pass");
 
             User u = new User(usr, pss);
-            if(!u.isValidLogin())
+            if(!u.isValidLogin()) {
                 request.getRequestDispatcher("/invalidloginretrievenotifications").forward(request, response);
+                return;
+            }
             //GET NOTIFICATIONS
             DataLayer.getNotification(u);
             //PREPARE AND SEND RESPONSE

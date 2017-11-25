@@ -47,8 +47,10 @@ public class DeleteActivityServlet extends HttpServlet{
 
             User u = new User(usr, pss);
             //LOGIN CHECK
-            if(!u.isValidLogin())
+            if(!u.isValidLogin()) {
                 request.getRequestDispatcher("/invalidlogindeleteactivity").forward(request, response);
+                return;
+            }
             //DELETE ACTIVITY
             DataLayer.deleteActivity(u, act);
             //UPDATE USER

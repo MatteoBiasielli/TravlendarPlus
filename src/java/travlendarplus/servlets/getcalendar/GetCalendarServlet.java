@@ -42,8 +42,10 @@ public class GetCalendarServlet extends HttpServlet{
 
             User u = new User(usr, pss);
             //LOGIN CHECK
-            if(!u.isValidLogin())
+            if(!u.isValidLogin()) {
                 request.getRequestDispatcher("/invalidlogingetcalendar").forward(request, response);
+                return;
+            }
             //UPDATE  CALENDAR IN USER
             u.getCalendarFromDB();
             //PREPARE AND SEND THE RESPONSE

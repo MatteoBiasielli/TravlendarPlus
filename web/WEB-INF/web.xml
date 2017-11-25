@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    
+
+    <!--- check position of tag below listener -->
+    <listener>
+        <listener-class>travlendarplus.notification.TravlendarContextListener</listener-class>
+    </listener>
+
+
     <session-config>
         <session-timeout>
             30
@@ -517,6 +523,41 @@
     <servlet-mapping>
     <servlet-name>InvalidInputUpdateRangedPreferencesServlet</servlet-name>
     <url-pattern>/invalidinputupdaterangedpreferences</url-pattern>
+    </servlet-mapping>
+
+
+
+    <servlet>
+        <servlet-name>RetrieveNotificationsServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.retrievenotificationsservlet.RetrieveNotificationsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RetrieveNotificationsServlet</servlet-name>
+        <url-pattern>/retrievenotifications</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ConnectionErrorRetrieveNotifications</servlet-name>
+        <servlet-class>travlendarplus.servlets.retrievenotificationsservlet.ConnectionErrorRetrieveNotifications</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConnectionErrorRetrieveNotifications</servlet-name>
+        <url-pattern>/connectionerrorretrievenotifications</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidLoginRetrieveNotifications</servlet-name>
+        <servlet-class>travlendarplus.servlets.retrievenotificationsservlet.InvalidLoginRetrieveNotifications</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidLoginRetrieveNotifications</servlet-name>
+        <url-pattern>/invalidloginretrievenotifications</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>InvalidInputRetrieveNotifications</servlet-name>
+        <servlet-class>travlendarplus.servlets.retrievenotificationsservlet.InvalidInputRetrieveNotifications</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InvalidInputRetrieveNotifications</servlet-name>
+        <url-pattern>/invalidinputretrievenotifications</url-pattern>
     </servlet-mapping>
     
     <!--

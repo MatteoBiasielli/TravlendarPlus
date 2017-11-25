@@ -18,6 +18,9 @@ public class Notification {
 
     @Override
     public String toString() {
-        return "{USER: "+user_id+"; ACTIVITY_ID: "+activity_id+"; TEXT: "+text+"; TIMESTAMP: "+timestamp+"}";
+        if (this.user_id == 0)
+            return "{GENERIC - TEXT: "+text+"; TIMESTAMP: "+timestamp+"}";
+        else
+            return "{USER: "+user_id+"; ACTIVITY_ID: "+activity_id+"; TEXT: "+text+"; TIMESTAMP: "+timestamp+"}";
     }
 }

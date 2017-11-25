@@ -536,27 +536,27 @@
         <url-pattern>/retrievenotifications</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>ConnectionErrorRetrieveNotifications</servlet-name>
-        <servlet-class>travlendarplus.servlets.retrievenotificationsservlet.ConnectionErrorRetrieveNotifications</servlet-class>
+        <servlet-name>ConnectionErrorRetrieveNotificationsServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.retrievenotificationsservlet.ConnectionErrorRetrieveNotificationsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>ConnectionErrorRetrieveNotifications</servlet-name>
+        <servlet-name>ConnectionErrorRetrieveNotificationsServlet</servlet-name>
         <url-pattern>/connectionerrorretrievenotifications</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>InvalidLoginRetrieveNotifications</servlet-name>
-        <servlet-class>travlendarplus.servlets.retrievenotificationsservlet.InvalidLoginRetrieveNotifications</servlet-class>
+        <servlet-name>InvalidLoginRetrieveNotificationsServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.retrievenotificationsservlet.InvalidLoginRetrieveNotificationsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>InvalidLoginRetrieveNotifications</servlet-name>
+        <servlet-name>InvalidLoginRetrieveNotificationsServlet</servlet-name>
         <url-pattern>/invalidloginretrievenotifications</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>InvalidInputRetrieveNotifications</servlet-name>
-        <servlet-class>travlendarplus.servlets.retrievenotificationsservlet.InvalidInputRetrieveNotifications</servlet-class>
+        <servlet-name>InvalidInputRetrieveNotificationsServlet</servlet-name>
+        <servlet-class>travlendarplus.servlets.retrievenotificationsservlet.InvalidInputRetrieveNotificationsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>InvalidInputRetrieveNotifications</servlet-name>
+        <servlet-name>InvalidInputRetrieveNotificationsServlet</servlet-name>
         <url-pattern>/invalidinputretrievenotifications</url-pattern>
     </servlet-mapping>
     

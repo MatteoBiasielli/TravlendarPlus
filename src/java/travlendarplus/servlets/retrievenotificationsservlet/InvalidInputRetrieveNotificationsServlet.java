@@ -16,8 +16,8 @@ import java.io.PrintWriter;
 /**
  * Modified by mattiadifatta on 25/11/2017.
  */
-@WebServlet(name = "InvalidInputRetrieveNotifications", urlPatterns = {"/invalidinputretrievenotifications"})
-public class InvalidInputRetrieveNotifications extends HttpServlet{
+@WebServlet(name = "InvalidInputRetrieveNotificationsServlet", urlPatterns = {"/invalidinputretrievenotifications"})
+public class InvalidInputRetrieveNotificationsServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         computeResponse(request, response);
@@ -30,7 +30,7 @@ public class InvalidInputRetrieveNotifications extends HttpServlet{
 
     private void computeResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out  = new PrintWriter(response.getWriter());
-        ResponseRetrieveNotifications rrn = new ResponseRetrieveNotifications(null, ResponseRetrieveNotificationsType.NOTIFICATIONS_WRONG_INPUT);
+        ResponseRetrieveNotifications rrn = new ResponseRetrieveNotifications(null, ResponseRetrieveNotificationsType.RETRIEVE_NOTIFICATIONS_WRONG_INPUT);
         Gson gson = new GsonBuilder().create();
         gson.toJson(rrn, out);
     }

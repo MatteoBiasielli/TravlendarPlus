@@ -16,8 +16,8 @@ import java.io.PrintWriter;
 /**
  * Modified by mattiadifatta on 25/11/2017.
  */
-@WebServlet(name = "InvalidLoginRetrieveNotifications", urlPatterns = {"/invalidloginretrievenotifications"})
-public class InvalidLoginRetrieveNotifications extends HttpServlet{
+@WebServlet(name = "ConnectionErrorRetrieveNotificationsServlet", urlPatterns = {"/connectionerrorretrievenotifications"})
+public class ConnectionErrorRetrieveNotificationsServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         computeResponse(request, response);
@@ -30,7 +30,7 @@ public class InvalidLoginRetrieveNotifications extends HttpServlet{
 
     private void computeResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = new PrintWriter(response.getWriter());
-        ResponseRetrieveNotifications rrn = new ResponseRetrieveNotifications(null, ResponseRetrieveNotificationsType.NOTIFICATIONS_LOGIN_ERROR);
+        ResponseRetrieveNotifications rrn = new ResponseRetrieveNotifications(null, ResponseRetrieveNotificationsType.RETRIEVE_NOTIFICATIONS_CONN_ERROR);
         Gson gson = new GsonBuilder().create();
         gson.toJson(rrn, out);
     }

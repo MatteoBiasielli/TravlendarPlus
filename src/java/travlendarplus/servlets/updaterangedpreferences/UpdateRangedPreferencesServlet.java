@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package travlendarplus.servlets.deleterangedpreferences;
+package travlendarplus.servlets.updaterangedpreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,10 +19,9 @@ import travlendarplus.data.DataLayer;
 import travlendarplus.exceptions.InvalidInputException;
 import travlendarplus.exceptions.InvalidLoginException;
 import travlendarplus.exceptions.UnconsistentValueException;
-import travlendarplus.response.responsedeleterangedpreferences.ResponseDeleteRangedPreferences;
-import travlendarplus.response.responsedeleterangedpreferences.ResponseDeleteRangedPreferencesType;
+import travlendarplus.response.responseupdaterangedpreferences.ResponseUpdateRangedPreferences;
+import travlendarplus.response.responseupdaterangedpreferences.ResponseUpdateRangedPreferencesType;
 import travlendarplus.user.User;
-import travlendarplus.user.preferences.Preference;
 import travlendarplus.user.preferences.RangedPreference;
 import travlendarplus.user.preferences.RangedPreferenceType;
 
@@ -30,8 +29,8 @@ import travlendarplus.user.preferences.RangedPreferenceType;
  *
  * @author Emilio
  */
-@WebServlet(name = "DeleteRangedPreferencesServlet", urlPatterns = {"/deleterangedpreferences"})
-public class DeleteRangedPreferencesServlet extends HttpServlet {
+@WebServlet(name = "UpdateRangedPreferencesServlet", urlPatterns = {"/updaterangedpreferences"})
+public class UpdateRangedPreferencesServlet extends HttpServlet {
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -69,24 +68,26 @@ public class DeleteRangedPreferencesServlet extends HttpServlet {
     protected void computeResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
             PrintWriter out = response.getWriter();
-            int curr, i;
+            int currp, currv, i;
             //GETPARAMETERS
             String p1 = request.getParameter("user");
             String p2 = request.getParameter("pass");
             String[] prefs = request.getParameterValues("pref");
+            String[] values = request.getParameterValues("val");
             User u = new User(p1, p2);
             RangedPreference[] ranprefs = new RangedPreference[prefs.length];
             //COMPUTE
             for(i = 0; i < prefs.length; i++){
-                curr = Integer.parseInt(prefs[i]);
-                ranprefs[i] = new RangedPreference(RangedPreferenceType.getForValue(curr), 0);
+                currp = Integer.parseInt(prefs[i]);
+                currv = Integer.parseInt(values[i]);
+                ranprefs[i] = new RangedPreference(RangedPreferenceType.getForValue(currp), currv);
             }
             for(RangedPreference r : ranprefs)
-                DataLayer.deletePreference(u, r);
+                DataLayer.updatePreference(u, r);
             
             DataLayer.getPreferences(u);
             //RESPONSE
-            ResponseDeleteRangedPreferences rr = new ResponseDeleteRangedPreferences(ResponseDeleteRangedPreferencesType.OK, ranprefs);
+            ResponseUpdateRangedPreferences rr = new ResponseUpdateRangedPreferences(ResponseUpdateRangedPreferencesType.OK, ranprefs);
             Gson gson = new GsonBuilder().create();
             gson.toJson(rr, out);
         } catch (IOException|SQLException e){

@@ -403,21 +403,6 @@
         <servlet-name>InvalidInputUpdateBooleanPreferencesServlet</servlet-name>
         <url-pattern>/invalidinputupdatebooleanpreferences</url-pattern>
     </servlet-mapping>
-    
-    <!--
-    *****EMPTY SERVLET XML SPECIFICATION*****
-    <servlet>
-    <servlet-name></servlet-name>
-    <servlet-class></servlet-class>
-    </servlet>
-    <servlet-name></servlet-name>
-    <url-pattern></url-pattern>
-    <servlet>
-    </servlet>
-    -->
-
-
-
 
     <servlet>
         <servlet-name>UpdateActivityServlet</servlet-name>
@@ -467,4 +452,82 @@
         <servlet-name>PastInsertionUpdateActivityServlet</servlet-name>
         <url-pattern>/pastupdateactivity</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+    <servlet-name>DeleteRangedPreferencesServlet</servlet-name>
+    <servlet-class>travlendarplus.servlets.deleterangedpreferences.DeleteRangedPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>DeleteRangedPreferencesServlet</servlet-name>
+    <url-pattern>/deleterangedpreferences</url-pattern>
+    </servlet-mapping>
+    <servlet>
+    <servlet-name>ConnectionErrorDeleteRangedPreferencesServlet</servlet-name>
+    <servlet-class>travlendarplus.servlets.ConnectionErrorDeleteRangedPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>ConnectionErrorDeleteRangedPreferencesServlet</servlet-name>
+    <url-pattern>/connectionerrordeleterangedpreferences</url-pattern>
+    </servlet-mapping>
+    <servlet>
+    <servlet-name>InvalidInputDeleteRangedPreferencesServlet</servlet-name>
+    <servlet-class>travlendarplus.servlets.InvalidInputDeleteRangedPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>InvalidInputDeleteRangedPreferencesServlet</servlet-name>
+    <url-pattern>/invalidinputdeleterangedpreferences</url-pattern>
+    </servlet-mapping>
+    <servlet>
+    <servlet-name>InvalidLoginDeleteRangedPreferencesServlet</servlet-name>
+    <servlet-class>travlendarplus.servlets.InvalidLoginDeleteRangedPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>InvalidLoginDeleteRangedPreferencesServlet</servlet-name>
+    <url-pattern>/invalidlogindeleterangedpreferences</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+    <servlet-name>UpdateRangedPreferencesServlet</servlet-name>
+    <servlet-class>travlendarplus.servlets.UpdateRangedPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>UpdateRangedPreferencesServlet</servlet-name>
+    <url-pattern>/updaterangedpreferences</url-pattern>
+    </servlet-mapping>
+    <servlet>
+    <servlet-name>ConnectionErrorUpdateRangedPreferencesServlet</servlet-name>
+    <servlet-class>travlendarplus.servlets.ConnectionErrorUpdateRangedPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>ConnectionErrorUpdateRangedPreferencesServlet</servlet-name>
+    <url-pattern>/connectionerrorupdaterangedpreferences</url-pattern>
+    </servlet-mapping>
+    <servlet>
+    <servlet-name>InvalidLoginUpdateRangedPreferencesServlet</servlet-name>
+    <servlet-class>travlendarplus.servlets.InvalidLoginUpdateRangedPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>InvalidLoginUpdateRangedPreferencesServlet</servlet-name>
+    <url-pattern>/invalidloginupdaterangedpreferences</url-pattern>
+    </servlet-mapping>
+    <servlet>
+    <servlet-name>InvalidInputUpdateRangedPreferencesServlet</servlet-name>
+    <servlet-class>travlendarplus.servlets.InvalidInputUpdateRangedPreferencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>InvalidInputUpdateRangedPreferencesServlet</servlet-name>
+    <url-pattern>/invalidinputupdaterangedpreferences</url-pattern>
+    </servlet-mapping>
+    
+    <!--
+    *****EMPTY SERVLET XML SPECIFICATION*****
+    <servlet>
+    <servlet-name></servlet-name>
+    <servlet-class>travlendarplus.servlets.</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name></servlet-name>
+    <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    -->
 </web-app>

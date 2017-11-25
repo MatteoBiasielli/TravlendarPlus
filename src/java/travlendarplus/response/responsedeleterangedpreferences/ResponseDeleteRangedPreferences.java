@@ -12,20 +12,20 @@ import travlendarplus.user.preferences.RangedPreference;
  * @author Emilio
  */
 public class ResponseDeleteRangedPreferences {
-    private final ResponseDeleteRangedPreferencesType rubpt;
+    private final ResponseDeleteRangedPreferencesType rdrpt;
     private final RangedPreference[] rp;
     
     public ResponseDeleteRangedPreferences(ResponseDeleteRangedPreferencesType r){
-        this.rubpt = r;
+        this.rdrpt = r;
         this.rp = null;
     }
     
     public ResponseDeleteRangedPreferences(ResponseDeleteRangedPreferencesType r, RangedPreference[] p){
-        this.rubpt = r;
+        this.rdrpt = r;
         this.rp = p;
     }
     
     public ResponseDeleteRangedPreferencesType getType(){
-        return rubpt;
+        return rdrpt;
     }
 }

@@ -550,12 +550,21 @@ public class DataLayer {
 	        long timestamp = rs.getLong("TIMESTAMP");
 	        Notification notification = new Notification(user_id, activity_id, text, timestamp);
 	        notif.add(notification);
-            }
+        }
 
-            u.setNotifications(notif);
+        u.setNotifications(notif);
 	    rs.close();
 	    conn.close();
-        }
-        
-        
+    }
+
+    public static void deleteOldNotification() throws SQLException {
+        Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+        Statement statement = conn.createStatement();
+        long currentTime = new Date().getTime();
+        String query = "DELETE FROM NOTIFICATION "
+                +"WHERE "+currentTime+" - TIMESTAMP >= 24";
+        statement.execute(query);
+        conn.close();
+    }
+
 }

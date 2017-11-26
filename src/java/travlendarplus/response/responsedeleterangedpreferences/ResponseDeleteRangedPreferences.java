@@ -5,6 +5,7 @@
  */
 package travlendarplus.response.responsedeleterangedpreferences;
 
+import java.util.ArrayList;
 import travlendarplus.user.preferences.RangedPreference;
 
 /**
@@ -13,14 +14,14 @@ import travlendarplus.user.preferences.RangedPreference;
  */
 public class ResponseDeleteRangedPreferences {
     private final ResponseDeleteRangedPreferencesType rdrpt;
-    private final RangedPreference[] rp;
+    private final ArrayList<RangedPreference> rp;
     
     public ResponseDeleteRangedPreferences(ResponseDeleteRangedPreferencesType r){
         this.rdrpt = r;
         this.rp = null;
     }
     
-    public ResponseDeleteRangedPreferences(ResponseDeleteRangedPreferencesType r, RangedPreference[] p){
+    public ResponseDeleteRangedPreferences(ResponseDeleteRangedPreferencesType r, ArrayList<RangedPreference> p){
         this.rdrpt = r;
         this.rp = p;
     }

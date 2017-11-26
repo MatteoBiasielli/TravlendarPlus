@@ -85,7 +85,7 @@ public class DeleteRangedPreferencesServlet extends HttpServlet {
             
             DataLayer.getPreferences(u);
             //RESPONSE
-            ResponseDeleteRangedPreferences rr = new ResponseDeleteRangedPreferences(ResponseDeleteRangedPreferencesType.OK, ranprefs);
+            ResponseDeleteRangedPreferences rr = new ResponseDeleteRangedPreferences(ResponseDeleteRangedPreferencesType.OK, u.getRangedPreferences());
             Gson gson = new GsonBuilder().create();
             gson.toJson(rr, out);
         } catch (IOException|SQLException e){

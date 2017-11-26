@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -76,6 +77,7 @@ public class UpdateRangedPreferencesServlet extends HttpServlet {
             String[] values = request.getParameterValues("val");
             User u = new User(p1, p2);
             RangedPreference[] ranprefs = new RangedPreference[prefs.length];
+            ArrayList<RangedPreference> toSend;
             //COMPUTE
             for(i = 0; i < prefs.length; i++){
                 currp = Integer.parseInt(prefs[i]);
@@ -86,8 +88,9 @@ public class UpdateRangedPreferencesServlet extends HttpServlet {
                 DataLayer.updatePreference(u, r);
             
             DataLayer.getPreferences(u);
+            toSend = u.getRangedPreferences();
             //RESPONSE
-            ResponseUpdateRangedPreferences rr = new ResponseUpdateRangedPreferences(ResponseUpdateRangedPreferencesType.OK, ranprefs);
+            ResponseUpdateRangedPreferences rr = new ResponseUpdateRangedPreferences(ResponseUpdateRangedPreferencesType.OK, toSend);
             Gson gson = new GsonBuilder().create();
             gson.toJson(rr, out);
         } catch (IOException|SQLException e){

@@ -5,6 +5,7 @@
  */
 package travlendarplus.response.responseupdaterangedpreferences;
 
+import java.util.ArrayList;
 import travlendarplus.user.preferences.RangedPreference;
 
 /**
@@ -13,14 +14,14 @@ import travlendarplus.user.preferences.RangedPreference;
  */
 public class ResponseUpdateRangedPreferences {
     private final ResponseUpdateRangedPreferencesType rurpt;
-    private final RangedPreference[] rp;
+    private final ArrayList<RangedPreference> rp;
     
     public ResponseUpdateRangedPreferences(ResponseUpdateRangedPreferencesType r){
         this.rurpt = r;
         this.rp = null;
     }
     
-    public ResponseUpdateRangedPreferences(ResponseUpdateRangedPreferencesType r, RangedPreference[] p){
+    public ResponseUpdateRangedPreferences(ResponseUpdateRangedPreferencesType r, ArrayList<RangedPreference> p){
         this.rurpt = r;
         this.rp = p;
     }

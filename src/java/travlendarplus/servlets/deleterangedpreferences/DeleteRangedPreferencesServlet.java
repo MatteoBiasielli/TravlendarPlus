@@ -89,11 +89,11 @@ public class DeleteRangedPreferencesServlet extends HttpServlet {
             Gson gson = new GsonBuilder().create();
             gson.toJson(rr, out);
         } catch (IOException|SQLException e){
-            request.getRequestDispatcher("/connectionerrorupdaterangedpreferences").forward(request, response);
+            request.getRequestDispatcher("/connectionerrordeleterangedpreferences").forward(request, response);
         } catch (InvalidInputException|UnconsistentValueException|NullPointerException|NumberFormatException e){
-            request.getRequestDispatcher("/invalidinputupdaterangedpreferences").forward(request, response);
+            request.getRequestDispatcher("/invalidinputdeleterangedpreferences").forward(request, response);
         } catch (InvalidLoginException e){
-            request.getRequestDispatcher("/invalidloginupdaterangedpreferences").forward(request, response);
+            request.getRequestDispatcher("/invalidlogindeleterangedpreferences").forward(request, response);
         }
     }
 }

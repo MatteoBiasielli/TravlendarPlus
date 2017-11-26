@@ -469,7 +469,7 @@
     </servlet-mapping>
     <servlet>
     <servlet-name>ConnectionErrorDeleteRangedPreferencesServlet</servlet-name>
-    <servlet-class>travlendarplus.servlets.ConnectionErrorDeleteRangedPreferencesServlet</servlet-class>
+    <servlet-class>travlendarplus.servlets.deleterangedpreferences.ConnectionErrorDeleteRangedPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
     <servlet-name>ConnectionErrorDeleteRangedPreferencesServlet</servlet-name>
@@ -477,7 +477,7 @@
     </servlet-mapping>
     <servlet>
     <servlet-name>InvalidInputDeleteRangedPreferencesServlet</servlet-name>
-    <servlet-class>travlendarplus.servlets.InvalidInputDeleteRangedPreferencesServlet</servlet-class>
+    <servlet-class>travlendarplus.servlets.deleterangedpreferences.InvalidInputDeleteRangedPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
     <servlet-name>InvalidInputDeleteRangedPreferencesServlet</servlet-name>
@@ -485,7 +485,7 @@
     </servlet-mapping>
     <servlet>
     <servlet-name>InvalidLoginDeleteRangedPreferencesServlet</servlet-name>
-    <servlet-class>travlendarplus.servlets.InvalidLoginDeleteRangedPreferencesServlet</servlet-class>
+    <servlet-class>travlendarplus.servlets.deleterangedpreferences.InvalidLoginDeleteRangedPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
     <servlet-name>InvalidLoginDeleteRangedPreferencesServlet</servlet-name>
@@ -494,7 +494,7 @@
     
     <servlet>
     <servlet-name>UpdateRangedPreferencesServlet</servlet-name>
-    <servlet-class>travlendarplus.servlets.UpdateRangedPreferencesServlet</servlet-class>
+    <servlet-class>travlendarplus.servlets.updaterangedpreferences.UpdateRangedPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
     <servlet-name>UpdateRangedPreferencesServlet</servlet-name>
@@ -502,7 +502,7 @@
     </servlet-mapping>
     <servlet>
     <servlet-name>ConnectionErrorUpdateRangedPreferencesServlet</servlet-name>
-    <servlet-class>travlendarplus.servlets.ConnectionErrorUpdateRangedPreferencesServlet</servlet-class>
+    <servlet-class>travlendarplus.servlets.updaterangedpreferences.ConnectionErrorUpdateRangedPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
     <servlet-name>ConnectionErrorUpdateRangedPreferencesServlet</servlet-name>
@@ -510,7 +510,7 @@
     </servlet-mapping>
     <servlet>
     <servlet-name>InvalidLoginUpdateRangedPreferencesServlet</servlet-name>
-    <servlet-class>travlendarplus.servlets.InvalidLoginUpdateRangedPreferencesServlet</servlet-class>
+    <servlet-class>travlendarplus.servlets.updaterangedpreferences.InvalidLoginUpdateRangedPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
     <servlet-name>InvalidLoginUpdateRangedPreferencesServlet</servlet-name>
@@ -518,7 +518,7 @@
     </servlet-mapping>
     <servlet>
     <servlet-name>InvalidInputUpdateRangedPreferencesServlet</servlet-name>
-    <servlet-class>travlendarplus.servlets.InvalidInputUpdateRangedPreferencesServlet</servlet-class>
+    <servlet-class>travlendarplus.servlets.updaterangedpreferences.InvalidInputUpdateRangedPreferencesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
     <servlet-name>InvalidInputUpdateRangedPreferencesServlet</servlet-name>

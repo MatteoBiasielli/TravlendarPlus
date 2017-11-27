@@ -89,7 +89,7 @@ public class UpdateBooleanPreferencesServlet extends HttpServlet {
             gson.toJson(rr, out);
         } catch (IOException|SQLException e){
             request.getRequestDispatcher("/connectionerrorupdatebooleanpreferences").forward(request, response);
-        } catch (InvalidInputException|UnconsistentValueException|NullPointerException e){
+        } catch (InvalidInputException|NumberFormatException|UnconsistentValueException|NullPointerException e){
             request.getRequestDispatcher("/invalidinputupdatebooleanpreferences").forward(request, response);
         } catch (InvalidLoginException e){
             request.getRequestDispatcher("/invalidloginupdatebooleanpreferences").forward(request, response);

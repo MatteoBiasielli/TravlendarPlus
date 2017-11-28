@@ -9,26 +9,43 @@ import javax.servlet.annotation.WebListener;
  */
 @WebListener
 public class TravlendarContextListener implements ServletContextListener{
-    private EventCheckingThread checker = null;
+    private WeatherCheckingThread checkerW = null;
+    private ActivitiesCheckingThread checkerAct = null;
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        if(this.checker == null || !this.checker.isAlive()) {
-            checker = createThread(this);
-            checker.start();
+        if(this.checkerW == null || !this.checkerW.isAlive()) {
+            checkerW = createWeatherThread(this);
+            checkerW.start();
         }
+
+        if(this.checkerAct == null || !this.checkerAct.isAlive()) {
+            checkerAct = createActivitiesThread(this);
+            checkerAct.start();
+        }
+
+
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        checker.setActive(false);
+        checkerW.setActive(false);
+        checkerAct.setActive(false);
     }
 
-    public EventCheckingThread createThread(TravlendarContextListener creator){
-        return new EventCheckingThread(creator);
+    public WeatherCheckingThread createWeatherThread(TravlendarContextListener creator){
+        return new WeatherCheckingThread(creator);
     }
 
-    public void setChecker(EventCheckingThread thread){
-        this.checker = thread;
+    public ActivitiesCheckingThread createActivitiesThread(TravlendarContextListener creator){
+        return new ActivitiesCheckingThread(creator);
+    }
+
+    public void setCheckerW(WeatherCheckingThread thread){
+        this.checkerW = thread;
+    }
+
+    public void setCheckerAct(ActivitiesCheckingThread thread){
+        this.checkerAct = thread;
     }
 }

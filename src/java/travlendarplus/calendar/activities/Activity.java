@@ -1,9 +1,18 @@
 package travlendarplus.calendar.activities;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 
 import travlendarplus.calendar.Calendar;
+import travlendarplus.exceptions.InvalidInputException;
+import travlendarplus.exceptions.InvalidLoginException;
+import travlendarplus.exceptions.InvalidPositionException;
+import travlendarplus.exceptions.NoPathFoundException;
+import travlendarplus.exceptions.UnconsistentValueException;
 import travlendarplus.exceptions.UnsopportedOperationException;
+import travlendarplus.response.responseaddactivity.ResponseAddActivityNotification;
+import travlendarplus.user.User;
 
 public abstract class Activity {
 	protected Date startDate;
@@ -43,8 +52,9 @@ public abstract class Activity {
 	 *@return true if the activity doesn't make the calendar become inconsistent, false otherwise 
 	 */
 	public abstract boolean canBeAddedTo(Calendar c);
-	
+	public abstract ResponseAddActivityNotification generateRequiredNotification(Calendar c);
 	/**@return a string human-readable version of the Object**/
+        @Override
 	public String toString(){
 		return "START="+startDate+", END="+endDate+","+label+","+notes+","+locationAddress+","+startPlaceAddress+","+actStatus.name();
 	}
@@ -61,6 +71,21 @@ public abstract class Activity {
 		this.keySet=true;
 	}
 	
+        /**
+         * Verifies if a fixed activity and a break overlap
+         * @param fAct is the fixed activity
+         * @param br is the break
+         * @return true if the two activities overlap, false otherwise
+         */
+        public static boolean fixedBreakOverlap(FixedActivity fAct, Break br){
+            return (br.getStartDate().after(fAct.startDate) || br.getStartDate().equals(fAct.startDate))
+                                    && br.getStartDate().before(fAct.endDate) ||
+                                    br.getEndDate().after(fAct.startDate) && 
+                                    (br.getEndDate().before(fAct.endDate) || br.getEndDate().equals(fAct.endDate)) 
+                                        || (br.getStartDate().before(fAct.startDate) ||  br.getStartDate().equals(fAct.startDate))
+                                            && (br.getEndDate().after(fAct.endDate) ||  br.getEndDate().equals(fAct.endDate));
+        } 
+        
 	/* ******GETTERS**********/
 	public int getKey(){
 		return this.key;
@@ -89,4 +114,6 @@ public abstract class Activity {
 	}
 	public abstract boolean isFlexible();
 	public abstract long getDuration();
+        public abstract int getEstimatedTravelTime();
+        public abstract int calculateEstimatedTravelTime(String tagStart, String tagLoc, User u) throws IOException, InvalidInputException, SQLException, InvalidLoginException, UnconsistentValueException, InvalidPositionException;
 }

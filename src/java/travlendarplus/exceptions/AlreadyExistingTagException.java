@@ -3,10 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package travlendarplus.response;
+package travlendarplus.exceptions;
+
 /**
  *
  * @author matteo
  */
-public abstract class Response {    
+public class AlreadyExistingTagException extends Exception{
+    public AlreadyExistingTagException(String string) {
+		super(string);
+	}
 }

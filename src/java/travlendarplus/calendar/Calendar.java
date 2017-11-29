@@ -8,9 +8,9 @@ import travlendarplus.exceptions.*;
 
 public class Calendar {
 	/** Fixed Activities list**/
-	private ArrayList<FixedActivity> fixedActivities;
+	private final ArrayList<FixedActivity> fixedActivities;
 	/** breaks list **/
-	private ArrayList<Break> breaks;
+	private final ArrayList<Break> breaks;
 	
 	/**Written in minutes, SCATTO represents and must be equal to the minimum time
 	 * granularity of the activities*/
@@ -34,7 +34,6 @@ public class Calendar {
 	 */
 	public void addActivity(FixedActivity a) throws CannotBeAddedException{
 		if(a.canBeAddedTo(this)){
-			fixedActivities.add(a);
 			return;
 		}
 		throw new CannotBeAddedException("The activity cannot be added to the calendar");
@@ -46,10 +45,43 @@ public class Calendar {
 	 */
 	public void addActivity(Break a) throws CannotBeAddedException{
 		if(a.canBeAddedTo(this)){
-			breaks.add(a);
 			return;
 		}
 		throw new CannotBeAddedException("The activity cannot be added to the calendar");
+	}
+
+	/**
+	 *
+	 */
+	public void deleteActivity(FixedActivity a) throws NoSuchActivityException {
+		FixedActivity toDelete = null;
+		for(FixedActivity act : this.fixedActivities){
+			if(act.getKey() == a.getKey()) {
+				toDelete = act;
+				break;
+			}
+		}
+		if(toDelete != null)
+			this.fixedActivities.remove(toDelete);
+		else
+			throw new NoSuchActivityException("The activity with id "+a.getKey()+" cannot be found.");
+	}
+
+	/**
+	 *
+	 */
+	public void deleteActivity(Break a) throws NoSuchActivityException {
+		Break toDelete = null;
+		for(Break br : this.breaks){
+			if(br.getKey() == a.getKey()){
+				toDelete = br;
+				break;
+			}
+		}
+		if(toDelete != null)
+			this.breaks.remove(toDelete);
+		else
+			throw new NoSuchActivityException("The activity with id" +a.getKey()+" cannot be found");
 	}
 	
 	/**
@@ -109,6 +141,7 @@ public class Calendar {
 	}
 	
 	/**@return a string human-readable version of the Object**/
+        @Override
 	public String toString(){
 		String ris="FIXED:\n";
 		for(FixedActivity fa:this.fixedActivities)
@@ -118,6 +151,25 @@ public class Calendar {
 			ris+="("+fa.toString()+")\n";
 		return ris;
 	}
+        
+        /** This method is used in the process of calculating the proper notification
+         * to send to the user in case the activity he wants to insert will not allow him
+         * to be on time to the activity itself or another activity.
+         * The method creates a new calendar where fixed activities are extended to take 
+         * into account also the estimated travel time.
+         * @param c is the calendar to modify.
+         * @return a new calendar where fixed activities are extended to take into account also the estimated travel time.
+         */
+        public static Calendar modifyCalendarWithEstimatedTravelTimes(Calendar c){
+            ArrayList<FixedActivity> fa=c.getFixedActivities();
+            ArrayList<FixedActivity> modified= new ArrayList<>();
+            for(FixedActivity act:fa){
+                FixedActivity mod=new FixedActivity(new Date(act.getStartDate().getTime()-act.getEstimatedTravelTime()*60*1000),act.getEndDate(),null,null,null,null,null);
+                modified.add(mod);
+            }
+            ArrayList<Break> b= Break.copyList(c.getBreaks());
+            return new Calendar(modified,b);
+        }
 	/*********************GETTERS**********************************/
 	public ArrayList<FixedActivity> getFixedActivities(){
 		return fixedActivities;

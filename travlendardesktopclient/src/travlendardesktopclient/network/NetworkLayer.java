@@ -22,6 +22,7 @@ import travlendardesktopclient.network.deleterangedpreferenceresponse.ResponseDe
 import travlendardesktopclient.network.deletetagresponse.ResponseDeleteTag;
 import travlendardesktopclient.network.loginresponse.ResponseLogin;
 import travlendardesktopclient.network.registerresponse.ResponseRegister;
+import travlendardesktopclient.network.updateactivityresponse.ResponseUpdateActivity;
 import travlendardesktopclient.network.updatebooleanpreferencesresponse.ResponseUpdateBooleanPreferences;
 import travlendardesktopclient.network.updaterangedpreferencesresponse.ResponseUpdateRangedPreferences;
 
@@ -201,6 +202,40 @@ public class NetworkLayer {
     private static ResponseAddActivity parseResponseAddActivity(String json){
         Gson gson= new GsonBuilder().create();
         return gson.fromJson(json, ResponseAddActivity.class);
+    }
+    
+    
+    public static ResponseUpdateActivity updateActivityRequest(String user, String pass, String l,String n,String locText,String locTag,String startText,String startTag, Boolean flexible,String duration,Date st,Date en, int id) throws IOException {
+        return parseResponseUpdateActivity(requestHTTP(updateActivityURLBuilder(user,pass, l, n, locText, locTag, startText, startTag,  flexible, duration, st, en,id)));
+    }
+    private static URL updateActivityURLBuilder(String user, String pass, String l,String n,String locText,String locTag,String startText,String startTag, Boolean flexible,String duration,Date st,Date en,int id) throws MalformedURLException{
+        String url=urlHead+ip+urlCenter+"updateactivity?";
+        l=l.replace(" ", "%20");
+        n=n.replace(" ", "%20");
+        locText=locText.replace(" ", "%20");
+        startText=startText.replace(" ", "%20");
+        url+="user="+user;
+        url+="&pass="+pass;
+        url+="&label="+l;
+        url+="&notes="+n;
+        if(!"".equals(locTag))
+            url+="&locationtag="+locTag;
+        else
+            url+="&locationtext="+locText;
+        if(!"".equals(startTag))
+            url+="&starttag="+startTag;
+        else
+            url+="&starttext="+startText;
+        url+="&flexible="+flexible.toString();
+        url+="&duration="+duration;
+        url+="&start="+st.getTime();
+        url+="&end="+en.getTime();
+        url+="&activityid="+id;
+        return new URL(url);
+    }
+    private static ResponseUpdateActivity parseResponseUpdateActivity(String json){
+        Gson gson= new GsonBuilder().create();
+        return gson.fromJson(json, ResponseUpdateActivity.class);
     }
     
     

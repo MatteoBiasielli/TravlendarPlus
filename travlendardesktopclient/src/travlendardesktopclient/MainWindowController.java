@@ -47,6 +47,8 @@ import travlendardesktopclient.network.deleterangedpreferenceresponse.ResponseDe
 import travlendardesktopclient.network.deleterangedpreferenceresponse.ResponseDeleteRangedPreferencesType;
 import travlendardesktopclient.network.deletetagresponse.ResponseDeleteTag;
 import travlendardesktopclient.network.deletetagresponse.ResponseDeleteTagType;
+import travlendardesktopclient.network.updateactivityresponse.ResponseUpdateActivity;
+import travlendardesktopclient.network.updateactivityresponse.ResponseUpdateActivityType;
 import travlendardesktopclient.network.updatebooleanpreferencesresponse.ResponseUpdateBooleanPreferences;
 import travlendardesktopclient.network.updatebooleanpreferencesresponse.ResponseUpdateBooleanPreferencesType;
 import travlendardesktopclient.network.updaterangedpreferencesresponse.ResponseUpdateRangedPreferences;
@@ -206,20 +208,78 @@ public class MainWindowController implements Initializable {
         this.actNewStartHour.getItems().addAll("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24");
         this.actNewEndMinute.getItems().addAll("00","15","30","45");
         this.actNewStartMinute.getItems().addAll("00","15","30","45");
+        this.actUpdateEndHour.getItems().addAll("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24");
+        this.actUpdateStartHour.getItems().addAll("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24");
+        this.actUpdateEndMinute.getItems().addAll("00","15","30","45");
+        this.actUpdateStartMinute.getItems().addAll("00","15","30","45");
         this.actNewDuration.setDisable(true);
     }    
     @FXML
     public void init(){
         
     }
+    public void onUpdateActivity(){
+        try{
+            String l=this.actUpdateLabel.getText();
+            String n=this.actUpdateNotes.getText()==null?"":this.actUpdateNotes.getText();
+            String startAddr=this.actUpdateStart.getText()==null?"":this.actUpdateStart.getText();
+            String startAddrTag=this.actUpdateStartTag.getValue()==null?"":((FavouritePosition)this.actUpdateStartTag.getValue()).getTag();
+            String locationAddr=this.actUpdateLocation.getText()==null?"":this.actUpdateLocation.getText();
+            String locationAddrTag=this.actUpdateLocationTag.getValue()==null?"":((FavouritePosition)this.actUpdateLocationTag.getValue()).getTag();
+            Boolean flexible=this.actUpdateBreak.isSelected();
+            String duration="0";
+            if(flexible)
+                duration=this.actUpdateDuration.getValue()==null?"":(String)this.actUpdateDuration.getValue();
+            Integer startMinute=Integer.parseInt((String)this.actUpdateStartMinute.getValue());
+            Integer startHour=Integer.parseInt((String)this.actUpdateStartHour.getValue());
+            Integer endMinute=Integer.parseInt((String)this.actUpdateEndMinute.getValue());
+            Integer endHour=Integer.parseInt((String)this.actUpdateEndHour.getValue());
+            Date startDate=this.localDateToDate(this.actUpdateStartDatePicker.getValue());
+            Date endDate=this.localDateToDate(this.actUpdateEndDatePicker.getValue());
+            int id=this.selectedDayActivitiesUpdate.get(this.actualActivityUpdate).getKey();
+            startDate.setHours(startHour);
+            startDate.setMinutes(startMinute);
+            endDate.setHours(endHour);
+            endDate.setMinutes(endMinute);
+            if(l==null || "".equals(l) || "".equals(duration)){
+                showAlert("Invalid Input Data");
+                return;
+            }
+            if("".equals(startAddr) && "".equals(startAddrTag) || "".equals(locationAddrTag) && "".equals(locationAddr)){
+                showAlert("Invalid Input Data");
+                return;
+            }    
+            ResponseUpdateActivity rua=NetworkLayer.updateActivityRequest(Data.getUser().getUsername(), Data.getUser().getPassword(), l, n, locationAddr, locationAddrTag, startAddr, startAddrTag, flexible, duration, startDate, endDate,id);
+            if(rua.getType()==ResponseUpdateActivityType.OK){
+                String text="Actvity updated correctly.";
+                if(rua.getNotification()!=ResponseAddActivityNotification.NO)
+                    text=text+"\n"+rua.getNotification().getMessage();
+                Data.getUser().setCalendar(rua.getU().getCalendar());
+                this.onDateSelect();
+                showAlert(text);
+            }else if(rua.getType()==ResponseUpdateActivityType.OK_ESTIMATED_TIME){
+                String text=rua.getType().getMessage();
+                if(rua.getNotification()!=ResponseAddActivityNotification.NO)
+                    text=text+"\n"+rua.getNotification().getMessage();
+                Data.getUser().setCalendar(rua.getU().getCalendar());
+                this.onDateSelect();
+                showAlert(text);
+            }else
+               showAlert(rua.getType().getMessage()); 
+        }catch(NumberFormatException|NullPointerException e){
+            showAlert("Invalid Input Data");
+        }catch(IOException e){
+            showAlert("Check your internet connection.");
+        }
+    }
     public void onAddActivity(){
         try{
             String l=this.actNewLabel.getText();
             String n=this.actNewNotes.getText()==null?"":this.actNewNotes.getText();
             String startAddr=this.actNewStart.getText()==null?"":this.actNewStart.getText();
-            String startAddrTag=this.actNewStartTag.getValue()==null?"":(String)this.actNewStartTag.getValue();
+            String startAddrTag=this.actNewStartTag.getValue()==null?"":((FavouritePosition)this.actNewStartTag.getValue()).getTag();
             String locationAddr=this.actNewLocation.getText()==null?"":this.actNewLocation.getText();
-            String locationAddrTag=this.actNewLocationTag.getValue()==null?"":(String)this.actNewLocationTag.getValue();
+            String locationAddrTag=this.actNewLocationTag.getValue()==null?"":((FavouritePosition)this.actNewLocationTag.getValue()).getTag();
             Boolean flexible=this.actNewBreak.isSelected();
             String duration="0";
             if(flexible)
@@ -604,6 +664,8 @@ public class MainWindowController implements Initializable {
         chosenTag.setItems(list);
         this.actNewLocationTag.setItems(list);
         this.actNewStartTag.setItems(list);
+        this.actUpdateLocationTag.setItems(list);
+        this.actUpdateStartTag.setItems(list);
         selectedTagAddress.setText("");
     }
     private void updatePreferences(){

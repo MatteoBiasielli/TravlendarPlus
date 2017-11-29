@@ -370,7 +370,7 @@
                         <ComboBox fx:id="actUpdateEndMinute" layoutX="335.0" layoutY="355.0" onAction="#setDurationUpdate" prefHeight="25.0" prefWidth="65.0" promptText="mm" visibleRowCount="24" />
                         <ComboBox fx:id="actUpdateDuration" layoutX="82.0" layoutY="407.0" prefHeight="25.0" prefWidth="113.0" />
                         <Label layoutX="202.0" layoutY="411.0" text="Minutes" />
-                        <Button layoutX="184.0" layoutY="439.0" mnemonicParsing="false" onAction="#onAddActivity" text="Update Activity" />
+                        <Button layoutX="184.0" layoutY="439.0" mnemonicParsing="false" onAction="#onUpdateActivity" text="Update Activity" />
                         <ComboBox fx:id="actUpdateStartTag" layoutX="322.0" layoutY="241.0" prefHeight="25.0" prefWidth="95.0" promptText="Tag" />
                         <ComboBox fx:id="actUpdateLocationTag" layoutX="322.0" layoutY="288.0" prefHeight="25.0" prefWidth="95.0" promptText="Tag" />
                         <DatePicker fx:id="actUpdateDatePicker" layoutX="137.0" layoutY="49.0" onAction="#onDateSelectUpdate" />

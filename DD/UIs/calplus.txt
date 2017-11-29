@@ -1,0 +1,1 @@
+This UI shows how users can differentiate between fixed and flexible activities. This is obtained through a small menu that pops up after tapping on the Create New Activity button.

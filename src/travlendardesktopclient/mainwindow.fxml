@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<TabPane prefHeight="507.0" prefWidth="860.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="travlendardesktopclient.MainWindowController">
+  <tabs>
+    <Tab text="Your Activities">
+      <content>
+            <SplitPane dividerPositions="0.6627906976744186" prefHeight="160.0" prefWidth="200.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <Label layoutX="206.0" layoutY="14.0" text="Your activities">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="showActDatePicker" editable="false" layoutX="196.0" layoutY="49.0" onAction="#onDateSelect" promptText="Select a date" />
+                     </children></AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="253.0">
+                     <children>
+                        <Label layoutY="14.0" text="Label:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label fx:id="actLabel" alignment="TOP_LEFT" layoutX="52.0" layoutY="14.0" prefHeight="62.0" prefWidth="231.0" />
+                        <Label layoutY="80.0" text="Notes:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label fx:id="actNotes" alignment="TOP_LEFT" layoutX="52.0" layoutY="80.0" prefHeight="62.0" prefWidth="231.0" />
+                        <Label layoutY="145.0" text="Location:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label fx:id="actLocation" alignment="TOP_LEFT" layoutX="53.0" layoutY="145.0" prefHeight="62.0" prefWidth="231.0" />
+                        <Label layoutX="1.0" layoutY="280.0" text="Start:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label fx:id="actStartDate" alignment="TOP_LEFT" layoutX="55.0" layoutY="280.0" prefHeight="25.0" prefWidth="231.0" />
+                        <Label layoutX="1.0" layoutY="312.0" text="End:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label fx:id="actEndDate" alignment="TOP_LEFT" layoutX="55.0" layoutY="312.0" prefHeight="25.0" prefWidth="231.0" />
+                        <Label layoutX="1.0" layoutY="345.0" text="Flexible:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label fx:id="actFlexible" alignment="TOP_LEFT" layoutX="55.0" layoutY="345.0" prefHeight="25.0" prefWidth="231.0" />
+                        <Label layoutX="1.0" layoutY="373.0" text="Duration:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label fx:id="actDuration" alignment="TOP_LEFT" layoutX="55.0" layoutY="373.0" prefHeight="25.0" prefWidth="231.0" />
+                        <Label layoutY="213.0" text="Start:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label fx:id="actStart" alignment="TOP_LEFT" layoutX="54.0" layoutY="213.0" prefHeight="62.0" prefWidth="231.0" />
+                        <Button layoutX="105.0" layoutY="408.0" mnemonicParsing="false" onAction="#onPrevAct" text="&lt;&lt;" />
+                        <Button layoutX="149.0" layoutY="408.0" mnemonicParsing="false" onAction="#onNextAct" text="&gt;&gt;" />
+                        <Button layoutX="118.0" layoutY="439.0" mnemonicParsing="false" onAction="#onDeleteActivity" text="Delete" />
+                     </children></AnchorPane>
+              </items>
+            </SplitPane>
+      </content>
+    </Tab>
+    <Tab text="Control Panel">
+      <content>
+            <SplitPane dividerPositions="0.3372093023255814" prefHeight="160.0" prefWidth="200.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                  <SplitPane dividerPositions="0.5132275132275133" prefHeight="160.0" prefWidth="200.0">
+                    <items>
+                        <SplitPane dividerPositions="0.3577405857740586" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="190.0" prefWidth="288.0">
+                                 <children>
+                                    <Label fx:id="selectedTagAddress" layoutX="3.0" layoutY="92.0" prefHeight="68.0" prefWidth="280.0" />
+                                    <Button layoutX="176.0" layoutY="56.0" mnemonicParsing="false" onAction="#onDeleteTag" prefHeight="25.0" prefWidth="93.0" text="Delete" />
+                                    <Label layoutX="103.0" layoutY="14.0" text="Your tags">
+                                       <font>
+                                          <Font name="System Bold Italic" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="chosenTag" layoutX="14.0" layoutY="56.0" onAction="#onSelectTag" prefWidth="150.0" />
+                                 </children>
+                              </AnchorPane>
+                              <SplitPane dividerPositions="0.5197368421052632" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                       <children>
+                                          <Label layoutX="89.0" layoutY="-2.0" text="Add a tag">
+                                             <font>
+                                                <Font name="System Bold Italic" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Button layoutX="121.0" layoutY="125.0" mnemonicParsing="false" onAction="#onAddTag" text="Add" />
+                                          <TextArea fx:id="addTagAddress" layoutX="14.0" layoutY="27.0" prefHeight="63.0" prefWidth="260.0" promptText="Address" />
+                                          <TextField fx:id="tagToAdd" layoutX="14.0" layoutY="97.0" prefHeight="25.0" prefWidth="261.0" promptText="Tag Name" />
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                       <children>
+                                          <Label layoutX="103.0" layoutY="1.0" text="Modality">
+                                             <font>
+                                                <Font name="System Bold Italic" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <ImageView fitHeight="50.0" fitWidth="52.0" layoutX="14.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/normal.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="50.0" fitWidth="52.0" layoutX="85.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/carbon.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="50.0" fitWidth="52.0" layoutX="154.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/mincost.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="50.0" fitWidth="52.0" layoutX="224.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/mintime.png" />
+                                             </image>
+                                          </ImageView>
+                                          <RadioButton id="1" fx:id="norm" layoutX="31.0" layoutY="84.0" mnemonicParsing="false" selected="true">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="Mod" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton id="2" fx:id="carb" layoutX="101.0" layoutY="84.0" mnemonicParsing="false" toggleGroup="$Mod" />
+                                          <RadioButton id="3" fx:id="cost" layoutX="171.0" layoutY="84.0" mnemonicParsing="false" toggleGroup="$Mod" />
+                                          <RadioButton id="4" fx:id="time" layoutX="241.0" layoutY="84.0" mnemonicParsing="false" toggleGroup="$Mod" />
+                                          <Button layoutX="118.0" layoutY="101.0" mnemonicParsing="false" onAction="#onUpdateBoolPrefs" text="Update" />
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                          </items>
+                        </SplitPane>
+                        <SplitPane dividerPositions="0.42887029288702927" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                 <children>
+                                    <Label layoutX="60.0" layoutY="4.0" text="Your travel means">
+                                       <font>
+                                          <Font name="System Bold Italic" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <ImageView fitHeight="50.0" fitWidth="52.0" layoutX="41.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/car.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="50.0" fitWidth="52.0" layoutX="115.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/bike.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="50.0" fitWidth="52.0" layoutX="189.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/pub.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="50.0" fitWidth="52.0" layoutX="41.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/carsharing.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="50.0" fitWidth="52.0" layoutX="115.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/bikesharing.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button layoutX="113.0" layoutY="171.0" mnemonicParsing="false" onAction="#onUpdateBoolPrefs" text="Update" />
+                                    <CheckBox fx:id="car" layoutX="59.0" layoutY="81.0" mnemonicParsing="false" />
+                                    <Label layoutX="189.0" layoutY="119.0" text="Uber Taxi" />
+                                    <CheckBox fx:id="bike" layoutX="133.0" layoutY="81.0" mnemonicParsing="false" />
+                                    <CheckBox fx:id="transport" layoutX="206.0" layoutY="81.0" mnemonicParsing="false" />
+                                    <CheckBox fx:id="carsharing" layoutX="59.0" layoutY="152.0" mnemonicParsing="false" />
+                                    <CheckBox fx:id="bikesharing" layoutX="133.0" layoutY="152.0" mnemonicParsing="false" />
+                                    <CheckBox fx:id="ubertaxi" layoutX="206.0" layoutY="152.0" mnemonicParsing="false" />
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                 <children>
+                                    <Label layoutX="65.0" layoutY="13.0" text="Your preferences">
+                                       <font>
+                                          <Font name="System Bold Italic" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="19.0" layoutY="59.0" text="Max Driving Time" />
+                                    <Label layoutX="18.0" layoutY="92.0" text="Max Walking Time" />
+                                    <Label layoutX="18.0" layoutY="127.0" text="Max cost" />
+                                    <Label layoutX="18.0" layoutY="159.0" text="Max Bike Time" />
+                                    <Label layoutX="18.0" layoutY="191.0" text="Max Transport Time" />
+                                    <TextField id="4" fx:id="maxCar" layoutX="136.0" layoutY="55.0" prefHeight="25.0" prefWidth="33.0" />
+                                    <TextField id="1" fx:id="maxWalk" layoutX="136.0" layoutY="88.0" prefHeight="25.0" prefWidth="33.0" />
+                                    <TextField id="2" fx:id="maxCost" layoutX="136.0" layoutY="123.0" prefHeight="25.0" prefWidth="33.0" />
+                                    <TextField id="3" fx:id="maxBike" layoutX="136.0" layoutY="155.0" prefHeight="25.0" prefWidth="33.0" />
+                                    <TextField id="5" fx:id="maxTransp" layoutX="136.0" layoutY="187.0" prefHeight="0.0" prefWidth="33.0" />
+                                    <Button layoutX="80.0" layoutY="223.0" mnemonicParsing="false" onAction="#onUpdateRangedPrefs" text="Update" />
+                                    <Button layoutX="151.0" layoutY="223.0" mnemonicParsing="false" onAction="#onDeleteRangedPrefs" text="Delete" />
+                                 </children></AnchorPane>
+                          </items>
+                        </SplitPane>
+                    </items>
+                  </SplitPane>
+              </items>
+            </SplitPane>
+      </content>
+    </Tab>
+      <Tab text="Manage your activities">
+         <content>
+            <SplitPane dividerPositions="0.4965116279069767" prefHeight="160.0" prefWidth="200.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <Label layoutX="123.0" layoutY="14.0" text="Add an activity">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="30.0" layoutY="84.0" text="Label:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="29.0" layoutY="157.0" text="Notes:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="14.0" layoutY="279.0" text="Location:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="35.0" layoutY="329.0" text="Start:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="40.0" layoutY="359.0" text="End:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="33.0" layoutY="386.0" text="Type:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="11.0" layoutY="409.0" text="Duration:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="5.0" layoutY="232.0" text="StartPlace:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <TextArea fx:id="actNewLabel" layoutX="75.0" layoutY="84.0" prefHeight="70.0" prefWidth="327.0" />
+                        <TextArea fx:id="actNewNotes" layoutX="75.0" layoutY="158.0" prefHeight="70.0" prefWidth="327.0" />
+                        <TextArea fx:id="actNewStart" layoutX="75.0" layoutY="232.0" prefHeight="43.0" prefWidth="230.0" />
+                        <TextArea fx:id="actNewLocation" layoutX="75.0" layoutY="279.0" prefHeight="43.0" prefWidth="230.0" />
+                        <DatePicker fx:id="actNewStartDatePicker" editable="false" layoutX="75.0" layoutY="325.0" onAction="#setDuration" prefHeight="25.0" prefWidth="162.0" />
+                        <DatePicker fx:id="actNewEndDatePicker" editable="false" layoutX="75.0" layoutY="355.0" onAction="#setDuration" prefHeight="25.0" prefWidth="162.0" />
+                        <RadioButton fx:id="actNewFixed" layoutX="95.0" layoutY="386.0" mnemonicParsing="false" onAction="#onSelectFixed" selected="true" text="Fixed">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="Type" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="actNewBreak" layoutX="208.0" layoutY="386.0" mnemonicParsing="false" onAction="#onSelectBreak" text="Break" toggleGroup="$Type" />
+                        <ComboBox fx:id="actNewStartHour" layoutX="257.0" layoutY="325.0" onAction="#setDuration" prefHeight="25.0" prefWidth="60.0" promptText="HH" visibleRowCount="24" />
+                        <ComboBox fx:id="actNewStartMinute" layoutX="327.0" layoutY="325.0" onAction="#setDuration" prefHeight="25.0" prefWidth="65.0" promptText="mm" visibleRowCount="24" />
+                        <ComboBox fx:id="actNewEndHour" layoutX="257.0" layoutY="355.0" onAction="#setDuration" prefHeight="25.0" prefWidth="60.0" promptText="HH" visibleRowCount="24" />
+                        <ComboBox fx:id="actNewEndMinute" layoutX="327.0" layoutY="355.0" onAction="#setDuration" prefHeight="25.0" prefWidth="65.0" promptText="mm" visibleRowCount="24" />
+                        <ComboBox fx:id="actNewDuration" layoutX="74.0" layoutY="407.0" prefHeight="25.0" prefWidth="113.0" />
+                        <Label layoutX="194.0" layoutY="411.0" text="Minutes" />
+                        <Button layoutX="176.0" layoutY="439.0" mnemonicParsing="false" onAction="#onAddActivity" text="Add Activity" />
+                        <ComboBox fx:id="actNewStartTag" layoutX="314.0" layoutY="241.0" prefHeight="25.0" prefWidth="95.0" promptText="Tag" />
+                        <ComboBox fx:id="actNewLocationTag" layoutX="314.0" layoutY="288.0" prefHeight="25.0" prefWidth="95.0" promptText="Tag" />
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <Label layoutX="112.0" layoutY="14.0" text="Update an activity">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="38.0" layoutY="84.0" text="Label:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="37.0" layoutY="157.0" text="Notes:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="22.0" layoutY="279.0" text="Location:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="43.0" layoutY="329.0" text="Start:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="48.0" layoutY="359.0" text="End:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="41.0" layoutY="386.0" text="Type:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="19.0" layoutY="409.0" text="Duration:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="13.0" layoutY="232.0" text="StartPlace:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <TextArea fx:id="actUpdateLabel" layoutX="83.0" layoutY="84.0" prefHeight="70.0" prefWidth="327.0" />
+                        <TextArea fx:id="actUpdateNotes" layoutX="83.0" layoutY="158.0" prefHeight="70.0" prefWidth="327.0" />
+                        <TextArea fx:id="actUpdateStart" layoutX="83.0" layoutY="232.0" prefHeight="43.0" prefWidth="230.0" />
+                        <TextArea fx:id="actUpdateLocation" layoutX="83.0" layoutY="279.0" prefHeight="43.0" prefWidth="230.0" />
+                        <DatePicker fx:id="actUpdateStartDatePicker" editable="false" layoutX="83.0" layoutY="325.0" onAction="#setDurationUpdate" prefHeight="25.0" prefWidth="162.0" />
+                        <DatePicker fx:id="actUpdateEndDatePicker" editable="false" layoutX="83.0" layoutY="355.0" onAction="#setDurationUpdate" prefHeight="25.0" prefWidth="162.0" />
+                        <RadioButton fx:id="actUpdateFixed" layoutX="103.0" layoutY="386.0" mnemonicParsing="false" onAction="#onUpdateSelectFixed" selected="true" text="Fixed">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="TypeUpdate" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="actUpdateBreak" layoutX="216.0" layoutY="386.0" mnemonicParsing="false" onAction="#onUpdateSelectBreak" text="Break" toggleGroup="$TypeUpdate" />
+                        <ComboBox fx:id="actUpdateStartHour" layoutX="265.0" layoutY="325.0" onAction="#setDurationUpdate" prefHeight="25.0" prefWidth="60.0" promptText="HH" visibleRowCount="24" />
+                        <ComboBox fx:id="actUpdateStartMinute" layoutX="335.0" layoutY="325.0" onAction="#setDurationUpdate" prefHeight="25.0" prefWidth="65.0" promptText="mm" visibleRowCount="24" />
+                        <ComboBox fx:id="actUpdateEndHour" layoutX="265.0" layoutY="355.0" onAction="#setDurationUpdate" prefHeight="25.0" prefWidth="60.0" promptText="HH" visibleRowCount="24" />
+                        <ComboBox fx:id="actUpdateEndMinute" layoutX="335.0" layoutY="355.0" onAction="#setDurationUpdate" prefHeight="25.0" prefWidth="65.0" promptText="mm" visibleRowCount="24" />
+                        <ComboBox fx:id="actUpdateDuration" layoutX="82.0" layoutY="407.0" prefHeight="25.0" prefWidth="113.0" />
+                        <Label layoutX="202.0" layoutY="411.0" text="Minutes" />
+                        <Button layoutX="184.0" layoutY="439.0" mnemonicParsing="false" onAction="#onAddActivity" text="Update Activity" />
+                        <ComboBox fx:id="actUpdateStartTag" layoutX="322.0" layoutY="241.0" prefHeight="25.0" prefWidth="95.0" promptText="Tag" />
+                        <ComboBox fx:id="actUpdateLocationTag" layoutX="322.0" layoutY="288.0" prefHeight="25.0" prefWidth="95.0" promptText="Tag" />
+                        <DatePicker fx:id="actUpdateDatePicker" layoutX="137.0" layoutY="49.0" onAction="#onDateSelectUpdate" />
+                     </children></AnchorPane>
+              </items>
+            </SplitPane>
+         </content>
+      </Tab>
+  </tabs>
+</TabPane>

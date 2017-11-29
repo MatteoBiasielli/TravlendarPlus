@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TabPane prefHeight="266.0" prefWidth="401.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="travlendardesktopclient.LoginController">
+  <tabs>
+    <Tab text="Login">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <PasswordField fx:id="password" layoutX="73.0" layoutY="70.0" prefHeight="25.0" prefWidth="240.0" promptText="Password" />
+                  <Button fx:id="loginButton" layoutX="170.0" layoutY="110.0" mnemonicParsing="false" onAction="#onLogin" text="Login" />
+                  <Label fx:id="errorLabel" layoutX="54.0" layoutY="147.0" prefHeight="25.0" prefWidth="309.0" />
+                  <TextField fx:id="username" layoutX="73.0" layoutY="34.0" prefHeight="25.0" prefWidth="240.0" promptText="Username" />
+                  <TextField fx:id="ip" layoutX="223.0" layoutY="182.0" promptText="IP" text="localhost" />
+               </children>
+            </AnchorPane>
+      </content>
+    </Tab>
+    <Tab text="Registration">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <PasswordField fx:id="registerpassword" layoutX="81.0" layoutY="77.0" prefHeight="25.0" prefWidth="240.0" promptText="Password" />
+                  <Button fx:id="registerButton" layoutX="171.0" layoutY="106.0" mnemonicParsing="false" onAction="#onRegister" text="Register" />
+                  <TextField fx:id="registerusername" layoutX="81.0" layoutY="36.0" prefHeight="25.0" prefWidth="240.0" promptText="Username" />
+                  <TextField fx:id="registerip" layoutX="222.0" layoutY="186.0" promptText="IP" text="localhost" />
+                  <Label fx:id="registererrorLabel" layoutX="47.0" layoutY="142.0" prefHeight="25.0" prefWidth="309.0" />
+               </children>
+            </AnchorPane>
+      </content>
+    </Tab>
+  </tabs>
+</TabPane>

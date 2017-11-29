@@ -35,6 +35,7 @@ public class Test {
         /*ArrayList<Forecast> f=APIManager.getYahooWeatherForcast("via caduti di marcinelle milano");
         for(Forecast fore:f)
             System.out.println(fore);*/
-        DataLayer.getNotification(new User("cane","cane"));
+       // DataLayer.getNotification(new User("cane","cane"));
+       System.out.println(new Date(1511965277601L));
     }
 }

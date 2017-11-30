@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -26,6 +27,9 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.TilePane;
+import javafx.stage.Stage;
 import travlendardesktopclient.data.Data;
 import travlendardesktopclient.data.activities.Activity;
 import travlendardesktopclient.data.activities.Break;
@@ -47,6 +51,8 @@ import travlendardesktopclient.network.deleterangedpreferenceresponse.ResponseDe
 import travlendardesktopclient.network.deleterangedpreferenceresponse.ResponseDeleteRangedPreferencesType;
 import travlendardesktopclient.network.deletetagresponse.ResponseDeleteTag;
 import travlendardesktopclient.network.deletetagresponse.ResponseDeleteTagType;
+import travlendardesktopclient.network.retrievenotificationsresponse.ResponseRetrieveNotifications;
+import travlendardesktopclient.network.retrievenotificationsresponse.ResponseRetrieveNotificationsType;
 import travlendardesktopclient.network.updateactivityresponse.ResponseUpdateActivity;
 import travlendardesktopclient.network.updateactivityresponse.ResponseUpdateActivityType;
 import travlendardesktopclient.network.updatebooleanpreferencesresponse.ResponseUpdateBooleanPreferences;
@@ -60,6 +66,8 @@ import travlendardesktopclient.network.updaterangedpreferencesresponse.ResponseU
  * @author matteo
  */
 public class MainWindowController implements Initializable {
+    private UpdateNotificationsThread notifThread;
+    private Stage thisStage;
     private ArrayList<Activity> selectedDayActivities;
     private int totActivitiesForSelectedDay=0;
     private int actualActivity=0;
@@ -213,10 +221,17 @@ public class MainWindowController implements Initializable {
         this.actUpdateEndMinute.getItems().addAll("00","15","30","45");
         this.actUpdateStartMinute.getItems().addAll("00","15","30","45");
         this.actNewDuration.setDisable(true);
+    }
+    public void startNotificationThread(){
+        this.notifThread=new UpdateNotificationsThread(this);
+        this.notifThread.start();
     }    
     @FXML
     public void init(){
         
+    }
+    public void setStage(Stage s){
+        this.thisStage=s;
     }
     public void onUpdateActivity(){
         try{
@@ -657,6 +672,15 @@ public class MainWindowController implements Initializable {
     public void update(){
         updateTags();
         updatePreferences();
+        //updateNotifications();
+    }
+    protected void updateNotifications(){
+        TilePane notPane=(TilePane) this.thisStage.getScene().lookup("#101");
+        Label title= (Label) this.thisStage.getScene().lookup("#102");
+        notPane.getChildren().clear();
+        notPane.getChildren().add(title);
+        for(int i=0;i<Data.getUser().getNotifications().size();i++)
+            notPane.getChildren().add(new Label(this.setNewLines(50,Data.getUser().getNotifications().get(i).toString())));
     }
     private void updateTags(){
         ArrayList<FavouritePosition> favPos=Data.getUser().getFavPositions();
@@ -771,5 +795,42 @@ public class MainWindowController implements Initializable {
             actUpdateDuration.setValue(null);
         else
             actUpdateDuration.setValue(duration);
+    }
+    
+}
+
+class UpdateNotificationsThread extends Thread{
+    MainWindowController thisControll;
+    private final long ONE_MINUTE=60*1000;
+    UpdateNotificationsThread(MainWindowController thisControll){
+        this.thisControll=thisControll;
+    }
+    @Override
+    public void run(){
+        while(true){
+            try{
+                ResponseRetrieveNotifications rrn=NetworkLayer.retrieveNotificationsRequest(Data.getUser().getUsername(), Data.getUser().getPassword());
+                if(rrn.getType()==ResponseRetrieveNotificationsType.OK){
+                    Data.getUser().setNotifications(rrn.getNotifications());
+                    Platform.runLater(new UpdateNotificationsTask(thisControll));
+                }
+                sleep(ONE_MINUTE);
+            }catch(IOException e){
+
+            }catch(InterruptedException e){
+                break;
+            }
+        }
+    }
+}
+
+class UpdateNotificationsTask implements Runnable{
+    MainWindowController thisControll;
+    UpdateNotificationsTask(MainWindowController thisControll){
+        this.thisControll=thisControll;
+    }
+    @Override
+    public void run() {
+        thisControll.updateNotifications();
     }
 }

@@ -78,6 +78,7 @@ public class LoginController implements Initializable{
         this.mainLoader.setLocation(getClass().getResource("mainwindow.fxml"));
         this.mainStage.setScene(new Scene(mainLoader.load()));
         this.mainStage.setResizable(false);
+        ((MainWindowController)this.mainLoader.getController()).setStage(mainStage);
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -104,6 +105,7 @@ public class LoginController implements Initializable{
                 Data.setUser(rl.getUser());
                 mainStage.show();
                 ((MainWindowController)mainLoader.getController()).update();
+                ((MainWindowController)mainLoader.getController()).startNotificationThread();
                 this.thisStage.hide();
             }
         }catch(IOException e){

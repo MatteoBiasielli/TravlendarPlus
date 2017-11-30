@@ -22,6 +22,7 @@ import travlendardesktopclient.network.deleterangedpreferenceresponse.ResponseDe
 import travlendardesktopclient.network.deletetagresponse.ResponseDeleteTag;
 import travlendardesktopclient.network.loginresponse.ResponseLogin;
 import travlendardesktopclient.network.registerresponse.ResponseRegister;
+import travlendardesktopclient.network.retrievenotificationsresponse.ResponseRetrieveNotifications;
 import travlendardesktopclient.network.updateactivityresponse.ResponseUpdateActivity;
 import travlendardesktopclient.network.updatebooleanpreferencesresponse.ResponseUpdateBooleanPreferences;
 import travlendardesktopclient.network.updaterangedpreferencesresponse.ResponseUpdateRangedPreferences;
@@ -238,6 +239,19 @@ public class NetworkLayer {
         return gson.fromJson(json, ResponseUpdateActivity.class);
     }
     
+    public static ResponseRetrieveNotifications retrieveNotificationsRequest(String user, String pass) throws IOException{
+        return parseRetrieveNotifications(requestHTTP(retrieveNotificationsURLBuilder(user,pass)));
+    }
+    private static URL retrieveNotificationsURLBuilder(String user, String pass) throws MalformedURLException{
+        String url=urlHead+ip+urlCenter+"retrievenotifications?";
+        url+="user="+user;
+        url+="&pass="+pass;
+        return new URL(url);
+    }
+    private static ResponseRetrieveNotifications parseRetrieveNotifications(String json){
+        Gson gson= new GsonBuilder().create();
+        return gson.fromJson(json, ResponseRetrieveNotifications.class);
+    }
     
     
     /**

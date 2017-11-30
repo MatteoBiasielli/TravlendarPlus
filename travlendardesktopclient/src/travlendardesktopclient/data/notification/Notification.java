@@ -1,5 +1,7 @@
 package travlendardesktopclient.data.notification;
 
+import java.util.Date;
+
 /**
  * Modified by mattiadifatta on 23/11/2017.
  */
@@ -18,6 +20,6 @@ public class Notification {
 
     @Override
     public String toString() {
-        return "{USER: "+user_id+"; ACTIVITY_ID: "+activity_id+"; TEXT: "+text+"; TIMESTAMP: "+timestamp+"}";
+        return ">>["+new Date(timestamp).toString() + "]: " +text;
     }
 }

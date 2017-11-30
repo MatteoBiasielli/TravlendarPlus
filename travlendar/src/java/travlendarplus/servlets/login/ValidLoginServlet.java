@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import travlendarplus.data.DataLayer;
 import travlendarplus.exceptions.InvalidInputException;
 import travlendarplus.exceptions.InvalidLoginException;
 import travlendarplus.exceptions.InvalidPositionException;
@@ -75,6 +76,7 @@ public class ValidLoginServlet extends HttpServlet{
             u.getCalendarFromDB();
             u.getPreferencesFromDB();
             u.getfavPositionsFromDB();
+            DataLayer.getNotification(u); 
             //SEND RESPONSE
             ResponseLogin rl= new ResponseLogin(ResponseLoginType.OK,u);
             Gson gson= new GsonBuilder().create();

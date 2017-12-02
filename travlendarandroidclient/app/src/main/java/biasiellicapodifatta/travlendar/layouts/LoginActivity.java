@@ -30,10 +30,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import biasiellicapodifatta.travlendar.R;
+import biasiellicapodifatta.travlendar.network.NetworkLayer;
+import biasiellicapodifatta.travlendar.response.responselogin.ResponseLogin;
+import biasiellicapodifatta.travlendar.response.responselogin.ResponseLoginType;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -195,12 +199,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 3;
     }
 
     /**
@@ -301,7 +305,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
-
+        ResponseLogin response;
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -326,6 +330,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
 
+            NetworkLayer.setIP("10.18.2.121");
+            try {
+                response = NetworkLayer.loginRequest(mEmail, mPassword);
+            } catch (IOException e) {
+                return true;
+            }
+
             // TODO: register the new account here.
             return true;
         }
@@ -335,12 +346,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            /*if (success) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
+            }*/
+            if(response.getType()== ResponseLoginType.OK) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+            else{
+                mPasswordView.setError(response.getType().getMessage());
+                mPasswordView.requestFocus();
+
             }
         }
 

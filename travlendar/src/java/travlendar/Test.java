@@ -36,6 +36,7 @@ public class Test {
         for(Forecast fore:f)
             System.out.println(fore);*/
        // DataLayer.getNotification(new User("cane","cane"))-;
-       System.out.println(new Date(1511965277601L));
+       //System.out.println(new Date(1511965277601L));
+       DataLayer.checkForNotification();
     }
 }

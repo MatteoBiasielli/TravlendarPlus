@@ -27,7 +27,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import travlendardesktopclient.data.Data;
@@ -795,6 +794,10 @@ public class MainWindowController implements Initializable {
             actUpdateDuration.setValue(null);
         else
             actUpdateDuration.setValue(duration);
+    }
+
+    void stopNotificationThread() {
+        this.notifThread.stop();
     }
     
 }

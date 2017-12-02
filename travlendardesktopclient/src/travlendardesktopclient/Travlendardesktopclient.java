@@ -44,6 +44,10 @@ public class Travlendardesktopclient extends Application {
         ((LoginController)loginLoader.getController()).setStage(loginStage);
     }
 	
+    @Override
+    public void stop(){
+        ((LoginController)loginLoader.getController()).stopNotificationThread();
+    }
     
     
     

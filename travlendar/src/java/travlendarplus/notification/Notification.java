@@ -1,14 +1,14 @@
 package travlendarplus.notification;
 
 /**
- * Modified by mattiadifatta on 23/11/2017.
+ * This class represents a notification object to be used in server as auxiliary object.
  */
 public class Notification {
     private Integer user_id, activity_id;
     private long timestamp;
     private String text;
 
-    /*CONSTRUCTOR*/
+    /*CONSTRUCTORS*/
     public Notification(int usr, int activity, String text, long timestamp){
         this.activity_id = activity;
         this.user_id = usr;
@@ -31,6 +31,7 @@ public class Notification {
             return "{USER: "+user_id+"; ACTIVITY_ID: "+activity_id+"; TEXT: "+text+"; TIMESTAMP: "+timestamp+"}";
     }
 
+    /*GETTERS*/
     public Integer getUser_id() {
         return user_id;
     }

@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import biasiellicapodifatta.travlendar.R;
 
-/**
+/**.
  * Created by Emilio on 29/11/2017.
  */
 

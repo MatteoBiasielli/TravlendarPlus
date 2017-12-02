@@ -22,7 +22,9 @@ public class Travlendardesktopclient extends Application {
     /** attribute used to handle operations on the login screen*/
     private Stage loginStage;
     
-    
+    /**Automatically called on application start, initializes the login stage 
+     * and its controller and shows it
+     * */
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.loginStage=primaryStage;

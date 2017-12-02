@@ -57,10 +57,11 @@ public class LoginController implements Initializable{
     private TextField registerip;
     
     
-    /** attribute used to handle operations on the login screen*/
+    /** attribute used to handle operations on the main screen*/
     private FXMLLoader mainLoader;
-    /** attribute used to handle operations on the login screen*/
+    /** attribute used to handle operations on the main screen*/
     private Stage mainStage;
+    /** attribute containing the stage controlled by this controller*/
     private Stage thisStage;
     public LoginController(){
         
@@ -69,9 +70,15 @@ public class LoginController implements Initializable{
     public void initialize(){
             
     }
+    
+    /**tells the controller the stage it is controlling*/
     public void setStage(Stage s){
         this.thisStage=s;
     }
+    
+    /**initializes the mainStage and the mainLoader
+    * 
+    */
     private void initializeMainStage() throws IOException{
         mainStage=new Stage();
         this.mainLoader= new FXMLLoader();
@@ -80,6 +87,12 @@ public class LoginController implements Initializable{
         this.mainStage.setResizable(false);
         ((MainWindowController)this.mainLoader.getController()).setStage(mainStage);
     }
+    
+    /**called automatically on application start, exploits all initialization
+     * procedures required
+     * @param location NOT USED
+     * @param resources NOT USED
+     */ 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -89,6 +102,9 @@ public class LoginController implements Initializable{
         }
     }
     
+    /**activated when the login button is pressed. Handles all the required 
+     * procedures to peform the login.
+     */
     public void onLogin(){
         loginButton.setDisable(true);
         String user=username.getText();
@@ -115,6 +131,9 @@ public class LoginController implements Initializable{
         }
     }
     
+    /**activated when the login button is pressed. Handles all the required 
+     * procedures to peform the registration.
+     */
     public void onRegister(){
         registerButton.setDisable(true);
         String user=registerusername.getText();

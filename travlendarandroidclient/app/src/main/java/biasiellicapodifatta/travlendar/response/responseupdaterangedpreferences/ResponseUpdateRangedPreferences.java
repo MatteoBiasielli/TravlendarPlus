@@ -3,7 +3,7 @@ package biasiellicapodifatta.travlendar.response.responseupdaterangedpreferences
 
 import java.util.ArrayList;
 
-import biasiellicapodifatta.travlendar.user.preferences.RangedPreference;
+import biasiellicapodifatta.travlendar.data.user.preferences.RangedPreference;
 
 /**
  *

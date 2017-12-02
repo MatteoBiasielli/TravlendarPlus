@@ -1,10 +1,17 @@
 .idea/
 travlendar/out/
 out/
+<<<<<<< HEAD
+=======
+travlendarandroidclient/gradlew
+travlendarandroidclient/build/
+travlendarandroidclient/travlendarandroidclient.iml
+>>>>>>> a3293e575ee5e68caebfa7aab3cb6decccc8f311
 travlendarandroidclient/.gradle/4.1/fileHashes/fileHashes.bin
 travlendarandroidclient/.gradle/4.1/fileHashes/fileHashes.lock
 travlendarandroidclient/.gradle/4.1/taskHistory/fileSnapshots.bin
 travlendarandroidclient/.gradle/4.1/taskHistory/taskHistory.bin
+<<<<<<< HEAD
 travlendarandroidclient/.gradle/4.1/taskHistory/taskHistory.lock
 travlendarandroidclient/app/app.iml
 travlendarandroidclient/build/android-profile/profile-2017-12-02-10-26-10-889.json
@@ -15,3 +22,12 @@ travlendarandroidclient/build/android-profile/profile-2017-12-02-11-15-28-647.ra
 travlendarandroidclient/travlendarandroidclient.iml
 travlendarandroidclient/build/android-profile/profile-2017-12-02-10-26-10-889.rawproto
 *.rawproto
+=======
+travlendarandroidclient/app/app.iml
+travlendarandroidclient/app/build.gradle
+travlendarandroidclient/gradle/wrapper/gradle-wrapper.jar
+travlendarandroidclient/gradle/wrapper/gradle-wrapper.properties
+travlendarandroidclient/gradlew
+travlendarandroidclient/gradlew.bat
+travlendarandroidclient/local.properties
+>>>>>>> a3293e575ee5e68caebfa7aab3cb6decccc8f311

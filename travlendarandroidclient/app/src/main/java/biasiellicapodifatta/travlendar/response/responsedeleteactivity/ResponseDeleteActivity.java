@@ -1,6 +1,6 @@
 package biasiellicapodifatta.travlendar.response.responsedeleteactivity;
 
-import travlendarplus.calendar.Calendar;
+import biasiellicapodifatta.travlendar.data.activities.Calendar;
 
 /**
  * Modified by mattiadifatta on 19/11/2017.

@@ -1,6 +1,6 @@
 package biasiellicapodifatta.travlendar.response.responselogin;
 
-import biasiellicapodifatta.travlendar.user.User;
+import biasiellicapodifatta.travlendar.data.user.User;
 
 /**
  *

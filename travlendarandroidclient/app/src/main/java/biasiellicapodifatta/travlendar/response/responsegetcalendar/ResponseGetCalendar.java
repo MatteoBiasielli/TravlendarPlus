@@ -1,6 +1,7 @@
 package biasiellicapodifatta.travlendar.response.responsegetcalendar;
 
 
+import biasiellicapodifatta.travlendar.data.activities.Calendar;
 
 /**
  * Modified by mattiadifatta on 20/11/2017.

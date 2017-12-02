@@ -1,7 +1,7 @@
 package biasiellicapodifatta.travlendar.response.responseupdateactivity;
 
 import biasiellicapodifatta.travlendar.response.responseaddactivity.ResponseAddActivityNotification;
-import biasiellicapodifatta.travlendar.user.User;
+import biasiellicapodifatta.travlendar.data.user.User;
 
 /**
  * Modified by mattiadifatta on 21/11/2017.

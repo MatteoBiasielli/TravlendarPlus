@@ -2,7 +2,7 @@ package biasiellicapodifatta.travlendar.response.responsedeletetag;
 
 import java.util.ArrayList;
 
-import biasiellicapodifatta.travlendar.user.FavouritePosition;
+import biasiellicapodifatta.travlendar.data.user.FavouritePosition;
 
 /**
  *

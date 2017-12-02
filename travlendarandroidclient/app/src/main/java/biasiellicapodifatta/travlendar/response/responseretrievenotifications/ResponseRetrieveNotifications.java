@@ -1,4 +1,9 @@
 package biasiellicapodifatta.travlendar.response.responseretrievenotifications;
+
+import java.util.ArrayList;
+
+import biasiellicapodifatta.travlendar.data.notification.Notification;
+
 /**
  * Modified by mattiadifatta on 24/11/2017.
  */

@@ -1,5 +1,9 @@
 package biasiellicapodifatta.travlendar.response.responsetravel;
 
+import java.util.ArrayList;
+
+import biasiellicapodifatta.travlendar.data.travel.Route;
+
 /**
  *
  * @author matteo

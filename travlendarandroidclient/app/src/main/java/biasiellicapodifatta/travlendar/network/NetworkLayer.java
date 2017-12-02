@@ -14,17 +14,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import travlendardesktopclient.network.addactivityresponse.ResponseAddActivity;
-import travlendardesktopclient.network.addtagresponse.ResponseAddTag;
-import travlendardesktopclient.network.deleteactivityresponse.ResponseDeleteActivity;
-import travlendardesktopclient.network.deleterangedpreferenceresponse.ResponseDeleteRangedPreferences;
-import travlendardesktopclient.network.deletetagresponse.ResponseDeleteTag;
-import travlendardesktopclient.network.loginresponse.ResponseLogin;
-import travlendardesktopclient.network.registerresponse.ResponseRegister;
-import travlendardesktopclient.network.retrievenotificationsresponse.ResponseRetrieveNotifications;
-import travlendardesktopclient.network.updateactivityresponse.ResponseUpdateActivity;
-import travlendardesktopclient.network.updatebooleanpreferencesresponse.ResponseUpdateBooleanPreferences;
-import travlendardesktopclient.network.updaterangedpreferencesresponse.ResponseUpdateRangedPreferences;
+
+import biasiellicapodifatta.travlendar.response.responseaddactivity.ResponseAddActivity;
+import biasiellicapodifatta.travlendar.response.responseaddtag.ResponseAddTag;
+import biasiellicapodifatta.travlendar.response.responsedeleteactivity.ResponseDeleteActivity;
+import biasiellicapodifatta.travlendar.response.responsedeleterangedpreferences.ResponseDeleteRangedPreferences;
+import biasiellicapodifatta.travlendar.response.responsedeletetag.ResponseDeleteTag;
+import biasiellicapodifatta.travlendar.response.responselogin.ResponseLogin;
+import biasiellicapodifatta.travlendar.response.responseregister.ResponseRegister;
+import biasiellicapodifatta.travlendar.response.responseretrievenotifications.ResponseRetrieveNotifications;
+import biasiellicapodifatta.travlendar.response.responseupdateactivity.ResponseUpdateActivity;
+import biasiellicapodifatta.travlendar.response.responseupdatebooleanpreferences.ResponseUpdateBooleanPreferences;
+import biasiellicapodifatta.travlendar.response.responseupdaterangedpreferences.ResponseUpdateRangedPreferences;
+
 
 /**
  *
@@ -65,7 +67,7 @@ public class NetworkLayer {
         return gson.fromJson(json, ResponseRegister.class);
     }
 
-    public static ResponseDeleteTag deleteTagRequest(String user, String pass,String tag) throws IOException {
+    public static ResponseDeleteTag deleteTagRequest(String user, String pass, String tag) throws IOException {
         return parseResponseDeleteTag(requestHTTP(deleteTagURLBuilder(user,pass,tag)));
     }
     private static URL deleteTagURLBuilder(String user, String pass,String tag) throws MalformedURLException{
@@ -80,7 +82,7 @@ public class NetworkLayer {
         return gson.fromJson(json, ResponseDeleteTag.class);
     }
 
-    public static ResponseAddTag addTagRequest(String user, String pass,String tag,String addr) throws IOException {
+    public static ResponseAddTag addTagRequest(String user, String pass, String tag, String addr) throws IOException {
         return parseResponseAddTag(requestHTTP(addTagURLBuilder(user,pass,tag,addr)));
     }
     private static URL addTagURLBuilder(String user, String pass,String tag, String addr) throws MalformedURLException{
@@ -97,7 +99,7 @@ public class NetworkLayer {
         return gson.fromJson(json, ResponseAddTag.class);
     }
 
-    public static ResponseUpdateBooleanPreferences updateBooleanPreferencesRequest(String user, String pass,boolean pC,boolean cS,boolean pB,boolean bS, boolean pT, boolean uT, int mode) throws IOException {
+    public static ResponseUpdateBooleanPreferences updateBooleanPreferencesRequest(String user, String pass, boolean pC, boolean cS, boolean pB, boolean bS, boolean pT, boolean uT, int mode) throws IOException {
         return parseResponseUpdateBooleanPreferences(requestHTTP(updateBooleanPreferencesURLBuilder(user,pass,pC,cS,pB,bS,pT,uT,mode)));
     }
     private static URL updateBooleanPreferencesURLBuilder(String user, String pass,boolean pC,boolean cS,boolean pB,boolean bS, boolean pT, boolean uT, int mode) throws MalformedURLException{
@@ -118,7 +120,7 @@ public class NetworkLayer {
         return gson.fromJson(json, ResponseUpdateBooleanPreferences.class);
     }
 
-    public static ResponseUpdateRangedPreferences updateRangedPreferencesRequest(String user, String pass,ArrayList<Integer> vals, ArrayList<String> ids) throws IOException {
+    public static ResponseUpdateRangedPreferences updateRangedPreferencesRequest(String user, String pass, ArrayList<Integer> vals, ArrayList<String> ids) throws IOException {
         return parseResponseUpdateRangedPreferences(requestHTTP(updateRangedPreferencesURLBuilder(user,pass,vals,ids)));
     }
     private static URL updateRangedPreferencesURLBuilder(String user, String pass,ArrayList<Integer> vals, ArrayList<String> ids) throws MalformedURLException{
@@ -171,7 +173,7 @@ public class NetworkLayer {
 
 
 
-    public static ResponseAddActivity addActivityRequest(String user, String pass, String l,String n,String locText,String locTag,String startText,String startTag, Boolean flexible,String duration,Date st,Date en) throws IOException {
+    public static ResponseAddActivity addActivityRequest(String user, String pass, String l, String n, String locText, String locTag, String startText, String startTag, Boolean flexible, String duration, Date st, Date en) throws IOException {
         return parseResponseAddActivity(requestHTTP(addActivityURLBuilder(user,pass, l, n, locText, locTag, startText, startTag,  flexible, duration, st, en)));
     }
     private static URL addActivityURLBuilder(String user, String pass, String l,String n,String locText,String locTag,String startText,String startTag, Boolean flexible,String duration,Date st,Date en) throws MalformedURLException{
@@ -205,7 +207,7 @@ public class NetworkLayer {
     }
 
 
-    public static ResponseUpdateActivity updateActivityRequest(String user, String pass, String l,String n,String locText,String locTag,String startText,String startTag, Boolean flexible,String duration,Date st,Date en, int id) throws IOException {
+    public static ResponseUpdateActivity updateActivityRequest(String user, String pass, String l, String n, String locText, String locTag, String startText, String startTag, Boolean flexible, String duration, Date st, Date en, int id) throws IOException {
         return parseResponseUpdateActivity(requestHTTP(updateActivityURLBuilder(user,pass, l, n, locText, locTag, startText, startTag,  flexible, duration, st, en,id)));
     }
     private static URL updateActivityURLBuilder(String user, String pass, String l,String n,String locText,String locTag,String startText,String startTag, Boolean flexible,String duration,Date st,Date en,int id) throws MalformedURLException{

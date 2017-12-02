@@ -12,19 +12,31 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Modified by mattiadifatta on 28/11/2017.
+ * This class implements the generic EventCheckingThread class for weather forecast from the Yahoo!Weather APIs
  */
 public class WeatherCheckingThread extends EventCheckingThread{
-
+    /**
+     * Logger for this class used to handle internal exceptions.
+     */
     private static final Logger LOGGER = Logger.getLogger(Class.class.getName());
-
+    /**
+     * Constant representing the position of today in an array of data.
+     */
     private final int TODAY = 0;
-    private final long A_DAY = 24 * 60 * 60 * 1000;
 
+    /**
+     * Constant representing the interval of time (in millis) this thread must sleep between each check.
+     */
+    private final long A_DAY = 24 * 60 * 60 * 1000;
+    /*CONSTRUCTOR*/
     public WeatherCheckingThread(TravlendarContextListener creator){
         super(creator);
     }
 
+    /**
+     * Override of the run() method in which this thread retrieves weather forecasts from Yahoo!Weather APIs,
+     * generates a new notifications and stores it in the DB. Finally it sleeps for A_DAY
+     */
     @Override
     public void run() {
         try {

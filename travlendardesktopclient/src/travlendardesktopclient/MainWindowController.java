@@ -441,6 +441,24 @@ public class MainWindowController implements Initializable {
             this.setUpdateArea(a.getLabel(), a.getNotes(), a.getLocationAddress(), a.getStartPlaceAddress(), a.isFlexible(), Long.toString(a.getDuration()), a.getStartDate(), a.getEndDate());
         }
     }
+    public void onNextActivityUpdate(){
+        if(this.selectedDayActivitiesUpdate!=null && !this.selectedDayActivitiesUpdate.isEmpty()){
+            if(this.actualActivityUpdate+1<this.totActivitiesForSelectedDayUpdate){
+                Activity a=this.selectedDayActivitiesUpdate.get(this.actualActivityUpdate+1);
+                this.setUpdateArea(a.getLabel(), a.getNotes(), a.getLocationAddress(), a.getStartPlaceAddress(), a.isFlexible(), Long.toString(a.getDuration()), a.getStartDate(), a.getEndDate());
+                this.actualActivityUpdate++;
+            }   
+        }
+    }
+    public void onPreviousActivityUpdate(){
+        if(this.selectedDayActivitiesUpdate!=null && !this.selectedDayActivitiesUpdate.isEmpty()){
+            if(this.actualActivityUpdate-1>=0){
+                Activity a=this.selectedDayActivitiesUpdate.get(this.actualActivityUpdate-1);
+                this.setUpdateArea(a.getLabel(), a.getNotes(), a.getLocationAddress(), a.getStartPlaceAddress(), a.isFlexible(), Long.toString(a.getDuration()), a.getStartDate(), a.getEndDate());
+                this.actualActivityUpdate--;
+            }   
+        }
+    }
     public void onSelectTag(){
         FavouritePosition sel=(FavouritePosition) chosenTag.getValue();
         if(sel!=null){

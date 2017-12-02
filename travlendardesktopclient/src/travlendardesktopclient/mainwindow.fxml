@@ -23,7 +23,7 @@
   <tabs>
     <Tab text="Your Activities">
       <content>
-            <SplitPane dividerPositions="0.6627906976744186" prefHeight="160.0" prefWidth="200.0">
+            <SplitPane disable="true" dividerPositions="0.6627906976744186" prefHeight="160.0" prefWidth="200.0">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
@@ -388,6 +388,8 @@
                         <ComboBox fx:id="actUpdateStartTag" layoutX="322.0" layoutY="241.0" prefHeight="25.0" prefWidth="95.0" promptText="Tag" />
                         <ComboBox fx:id="actUpdateLocationTag" layoutX="322.0" layoutY="288.0" prefHeight="25.0" prefWidth="95.0" promptText="Tag" />
                         <DatePicker fx:id="actUpdateDatePicker" layoutX="137.0" layoutY="49.0" onAction="#onDateSelectUpdate" />
+                        <Button layoutX="293.0" layoutY="439.0" mnemonicParsing="false" onAction="#onNextActivityUpdate" text="&gt;&gt;&gt;" />
+                        <Button layoutX="132.0" layoutY="439.0" mnemonicParsing="false" onAction="#onPreviousActivityUpdate" text="&lt;&lt;&lt;" />
                      </children></AnchorPane>
               </items>
             </SplitPane>

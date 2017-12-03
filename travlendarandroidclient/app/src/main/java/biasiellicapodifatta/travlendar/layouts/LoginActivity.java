@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import biasiellicapodifatta.travlendar.R;
+import biasiellicapodifatta.travlendar.data.user.User;
 import biasiellicapodifatta.travlendar.network.NetworkLayer;
 import biasiellicapodifatta.travlendar.response.responselogin.ResponseLogin;
 import biasiellicapodifatta.travlendar.response.responselogin.ResponseLoginType;
@@ -305,11 +306,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     public class UserLoginTask extends AsyncTask<Void, Void, ResponseLogin> {
 
-        private final String mEmail;
+        private final String mUsername;
         private final String mPassword;
         ResponseLogin response;
-        UserLoginTask(String email, String password) {
-            mEmail = email;
+        UserLoginTask(String username, String password) {
+            mUsername = username;
             mPassword = password;
         }
 
@@ -320,18 +321,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected ResponseLogin doInBackground(Void... params) {
-            /*try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }*/
 
-            try {
-                response = NetworkLayer.loginRequest(mEmail, mPassword);
-            } catch (IOException e) {
-                return null;
-            }
+//            try {
+//                response = NetworkLayer.loginRequest(mUsername, mPassword);
+//            } catch (IOException e) {
+//                return null;
+//            }
+
+            response = new ResponseLogin(ResponseLoginType.OK, new User(mUsername, mPassword));
 
             return response;
         }
@@ -348,7 +345,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             switch (response.getType()){
                 case OK:
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainTabContainer.class);
                     startActivity(intent);
                     break;
                 case LOGIN_USERNAME_ERROR:

@@ -6,25 +6,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
+
 import biasiellicapodifatta.travlendar.R;
 
 /**
- * Created by Emilio on 29/11/2017.
+ * Created by Emilio on 03/12/2017.
  */
 
-public class CalendarTab extends Fragment {
+public class MapTrial extends Fragment {
 
-    public CalendarTab(){
+    public MapTrial(){
 
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.calendar_tab_layout, container, false);
+        return inflater.inflate(R.layout.map_tab_layout, container, false);
     }
 }

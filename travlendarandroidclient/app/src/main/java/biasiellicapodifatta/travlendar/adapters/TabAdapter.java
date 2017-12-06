@@ -8,18 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import biasiellicapodifatta.travlendar.R;
 import biasiellicapodifatta.travlendar.layouts.CalendarTab;
-import biasiellicapodifatta.travlendar.layouts.MapTrial;
 import biasiellicapodifatta.travlendar.layouts.PreferencesTab;
+import biasiellicapodifatta.travlendar.layouts.MapTab;
 
 public class TabAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
@@ -34,7 +25,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                MapTrial tab1 = new MapTrial();
+                MapTab tab1 = new MapTab();
                 return tab1;
             case 1:
                 CalendarTab tab2 = new CalendarTab();

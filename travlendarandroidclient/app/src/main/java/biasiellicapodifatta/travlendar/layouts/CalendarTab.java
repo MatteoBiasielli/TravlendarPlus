@@ -14,10 +14,6 @@ import biasiellicapodifatta.travlendar.R;
 
 public class CalendarTab extends Fragment {
 
-    public CalendarTab(){
-
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

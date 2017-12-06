@@ -6,20 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
+
 import biasiellicapodifatta.travlendar.R;
 
 /**
- * Created by Emilio on 29/11/2017.
+ * Created by Emilio on 03/12/2017.
  */
 
 public class PreferencesTab extends Fragment {
 
-    public PreferencesTab(){
-
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 

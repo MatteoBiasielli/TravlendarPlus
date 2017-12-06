@@ -1,23 +1,14 @@
 package biasiellicapodifatta.travlendar.layouts;
 
-import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import biasiellicapodifatta.travlendar.R;
 import biasiellicapodifatta.travlendar.adapters.TabAdapter;
 
-public class MainTabContainer extends AppCompatActivity{
+public class MainTabContainer extends AppCompatActivity {
     ViewPager simpleViewPager;
     TabLayout tabLayout;
 
@@ -50,6 +41,5 @@ public class MainTabContainer extends AppCompatActivity{
         // addOnPageChangeListener event change the tab on slide
         simpleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
     }
-
 
 }

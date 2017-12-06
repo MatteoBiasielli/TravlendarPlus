@@ -1,7 +1,11 @@
 package biasiellicapodifatta.travlendar.layouts;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,40 +16,48 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import biasiellicapodifatta.travlendar.R;
 
-/**.
+/**
  * Created by Emilio on 29/11/2017.
  */
 
-public class MapTab extends FragmentActivity implements OnMapReadyCallback{
-
-    private GoogleMap mMap;
+public class MapTab extends Fragment implements OnMapReadyCallback {
+    private static final int MIN_ZOOM_LEVEL = 10;
+    private GoogleMap map;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        return inflater.inflate(R.layout.map_tab_layout, container, false);
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        if (map == null) {
+            FragmentManager fm = getFragmentManager();
+            SupportMapFragment supMap = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
+            supMap.getMapAsync(this);
+
+            if (map != null) {
+                setUpMap();
+            }
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap){
+        this.map = googleMap;
+        setUpMap();
+    }
+
+    private void setUpMap() {
+        LatLng milan = new LatLng(45.465454, 9.186515999999983);
+        map.addMarker(new MarkerOptions().position(milan).title("Marker in Milan"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(milan));
+        map.setMinZoomPreference(MIN_ZOOM_LEVEL);
     }
 }

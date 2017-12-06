@@ -338,13 +338,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected ResponseLogin doInBackground(Void... params) {
 
-//            try {
-//                response = NetworkLayer.loginRequest(mUsername, mPassword);
-//            } catch (IOException e) {
-//                return null;
-//            }
+            try {
+                response = NetworkLayer.loginRequest(mUsername, mPassword);
+            } catch (IOException e) {
+                return null;
+            }
 
-            response = new ResponseLogin(ResponseLoginType.OK, new User(mUsername, mPassword));
+            //response = new ResponseLogin(ResponseLoginType.OK, new User(mUsername, mPassword));
 
             return response;
         }

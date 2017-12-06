@@ -31,21 +31,22 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
     private GoogleMap map;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.map_tab_layout, container, false);
     }
+
     @Override
     public void onResume() {
         super.onResume();
 
         if (map == null) {
             FragmentManager fm = getFragmentManager();
-            SupportMapFragment supMap = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
+            SupportMapFragment supMap = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             supMap.getMapAsync(this);
 
             if (map != null) {
@@ -55,7 +56,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap){
+    public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
         setUpMap();
     }
@@ -66,8 +67,9 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
         map.moveCamera(CameraUpdateFactory.newLatLng(milan));
         map.setMinZoomPreference(MIN_ZOOM_LEVEL);
     }
+}
 
-    public class ItineraryComputationTask extends AsyncTask<Void, Void, ResponseTravel> {
+    /*public class ItineraryComputationTask extends AsyncTask<Void, Void, ResponseTravel> {
         private final String mUsername;
         private final String mPassword;
         ResponseLogin response;
@@ -138,4 +140,4 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
             showProgress(false);
         }
     }
-}
+}*/

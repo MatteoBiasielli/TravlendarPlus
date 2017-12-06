@@ -6,6 +6,17 @@ package travlendardesktopclient;
  * and open the template in the editor.
  */
 
+import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.MapReadyListener;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.InfoWindow;
+import com.lynden.gmapsfx.javascript.object.InfoWindowOptions;
+import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
+import com.lynden.gmapsfx.javascript.object.Marker;
+import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -27,6 +38,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import travlendardesktopclient.data.Data;
@@ -64,7 +76,7 @@ import travlendardesktopclient.network.updaterangedpreferencesresponse.ResponseU
  *
  * @author matteo
  */
-public class MainWindowController implements Initializable {
+public class MainWindowController implements Initializable,MapComponentInitializedListener {
     private UpdateNotificationsThread notifThread;
     private Stage thisStage;
     private ArrayList<Activity> selectedDayActivities;
@@ -206,8 +218,10 @@ public class MainWindowController implements Initializable {
     private ComboBox actUpdateEndMinute;
     @FXML
     private DatePicker actUpdateDatePicker;
+    @FXML
+    private GoogleMapView maps;
     
-    
+    private GoogleMap map;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -220,6 +234,11 @@ public class MainWindowController implements Initializable {
         this.actUpdateEndMinute.getItems().addAll("00","15","30","45");
         this.actUpdateStartMinute.getItems().addAll("00","15","30","45");
         this.actNewDuration.setDisable(true);
+        /*TilePane dayPane=(TilePane) this.thisStage.getScene().lookup("#day");
+        for(int i=0;i<4;i++){
+            dayPane.getChildren().add(new TableView());
+        }*/
+        
     }
     public void startNotificationThread(){
         this.notifThread=new UpdateNotificationsThread(this);
@@ -229,6 +248,40 @@ public class MainWindowController implements Initializable {
     public void init(){
         
     }
+    public void initializeDayOverview(){
+        TilePane dayPane=(TilePane) this.thisStage.getScene().lookup("#1000");
+        for(int i=0;i<4;i++){
+            TableView toAdd=new TableView();
+            dayPane.getChildren().add(toAdd);
+        }
+    }
+    public void initMap(){
+        maps.addMapInitializedListener(this);
+        //maps.addMapReadyListener(this);
+    }
+    @Override
+    public void mapInitialized() {
+        MapOptions mapOptions = new MapOptions();
+        
+        mapOptions.center(new LatLong(45.4800783,9.2472984))
+                .mapType(MapTypeIdEnum.ROADMAP)
+                .overviewMapControl(false)
+                .panControl(false)
+                .rotateControl(false)
+                .scaleControl(false)
+                .zoomControl(false)
+                .zoom(12).clickableIcons(false);
+        map = maps.createMap(mapOptions,false);
+        MarkerOptions mOpt=new MarkerOptions();
+        InfoWindowOptions infoWindowOptions = new InfoWindowOptions();
+        infoWindowOptions.content("Casa Mia");
+        InfoWindow myHouse = new InfoWindow(infoWindowOptions);
+        mOpt.position(new LatLong(45.4800783,9.2472984));
+        Marker myMarker=new Marker(mOpt);
+        map.addMarker(myMarker);
+        myHouse.open(map,myMarker );
+    }
+
     public void setStage(Stage s){
         this.thisStage=s;
     }
@@ -623,8 +676,31 @@ public class MainWindowController implements Initializable {
             this.selectedDayActivities.sort(null);
             Activity a=this.selectedDayActivities.get(0);
             this.setActivityLabels(a.getLabel(), a.getNotes(), a.getLocationAddress(), a.getStartPlaceAddress(), a.isFlexible(), a.getDuration(), a.getStartDate(), a.getEndDate());
+            this.setDayOverview();
         }
     }
+    public void setDayOverview(){
+        //((TilePane dayPane=(TilePane) this.thisStage.getScene().lookup("#day");
+        /*Label night=new Label("Night:");
+        dayPane.getChildren().add(night);
+        TilePane nightPane= new TilePane();
+        nightPane.setOrientation(Orientation.HORIZONTAL);
+        dayPane.getChildren().add(nightPane);
+        for(Activity a:this.selectedDayActivities){
+            int sHour=a.getStartDate().getHours();
+            int sMin=a.getStartDate().getMinutes();
+            int eHour=a.getEndDate().getHours();
+            int eMin=a.getEndDate().getMinutes();
+            String l=a.getLabel();
+            if(sHour>=0 && sHour<7){
+                
+            }
+            else
+                break;
+        }*/
+        initializeDayOverview();
+    }
+    
     public void onNextAct(){
         if(this.selectedDayActivities!=null && !this.selectedDayActivities.isEmpty()){
             if(this.actualActivity+1<this.totActivitiesForSelectedDay){
@@ -815,8 +891,13 @@ public class MainWindowController implements Initializable {
     }
 
     void stopNotificationThread() {
-        this.notifThread.stop();
+        if(this.notifThread!=null)
+            this.notifThread.stop();
     }
+
+    
+
+    
     
 }
 

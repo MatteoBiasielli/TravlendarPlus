@@ -25,7 +25,7 @@ import travlendardesktopclient.network.loginresponse.ResponseLogin;
 import travlendardesktopclient.network.loginresponse.ResponseLoginType;
 import travlendardesktopclient.network.registerresponse.ResponseRegister;
 import travlendardesktopclient.network.registerresponse.ResponseRegisterType;
-
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -85,6 +85,7 @@ public class LoginController implements Initializable{
         this.mainStage.setScene(new Scene(mainLoader.load()));
         this.mainStage.setResizable(false);
         ((MainWindowController)this.mainLoader.getController()).setStage(mainStage);
+        ((MainWindowController)this.mainLoader.getController()).initMap();
     }
     
     /**called automatically on application start, exploits all initialization

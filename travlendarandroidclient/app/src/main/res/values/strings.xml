@@ -92,4 +92,8 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_register">Sign in</string>
+    <string name="Message_register">Choose a username and a password.</string>
+    <string name="Rewrite_password" >Please, insert again the chosen password.</string>
+    <string name="ip_address">Server IP address</string>
 </resources>

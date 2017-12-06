@@ -38,6 +38,6 @@ public class Leg {
             int acc=0;
             for(Step s:steps)
                 acc=acc+s.getTimeByModality(m);
-            return (int)(acc/60);
+            return acc;
         }
 }

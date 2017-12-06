@@ -32,7 +32,7 @@ public class Step {
         * @return the total travel time with the specified modality if it 
         * corresponds to the caller object's travel modality. return 0 
         * otherwise*/
-        int getTimeByModality(TravelMode m) {
+        public int getTimeByModality(TravelMode m) {
             if(mode==m)
                 return timeValue;
             return 0;

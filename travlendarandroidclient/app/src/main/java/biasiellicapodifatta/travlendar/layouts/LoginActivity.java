@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private View mRegistrationFormView;
     private EditText mIPView;
 
     @Override
@@ -84,15 +85,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mUsernameSignInButton = (Button) findViewById(R.id.username_sign_in_button);
+        mUsernameSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
 
+        Button mRegistrationSignInButton = (Button) findViewById(R.id.username_register_button);
+        mRegistrationSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showRegistrationForm();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
+        mRegistrationFormView = findViewById(R.id.username_register_button);
         mProgressView = findViewById(R.id.login_progress);
         mIPView = findViewById(R.id.ip_textbox);
     }
@@ -196,6 +206,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = new UserLoginTask(username, password);
             mAuthTask.execute((Void) null);
         }
+    }
+
+    private void showRegistrationForm() {
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
     }
 
     private boolean isUsernameValid(String username) {
@@ -309,6 +324,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mUsername;
         private final String mPassword;
         ResponseLogin response;
+
         UserLoginTask(String username, String password) {
             mUsername = username;
             mPassword = password;
@@ -322,13 +338,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected ResponseLogin doInBackground(Void... params) {
 
-//            try {
-//                response = NetworkLayer.loginRequest(mUsername, mPassword);
-//            } catch (IOException e) {
-//                return null;
-//            }
+            try {
+                response = NetworkLayer.loginRequest(mUsername, mPassword);
+            } catch (IOException e) {
+                return null;
+            }
 
-            response = new ResponseLogin(ResponseLoginType.OK, new User(mUsername, mPassword));
+            //response = new ResponseLogin(ResponseLoginType.OK, new User(mUsername, mPassword));
 
             return response;
         }

@@ -12,15 +12,6 @@
 
     <!-- Login progress -->
 
-    <TextView
-        android:id="@+id/text_for_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Message_register"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        android:visibility="visible" />
-
     <ProgressBar
         android:id="@+id/register_progress"
         style="?android:attr/progressBarStyleLarge"
@@ -39,6 +30,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_for_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Message_register"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:visibility="visible" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -126,7 +126,7 @@
                     android:id="@+id/ip_address"
                     android:layout_width="173dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/ip_address"
+                    android:hint="@string/server_address"
                     android:imeActionId="6"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"

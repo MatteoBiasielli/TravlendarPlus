@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="84dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/common_full_open_on_phone" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/imageButton7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/common_full_open_on_phone" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/imageButton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/common_full_open_on_phone" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/imageButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/common_full_open_on_phone" />
+    </TableRow>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="382dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginStart="13dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="152dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="0dp">
+
+            <TextView
+                android:id="@+id/walking_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Maximum\nWalking Time"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="152dp" />
+
+            <TextView
+                android:id="@+id/biking_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Maximum\nBiking Time"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/publicTransport_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Maximum\nPublic Transport Time"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/car_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Maximum\nCar Time"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/cost_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Maximum\nTravel Cost"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="152dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="191dp">
+
+            <EditText
+                android:id="@+id/editText6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/editText5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/editText3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="284dp" />
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="238dp" />
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="192dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_marginTop="396dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/imageButton6"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/common_full_open_on_phone"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="394dp" />
+
+        <Space android:layout_width="5dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton10"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/common_full_open_on_phone"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="394dp" />
+
+        <Space android:layout_width="5dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton9"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/common_full_open_on_phone"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="394dp" />
+
+        <Space android:layout_width="5dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton8"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/common_full_open_on_phone"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="394dp" />
+
+        <Space android:layout_width="5dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton12"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/common_full_open_on_phone"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="394dp" />
+
+        <Space android:layout_width="5dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton11"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/common_full_open_on_phone"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="394dp" />
+
+    </TableRow>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Send to server"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

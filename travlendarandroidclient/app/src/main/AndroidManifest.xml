@@ -54,6 +54,7 @@
 
         </activity>
         <activity android:name=".layouts.RegisterActivity" />
+        <activity android:name=".layouts.NewActActivity"></activity>
     </application>
 
 </manifest>

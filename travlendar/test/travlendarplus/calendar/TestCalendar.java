@@ -85,4 +85,21 @@ public class TestCalendar {
         br.add(b2);
         assertFalse(testCal.canBeACalendar(fas, br));
     }
+    @Test
+    public void testCanBeACalendarOptimized(){
+        ArrayList<FixedActivity> fas=new ArrayList<>();
+        ArrayList<Break> br= new ArrayList<>();
+        FixedActivity fa=new FixedActivity(new Date(0), new Date(900000),null,null,null,null,null);
+        Break b=new Break(new Date(0), new Date(1800000),null,null,null,null,null,15);
+        fas.add(fa);
+        br.add(b);
+        assertTrue(testCal.canBeACalendarOptimized(fas, br));
+        FixedActivity fa2=new FixedActivity(new Date(0), new Date(900000),null,null,null,null,null);
+        fas.add(fa2);
+        assertFalse(testCal.canBeACalendarOptimized(fas, br));
+        fas.remove(fa2);
+        Break b2=new Break(new Date(0), new Date(2700000),null,null,null,null,null,30);
+        br.add(b2);
+        assertFalse(testCal.canBeACalendarOptimized(fas, br));
+    }
 }

@@ -109,7 +109,7 @@ public class FixedActivity extends Activity{
 		boundSubCalendar(c,fixApp, breaks);
                 fixApp=copyList(fixApp);
 		fixApp.add(this);
-		return c.canBeACalendar(fixApp,breaks);
+		return c.canBeACalendarOptimized(fixApp,breaks);
 	}
 	
 	

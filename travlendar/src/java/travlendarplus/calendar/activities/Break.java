@@ -55,7 +55,7 @@ public class Break extends Activity{
 		ArrayList<Break> b=Break.copyList(c.getBreaks());
 		b.add(new Break(this));
 		ArrayList<FixedActivity> fa=FixedActivity.copyList(c.getFixedActivities());
-		return c.canBeACalendar(fa, b);
+		return c.canBeACalendarOptimized(fa, b);
 	}
 	
 	/**
@@ -102,6 +102,32 @@ public class Break extends Activity{
 	public String toString(){
 		return super.toString()+", DUR="+duration+"m";
 	}
+        
+        /**
+	 * @param a is a break activity to compare with the caller object
+	 * @return true if the callers's ending time comes before or is equal to
+	 * the parameters's starting time. false otherwise
+	 */
+	public boolean isBefore(Break a){
+		return endDate.before(a.startDate) || endDate.equals(a.startDate);
+	}
+	
+	/**
+	 * @param a is a break activity to compare with the caller object
+	 * @return true if the callers's starting time comes after or is equal to
+	 * the parameters's ending time. false otherwise
+	 */
+	public boolean isAfter(Break a){
+		return this.startDate.after(a.endDate) || startDate.equals(a.endDate);
+	}
+        
+        public boolean contains(Date d){
+            return d.compareTo(startDate)>0 && d.compareTo(endDate)<0;
+        }
+        
+        public boolean isContainedIn(Date s, Date e){
+            return s.compareTo(startDate)<=0 && e.compareTo(endDate)>=0;
+        }
 	/* ************GETTERS******************/
         @Override
 	public long getDuration(){

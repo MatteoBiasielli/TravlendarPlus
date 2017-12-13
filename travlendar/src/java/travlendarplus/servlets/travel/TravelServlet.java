@@ -65,8 +65,10 @@ public class TravelServlet extends HttpServlet{
             u.getCalendarFromDB();
             u.getPreferencesFromDB();
             FixedActivity nextAct=computeNextActivity(u.getCalendar());
-            if(nextAct==null)
+            if(nextAct==null){
                 request.getRequestDispatcher("/noactivitytravel").forward(request,response);
+                return;
+            }
             ArrayList<Route> routes= nextAct.computeTravels(u);
             //SEND RESPONSE
             ResponseTravel rt= new ResponseTravel(routes, ResponseTravelType.OK);

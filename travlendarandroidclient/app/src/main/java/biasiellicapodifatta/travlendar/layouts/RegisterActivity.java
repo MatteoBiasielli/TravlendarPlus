@@ -355,9 +355,10 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             try{
                 response = NetworkLayer.registerRequest(mUsername, mPassword);
             }catch(IOException e){
-                //TODO: add pop-up
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intent);
+                DialogFragment unexp = new UnexpectedError();
+                unexp.show(getFragmentManager(), "unexp-err");
+                Intent intentx = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intentx);
             }
 
             return response;
@@ -369,12 +370,17 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             showProgress(false);
 
             if(response.equals(null)){
-                //TODO add pop-up
+                DialogFragment unexp = new UnexpectedError();
+                unexp.show(getFragmentManager(), "unexp-err");
+                Intent intentx = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intentx);
                 return;
             }
 
             switch (response.getType()){
                 case OK:
+                    DialogFragment success = new Registered();
+                    success.show(getFragmentManager(), "registered");
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                     break;
@@ -391,9 +397,10 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                     mIpAddressView.requestFocus();
                     break;
                 default:
-                    //TODO add pop-up
-                    Intent intent2 = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent2);
+                    DialogFragment unexp = new UnexpectedError();
+                    unexp.show(getFragmentManager(), "unexp-err");
+                    Intent intentx = new Intent(RegisterActivity.this, LoginActivity.class);
+                    startActivity(intentx);
                     break;
             }
         }
@@ -402,6 +409,40 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+    }
+
+    public static class UnexpectedError extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Unexpected error").
+                    setMessage("An unexpected error occurred. You'll be directed to the last valid screen.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to calendar
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    public static class Registered extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Registered with success").
+                    setMessage("You successfully register to Travlendar+. Please log in your account.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to calendar
+                        }
+                    });
+
+            return builder.create();
         }
     }
 }

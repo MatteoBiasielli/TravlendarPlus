@@ -3,6 +3,10 @@ package biasiellicapodifatta.travlendar.layouts;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -41,7 +45,9 @@ import biasiellicapodifatta.travlendar.response.responseregister.ResponseRegiste
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
- * A login screen that offers login via email/password.
+ * A register screen that offers registration via username/password.
+ * Please notice that in this pre-release version the user must also provide a valid IP address
+ * for the server
  */
 public class RegisterActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -51,7 +57,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * Keep track of the login task to ensure we can cancel it if requested.
+     * Keep track of the register task to ensure we can cancel it if requested.
      */
     private UserRegisterTask mAuthTask = null;
 
@@ -156,9 +162,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * Attempts to register the account specified by the register form.
+     * If there are form errors (invalid username, missing fields, etc.), the
+     * errors are presented and no actual register attempt is made.
      */
     private void attemptRegister() {
         if (mAuthTask != null) {
@@ -168,6 +174,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         // Reset errors.
         mUsernameView.setError(null);
         mPasswordView.setError(null);
+        mPasswordCopyView.setError(null);
+        mIpAddressView.setError(null);
 
         // Store values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
@@ -201,8 +209,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
         //Check for a valid ip address
         if(!isIPValid(ip_address)){
-            mPasswordCopyView.setError("This is not a valid ip address");
-            focusView = mPasswordCopyView;
+            mIpAddressView.setError("This is not a valid ip address");
+            focusView = mIpAddressView;
             cancel = true;
         }
 
@@ -327,7 +335,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
+     * Represents an asynchronous registration task used to register
      * the user.
      */
     public class UserRegisterTask extends AsyncTask<Void, Void, ResponseRegister> {
@@ -347,25 +355,27 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             try{
                 response = NetworkLayer.registerRequest(mUsername, mPassword);
             }catch(IOException e){
-                //TODO: cancel registration
+                //TODO: add pop-up
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
 
             return response;
         }
 
         @Override
-        protected void onPostExecute(final ResponseRegister success) {
+        protected void onPostExecute(final ResponseRegister response) {
             mAuthTask = null;
             showProgress(false);
 
             if(response.equals(null)){
-                //TODO:
+                //TODO add pop-up
                 return;
             }
 
             switch (response.getType()){
                 case OK:
-                    Intent intent = new Intent(RegisterActivity.this, MainTabContainer.class);
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                     break;
                 case REGISTER_USERNAME_ERROR:
@@ -377,10 +387,13 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                     mUsernameView.requestFocus();
                     break;
                 case REGISTER_CONNECTION_ERROR:
-                    //TODO add behaviour
+                    mIpAddressView.setError(response.getType().getMessage());
+                    mIpAddressView.requestFocus();
                     break;
                 default:
-                    //TODO add behaviour
+                    //TODO add pop-up
+                    Intent intent2 = new Intent(RegisterActivity.this, LoginActivity.class);
+                    startActivity(intent2);
                     break;
             }
         }

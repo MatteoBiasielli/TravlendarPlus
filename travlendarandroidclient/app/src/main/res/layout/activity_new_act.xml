@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="biasiellicapodifatta.travlendar.layouts.NewActActivity">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/new_act_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/head"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:text="@string/new_act"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="163dp"
+                tools:layout_editor_absoluteY="16dp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <Switch
+                android:id="@+id/flex_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/flexible"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/duration_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/duration"
+                android:inputType="number" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <TextView
+                android:id="@+id/activity_name_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/activity_name_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/new_activity_name"
+                android:inputType="text"
+                android:textAlignment="viewStart" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <TextView
+                android:id="@+id/start_head"
+                android:layout_width="match_parent"
+                android:layout_height="39dp"
+                android:paddingTop="5dp"
+                android:text="@string/start_time"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <DatePicker
+                android:id="@+id/datePicker_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:headerBackground="@color/colorPrimary" />
+
+            <TimePicker
+                android:id="@+id/timePicker_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:headerBackground="@color/colorPrimary"
+                android:numbersSelectorColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/end_head"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="@string/end_time"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <DatePicker
+                android:id="@+id/datePicker_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:headerBackground="@color/colorPrimary" />
+
+            <TimePicker
+                android:id="@+id/timePicker_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:headerBackground="@color/colorPrimary"
+                android:numbersSelectorColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/start_position_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/starting_point"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/start_position_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/postal_address"
+                android:inputType="textPostalAddress" />
+
+            <TextView
+                android:id="@+id/destination_position_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/where"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/destination_position_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/postal_address"
+                android:inputType="textPostalAddress" />
+
+            <TextView
+                android:id="@+id/notes_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notes"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/notes_form"
+                android:layout_width="match_parent"
+                android:layout_height="87dp"
+                android:ems="10"
+                android:hint="@string/notes"
+                android:inputType="text|textMultiLine"
+                android:textAlignment="textStart" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="43dp" />
+
+            <Button
+                android:id="@+id/add_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="70dp"
+                android:layout_marginRight="70dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:elevation="0dp"
+                android:text="@string/add"
+                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_marginRight="100dp"
+                android:backgroundTint="?attr/colorError"
+                android:text="@string/cancel"
+                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="51dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

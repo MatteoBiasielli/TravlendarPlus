@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/mod_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/common_full_open_on_phone" />
@@ -30,7 +30,7 @@
             android:layout_height="match_parent" />
 
         <ImageButton
-            android:id="@+id/imageButton7"
+            android:id="@+id/mod_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/common_full_open_on_phone" />
@@ -40,7 +40,7 @@
             android:layout_height="match_parent" />
 
         <ImageButton
-            android:id="@+id/imageButton5"
+            android:id="@+id/mod_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/common_full_open_on_phone" />
@@ -50,7 +50,7 @@
             android:layout_height="match_parent" />
 
         <ImageButton
-            android:id="@+id/imageButton4"
+            android:id="@+id/mod_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/common_full_open_on_phone" />
@@ -82,6 +82,7 @@
                 android:text="Maximum\nWalking Time"
                 android:textColor="@android:color/holo_orange_dark"
                 android:textSize="18sp"
+                android:textStyle="bold"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="152dp" />
 
@@ -91,7 +92,8 @@
                 android:layout_height="wrap_content"
                 android:text="Maximum\nBiking Time"
                 android:textColor="@android:color/holo_orange_dark"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/publicTransport_textView"
@@ -99,7 +101,8 @@
                 android:layout_height="wrap_content"
                 android:text="Maximum\nPublic Transport Time"
                 android:textColor="@android:color/holo_orange_dark"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/car_textView"
@@ -107,7 +110,8 @@
                 android:layout_height="wrap_content"
                 android:text="Maximum\nCar Time"
                 android:textColor="@android:color/holo_orange_dark"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/cost_textView"
@@ -115,7 +119,8 @@
                 android:layout_height="wrap_content"
                 android:text="Maximum\nTravel Cost"
                 android:textColor="@android:color/holo_orange_dark"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -127,43 +132,48 @@
             tools:layout_editor_absoluteX="191dp">
 
             <EditText
-                android:id="@+id/editText6"
+                android:id="@+id/walking_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="numberDecimal" />
+                android:inputType="number"
+                android:textColor="@android:color/holo_orange_dark" />
 
             <EditText
-                android:id="@+id/editText5"
+                android:id="@+id/biking_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="numberDecimal" />
+                android:inputType="number"
+                android:textColor="@android:color/holo_orange_dark" />
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/publicTransport_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="numberDecimal"
+                android:inputType="number"
+                android:textColor="@android:color/holo_orange_dark"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="284dp" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/car_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="numberDecimal"
+                android:inputType="number"
+                android:textColor="@android:color/holo_orange_dark"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="238dp" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/cost_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="numberDecimal"
+                android:textColor="@android:color/holo_orange_dark"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="192dp" />
         </LinearLayout>
@@ -186,7 +196,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imageButton6"
+            android:id="@+id/mean_1"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/common_full_open_on_phone"
@@ -196,7 +206,7 @@
         <Space android:layout_width="5dp" />
 
         <ImageButton
-            android:id="@+id/imageButton10"
+            android:id="@+id/mean_2"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/common_full_open_on_phone"
@@ -206,7 +216,7 @@
         <Space android:layout_width="5dp" />
 
         <ImageButton
-            android:id="@+id/imageButton9"
+            android:id="@+id/mean_3"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/common_full_open_on_phone"
@@ -216,7 +226,7 @@
         <Space android:layout_width="5dp" />
 
         <ImageButton
-            android:id="@+id/imageButton8"
+            android:id="@+id/mean_4"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/common_full_open_on_phone"
@@ -226,7 +236,7 @@
         <Space android:layout_width="5dp" />
 
         <ImageButton
-            android:id="@+id/imageButton12"
+            android:id="@+id/mean_5"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/common_full_open_on_phone"
@@ -236,7 +246,7 @@
         <Space android:layout_width="5dp" />
 
         <ImageButton
-            android:id="@+id/imageButton11"
+            android:id="@+id/mean_6"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/common_full_open_on_phone"
@@ -246,13 +256,13 @@
     </TableRow>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/save_prefs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="Send to server"
+        android:text="@string/save_pref"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

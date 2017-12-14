@@ -45,21 +45,51 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_password_mandatory"
+                android:imeActionId="6"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="161dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/ip_textbox"
+                        android:layout_width="188dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="IP Address"
+                        android:inputType="textPersonName" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/offline_checkBox"
+                    android:layout_width="128dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/offline_mode_checkbox"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password_mandatory"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -81,25 +111,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/register"
                 android:textStyle="bold" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="184dp" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <EditText
-                    android:id="@+id/ip_textbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:text="IP" />
-
-            </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
     </ScrollView>

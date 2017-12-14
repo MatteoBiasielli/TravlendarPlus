@@ -27,6 +27,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -64,6 +65,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     private View mRegistrationFormView;
     private EditText mIPView;
+    private static CheckBox mCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +107,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mRegistrationFormView = findViewById(R.id.username_register_button);
         mProgressView = findViewById(R.id.login_progress);
         mIPView = findViewById(R.id.ip_textbox);
+        mCheckBox = findViewById(R.id.offline_checkBox);
     }
 
     private void populateAutoComplete() {
@@ -188,11 +191,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
-        // Check for a valid ip.
-        if(!isIPValid(ip)){
-            mIPView.setError("This is not a valid ip.");
-            focusView = mIPView;
-            cancel = true;
+        if(!isOfflineMode()) {
+            // Check for a valid ip.
+            if (!isIPValid(ip)) {
+                mIPView.setError("This is not a valid ip.");
+                focusView = mIPView;
+                cancel = true;
+            }
         }
 
         if (cancel) {
@@ -315,6 +320,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
+    public static boolean isOfflineMode(){
+        return mCheckBox.isChecked();
+    }
+
     /**
      * Represents an asynchronous login task used to authenticate
      * the user.
@@ -337,14 +346,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected ResponseLogin doInBackground(Void... params) {
-
-            /*try {
-                response = NetworkLayer.loginRequest(mUsername, mPassword);
-            } catch (IOException e) {
-                return null;
-            }*/
-
-            response = new ResponseLogin(ResponseLoginType.OK, new User(mUsername, mPassword));
+            if(!isOfflineMode()) {
+                try {
+                    response = NetworkLayer.loginRequest(mUsername, mPassword);
+                } catch (IOException e) {
+                    return null;
+                }
+            }
+            else {
+                response = new ResponseLogin(ResponseLoginType.OK, new User(mUsername, mPassword));
+            }
 
             return response;
         }
@@ -390,15 +401,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
-    }
-
-    public class UserRegistrationTask extends AsyncTask<Void, Void, Boolean>{
-
-        @Override
-        protected Boolean doInBackground(Void... params){
-           return true;
-        }
-
     }
 }
 

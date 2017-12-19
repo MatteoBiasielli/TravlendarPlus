@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -243,7 +244,7 @@ public class NewActActivity extends AppCompatActivity {
             showProgress(true);
             mAddTask = new AddFixedActivity(Data.getUser().getUsername(), Data.getUser().getPassword(),
                     act_name, notes, start, dest, start_date, end_date, mFlexibleSwitch.isChecked(), duration.toString());
-            //TODO: ip address
+            // ip address set by the login screen
             mAddTask.execute((Void)null);
         }
 
@@ -273,7 +274,7 @@ public class NewActActivity extends AppCompatActivity {
      * @return : true if the notes are not longer than the threshold.
      */
     private boolean isNotesValid(String notes){
-        return notes.length() <= 300; //TODO: check max length on DB
+        return notes.length() <= 100;
     }
 
 
@@ -351,7 +352,8 @@ public class NewActActivity extends AppCompatActivity {
                 response = NetworkLayer.addActivityRequest(locUsername, locPassword, locName, locNotes,
                             locEndPosition, null, locStartPosition, null, locFlexible, locDuration,locStartDate, locEndDate);
             }catch (IOException e){
-                //TODO: add pop-up
+                DialogFragment unexp = new UnexpectedError();
+                unexp.show(getFragmentManager(), "unexp-err");
                 Intent intent = new Intent(NewActActivity.this, MainTabContainer.class);
                 startActivity(intent);
             }
@@ -365,43 +367,57 @@ public class NewActActivity extends AppCompatActivity {
             showProgress(false);
 
             if(response.equals(null)){
-                //TODO: add pop-up
+                DialogFragment unexp = new UnexpectedError();
+                unexp.show(getFragmentManager(), "unexp-err");
+                Intent intentx = new Intent(NewActActivity.this, MainTabContainer.class);
+                startActivity(intentx);
                 return;
             }
 
             switch (response.getType()){
                 case OK:
-                    //TODO: provare pop-up
                     DialogFragment pop_up = new ActivityAdded();
                     pop_up.show(getFragmentManager(), "added");
                     Intent intent = new Intent(NewActActivity.this, MainTabContainer.class);
                     startActivity(intent);
                     break;
                 case OK_ESTIMATED_TIME:
+                    DialogFragment pop_up_warning = new AddedWithCondition();
+                    pop_up_warning.show(getFragmentManager(), "warning");
                     Intent intent2 = new Intent(NewActActivity.this, MainTabContainer.class);
                     startActivity(intent2);
                     break;
                 case ADD_ACTIVITY_LOGIN_ERROR:
-                    //TODO add behaviour
+                    DialogFragment login_error = new LoginError();
+                    login_error.show(getFragmentManager(), "login-error");
+                    Intent intent3 = new Intent(NewActActivity.this, LoginActivity.class);
+                    startActivity(intent3);
                     break;
                 case ADD_ACTIVITY_WRONG_INPUT:
-                    //TODO add behaviour
+                    DialogFragment wrong_input = new WrongInput();
+                    wrong_input.show(getFragmentManager(), "wrong-input");
+                    // TODO serve?? :Intent intent4 = new Intent(NewActActivity.this, NewActActivity.class);
+                    //startActivity(intent4);
                     break;
                 case ADD_ACTIVITY_CONNECTION_ERROR:
-                    //TODO add behaviour
+                    DialogFragment conn_error = new ConnectionError();
+                    conn_error.show(getFragmentManager(), "conn-error");
+                    //TODO server?? :Intent intent5 = new Intent(NewActActivity.this, NewActActivity.class);
+                    //startActivity(intent5);
                     break;
                 case ADD_ACTIVITY_OVERLAPPING:
-                    mActivityNameView.setError(response.getType().getMessage());
-                    mActivityNameView.requestFocus();
+                    DialogFragment overlap = new Overlap();
+                    overlap.show(getFragmentManager(), "overlap");
                     break;
                 case ADD_ACTIVITY_PAST:
-                    mActivityNameView.setError(response.getType().getMessage());
-                    mActivityNameView.requestFocus();
+                    DialogFragment past = new Past();
+                    past.show(getFragmentManager(), "past-act");
                     break;
                 default:
-                    //TODO add pop-up
-                    Intent intent3 = new Intent(NewActActivity.this, MainTabContainer.class);
-                    startActivity(intent3);
+                    DialogFragment unexp = new UnexpectedError();
+                    unexp.show(getFragmentManager(), "unexp-err");
+                    Intent intentx = new Intent(NewActActivity.this, MainTabContainer.class);
+                    startActivity(intentx);
                     break;
             }
         }
@@ -417,12 +433,134 @@ public class NewActActivity extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("The activity has been successfully added.")
-                    .setTitle("Activity added")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            builder.setTitle("Activity added")
+                    .setMessage("The activity has been successfully added.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            //back to homepage
+                            //back to tab container
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    public static class AddedWithCondition extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Warning").
+                    setMessage("The activity has been added to your calendar " +
+                            "but doe to your too strict travel preferences it was not possible " +
+                            "to calculate the estimated travel time. You may not be notified " +
+                            "if you'll risk to be late due to the addition of another activity to the calendar.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to tab container
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    public static class LoginError extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Login error").
+                    setMessage("Who are you?!? A problem with your credentials occured, you'll be disconneted.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to login screen
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    public static class WrongInput extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Wrong input").
+                    setMessage("A problem with data provided by you occurred, please check all the fields")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to form
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    public static class ConnectionError extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Connection error").
+                    setMessage("Seems like our servers are lazy ;) Please try again in a while.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to form
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    public static class Overlap extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Overlapping activities").
+                    setMessage("You're too busy! This activity overlaps with others, please check your calendar.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to form
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    public static class Past extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Past activity").
+                    setMessage("This activity seems to be in the past...try to ask to Martin McFly.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to form
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    public static class UnexpectedError extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Unexpected error").
+                    setMessage("An unexpected error occurred. You'll be directed to the last valid screen.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to calendar
                         }
                     });
 

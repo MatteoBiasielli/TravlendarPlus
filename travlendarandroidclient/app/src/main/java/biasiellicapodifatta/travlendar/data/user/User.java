@@ -12,11 +12,13 @@ public class User {
 	private String username;
 	private String password;
 	private RegistrationStatus status;
+
 	private BooleanPreferencesSet boolPreferences;
-        private ArrayList<RangedPreference> rangedPreferences;
-        private ArrayList<FavouritePosition> favPos;
+	private ArrayList<RangedPreference> rangedPreferences;
+	private ArrayList<FavouritePosition> favPos;
 	private Calendar calendar;
-        private ArrayList<Notification> notifications;
+	private ArrayList<Notification> notifications;
+
 	public User(String u, String p){
 		this.username=u;
 		this.password=p;
@@ -36,13 +38,33 @@ public class User {
 	public void setCalendar(Calendar c){
 		this.calendar=c;
 	}
+
 	public void setPreferences(ArrayList<RangedPreference> pSet, BooleanPreferencesSet b){
-		this.rangedPreferences=pSet;
-                this.boolPreferences=b;
+		setRangedPreferences(pSet);
+		setBooleanPreferences(b);
 	}
+
+	public void setRangedPreferences(ArrayList<RangedPreference> pSet){
+		this.rangedPreferences = pSet;
+	}
+
+	public void setBooleanPreferences(BooleanPreferencesSet b){
+		this.boolPreferences = b;
+	}
+
 	public void setFavPositions(ArrayList<FavouritePosition> fp){
                 this.favPos=fp;
         }
+
+	public void deleteRangedPreferences(ArrayList<RangedPreference> pSet){
+		for(RangedPreference myrp : rangedPreferences){
+			for(RangedPreference rp : pSet){
+				if(myrp.equalTo(rp)){
+					rangedPreferences.remove(myrp);
+				}
+			}
+		}
+	}
 	/* GETTERS **/
 	public String getUsername(){
 		return username;
@@ -50,20 +72,19 @@ public class User {
 	public String getPassword(){
 		return password;
 	}
-	
 	public Calendar getCalendar(){
 		return this.calendar;
 	}
-        public ArrayList<FavouritePosition> getFavPositions(){
+	public ArrayList<FavouritePosition> getFavPositions(){
                 return this.favPos;
         }
-        public BooleanPreferencesSet getBoolPreferences(){
+	public BooleanPreferencesSet getBoolPreferences(){
                 return this.boolPreferences;
         }
-        public ArrayList<RangedPreference> getRangedPreferences(){
+	public ArrayList<RangedPreference> getRangedPreferences(){
             return this.rangedPreferences;
         }
-        public ArrayList<Notification> getNotifications() {
+	public ArrayList<Notification> getNotifications() {
 		return this.notifications;
 	}
 }

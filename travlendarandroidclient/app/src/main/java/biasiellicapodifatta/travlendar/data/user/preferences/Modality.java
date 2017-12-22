@@ -20,6 +20,8 @@ public enum Modality {
 				return Modality.MINIMIZE_COST;
 			case 4:
 				return Modality.MINIMIZE_TIME;
+			default:
+				return null;
 		}
 	}
 }

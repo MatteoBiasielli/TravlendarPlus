@@ -11,7 +11,6 @@ public class RangedPreference extends Preference{
 		this.value=v;
 	}
 	
-	
 	/**@return a string human-readable version of the Object**/
 	public String toString(){
 		return type.name()+","+value;
@@ -24,8 +23,15 @@ public class RangedPreference extends Preference{
 	public int getValue(){
 		return value;
 	}
-
-        public boolean isRanged() {
+	public boolean isRanged() {
             return true;
         }
+
+	/* OTHER METHODS */
+	public boolean equalTo(RangedPreference rp){
+		Integer myType = this.type.getValue();
+		Integer rpType = rp.getValue();
+
+		return myType.equals(rpType);
+	}
 }

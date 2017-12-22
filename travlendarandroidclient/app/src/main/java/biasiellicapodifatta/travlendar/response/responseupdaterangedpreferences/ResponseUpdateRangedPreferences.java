@@ -26,4 +26,8 @@ public class ResponseUpdateRangedPreferences {
     public ResponseUpdateRangedPreferencesType getType(){
         return rurpt;
     }
+
+    public ArrayList<RangedPreference> getData(){
+        return this.rp;
+    }
 }

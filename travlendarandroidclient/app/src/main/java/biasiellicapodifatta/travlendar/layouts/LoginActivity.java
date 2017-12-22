@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import biasiellicapodifatta.travlendar.R;
+import biasiellicapodifatta.travlendar.data.Data;
 import biasiellicapodifatta.travlendar.data.user.User;
 import biasiellicapodifatta.travlendar.network.NetworkLayer;
 import biasiellicapodifatta.travlendar.response.responselogin.ResponseLogin;
@@ -44,9 +45,9 @@ import biasiellicapodifatta.travlendar.response.responselogin.ResponseLoginType;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via username/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -73,8 +74,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.login_layout);
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
-        populateAutoComplete();
-
+        /*populateAutoComplete();
+*/
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -110,7 +111,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mCheckBox = findViewById(R.id.offline_checkBox);
     }
 
-    private void populateAutoComplete() {
+/*    private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
         }
@@ -138,20 +139,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
         }
         return false;
-    }
+    }*/
 
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
+//    /**
+//     * Callback received when a permissions request has been completed.
+//     */
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+//                                           @NonNull int[] grantResults) {
+//        if (requestCode == REQUEST_READ_CONTACTS) {
+//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                populateAutoComplete();
+//            }
+//        }
+//    }
 
 
     /**
@@ -173,6 +174,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
         String ip = mIPView.getText().toString();
+        Data.setOfflineMode(mCheckBox.isChecked());
 
         boolean cancel = false;
         View focusView = null;
@@ -191,7 +193,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
-        if(!isOfflineMode()) {
+        if(!Data.isOfflineMode()) {
             // Check for a valid ip.
             if (!isIPValid(ip)) {
                 mIPView.setError("This is not a valid ip.");
@@ -266,7 +268,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    @Override
+    /*@Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
@@ -318,11 +320,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
-    }
-
-    public static boolean isOfflineMode(){
-        return mCheckBox.isChecked();
-    }
+    }*/
 
     /**
      * Represents an asynchronous login task used to authenticate
@@ -346,7 +344,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected ResponseLogin doInBackground(Void... params) {
-            if(!isOfflineMode()) {
+            if(!Data.isOfflineMode()) {
                 try {
                     response = NetworkLayer.loginRequest(mUsername, mPassword);
                 } catch (IOException e) {

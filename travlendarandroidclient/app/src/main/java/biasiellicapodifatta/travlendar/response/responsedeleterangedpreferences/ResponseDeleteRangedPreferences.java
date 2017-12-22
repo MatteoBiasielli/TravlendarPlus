@@ -21,6 +21,10 @@ public class ResponseDeleteRangedPreferences {
         this.rdrpt = r;
         this.rp = p;
     }
+
+    public ArrayList<RangedPreference> getData(){
+        return this.rp;
+    }
     
     public ResponseDeleteRangedPreferencesType getType(){
         return rdrpt;

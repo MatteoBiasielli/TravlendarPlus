@@ -19,7 +19,11 @@ public class ResponseUpdateBooleanPreferences {
         this.rubpt = r;
         this.rbp = bp;
     }
-    
+
+    public BooleanPreferencesSet getData(){
+        return this.rbp;
+    }
+
     public ResponseUpdateBooleanPreferencesType getType(){
         return rubpt;
     }

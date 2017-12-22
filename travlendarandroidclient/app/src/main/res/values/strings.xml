@@ -106,12 +106,10 @@
     <string name="title_activity_settings_tab_layout">settings_tab_layout</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_new_event">NewEventActivity</string>
-<<<<<<< HEAD
     <string name="send_to_server">Send to server</string>
     <string name="save_pref">Save preferences</string>
     <string name="offline_mode_checkbox">Offline mode (only for debugging)</string>
     <string name="offline_mode_checkbox_formatted">Offline mode\\n(only for debugging)</string>
-=======
     <string name="new_act">Create a new activity</string>
     <string name="new_activity_name">New activity name</string>
     <string name="start_time">Starts at:</string>
@@ -127,5 +125,14 @@
     <string name="end_date">End day</string>
     <string name="flexible">Is it flexible?</string>
     <string name="duration">Duration, if flexible</string>
->>>>>>> b07a97834ac013aa61a57f1a69dcbcca3eaa3e6a
+<<<<<<< HEAD
+    <string name="user_profile">profile</string>
+    <string name="tags">Check your tags:</string>
+    <string name="add_tag">or add a new tag:</string>
+    <string name="tag_hint">Tag</string>
+    <string name="add_tag_button">add tag</string>
+    <string name="check_tags">check or delete</string>
+    <string name="faq">FAQ:</string>
+=======
+>>>>>>> 8907320efae5c901295fc38589a110e4e2b72a74
 </resources>

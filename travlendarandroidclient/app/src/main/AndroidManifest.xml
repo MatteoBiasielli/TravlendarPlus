@@ -50,11 +50,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
-
-        </activity>
+            android:label="@string/title_activity_maps"></activity>
         <activity android:name=".layouts.RegisterActivity" />
-        <activity android:name=".layouts.NewActActivity"></activity>
+        <activity android:name=".layouts.NewActActivity" />
+        <activity android:name=".layouts.SettingsMenu"></activity>
     </application>
 
 </manifest>

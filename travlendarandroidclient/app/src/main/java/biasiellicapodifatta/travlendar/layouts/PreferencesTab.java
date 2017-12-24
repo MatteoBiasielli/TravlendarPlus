@@ -3,6 +3,10 @@ package biasiellicapodifatta.travlendar.layouts;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,11 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import biasiellicapodifatta.travlendar.R;
@@ -26,6 +27,7 @@ import biasiellicapodifatta.travlendar.data.user.User;
 import biasiellicapodifatta.travlendar.data.user.preferences.BooleanPreferencesSet;
 import biasiellicapodifatta.travlendar.data.user.preferences.Modality;
 import biasiellicapodifatta.travlendar.data.user.preferences.RangedPreference;
+import biasiellicapodifatta.travlendar.data.user.preferences.RangedPreferenceType;
 import biasiellicapodifatta.travlendar.network.NetworkLayer;
 import biasiellicapodifatta.travlendar.response.responsedeleterangedpreferences.ResponseDeleteRangedPreferences;
 import biasiellicapodifatta.travlendar.response.responsedeleterangedpreferences.ResponseDeleteRangedPreferencesType;
@@ -39,10 +41,12 @@ import biasiellicapodifatta.travlendar.response.responseupdaterangedpreferences.
  */
 
 public class PreferencesTab extends Fragment {
-    private User myUser = Data.getUser();
+    private User myUser;
     private boolean isBoolUpdFinished;
     private boolean isRangUpdFinished;
     private boolean isRangDelFinished;
+    private boolean isTaskErrorDetected;
+
     private UpdateBooleanPreferencesTask mBoolUpdTask = null;
     private UpdateRangedPreferencesTask mRangUpdTask = null;
     private DeleteRangedPreferencesTask mRangDelTask = null;
@@ -61,14 +65,16 @@ public class PreferencesTab extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myUser = Data.getUser();
         isBoolUpdFinished = true;
         isRangUpdFinished = true;
         isRangDelFinished = true;
-        boolSet = new BooleanPreferencesSet();
-        rangSet = new ArrayList<>();
+        isTaskErrorDetected = false;
         mModesList = new ArrayList<>();
         mEditTextsList = new ArrayList<>();
         mMeansList = new ArrayList<>();
+        mSaveButton = null;
+        getCurrentData();
     }
 
     @Override
@@ -105,7 +111,7 @@ public class PreferencesTab extends Fragment {
             }
         });
 
-        for(final ImageButton b : mModesList){
+        for(ImageButton b : mModesList){
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -123,30 +129,82 @@ public class PreferencesTab extends Fragment {
             });
         }
 
-        getCurrentData();
-
         return preferencesView;
     }
 
     private void savePreferences(){
+        boolean isBoolUpdDetected;
+        boolean isRangUpdDetected = false;
+        boolean isRangDelDetected = false;
+        DialogFragment f;
+
         if(mRangUpdTask != null && mBoolUpdTask != null && mRangDelTask != null){
             return;
         }
 
-        mRangUpdTask = new UpdateRangedPreferencesTask(rangSet);
-        mRangUpdTask.execute((Void) null);
+        ArrayList<RangedPreference> newRangSet = new ArrayList<>();
+        RangedPreferenceType currType;
+        RangedPreference tmp;
 
-        mBoolUpdTask = new UpdateBooleanPreferencesTask(boolSet);
-        mBoolUpdTask.execute((Void) null);
+        isBoolUpdDetected = Data.getUser().getBoolPreferences().equalTo(boolSet);
+        for (EditText t : mEditTextsList) {
+            switch (t.getId()) {
+                case R.id.walking_editText:
+                    currType = RangedPreferenceType.WALKING_TIME_LIMIT;
+                    break;
+                case R.id.biking_editText:
+                    currType = RangedPreferenceType.BIKING_TIME_LIMIT;
+                    break;
+                case R.id.publicTransport_editText:
+                    currType = RangedPreferenceType.PUBLIC_TRANSPORT_TIME_LIMIT;
+                    break;
+                case R.id.car_editText:
+                    currType = RangedPreferenceType.CAR_TIME_LIMIT;
+                    break;
+                case R.id.cost_editText:
+                    currType = RangedPreferenceType.COST_LIMIT;
+                    break;
+                default:
+                    currType = RangedPreferenceType.WALKING_TIME_LIMIT;
+                    break;
+            }
 
-        mRangDelTask = new DeleteRangedPreferencesTask(rangSet);
-        mRangDelTask.execute((Void) null);
+            if(t.getText().equals(null)) {
+                t.setText(0);
+            }
+            tmp = new RangedPreference(currType, Integer.parseInt(t.getText().toString()));
+            if(!rangSet.contains(tmp)) {
+                newRangSet.add(tmp);
+                if(tmp.getValue() == 0)
+                    isRangDelDetected = true;
+                else
+                    isRangUpdDetected = true;
+            }
+        }
+
+        if(!isRangUpdDetected && !isBoolUpdDetected && !isRangDelDetected){
+            f = new SavePreferencesNotRequiredMessage();
+            f.show(getActivity().getFragmentManager(), "savepreferences_notrequired");
+        }
+        else {
+            if(isRangUpdDetected) {
+                mRangUpdTask = new UpdateRangedPreferencesTask(rangSet);
+                mRangUpdTask.execute((Void) null);
+            }
+            if(isBoolUpdDetected) {
+                mBoolUpdTask = new UpdateBooleanPreferencesTask(boolSet);
+                mBoolUpdTask.execute((Void) null);
+            }
+            if(isRangDelDetected) {
+                mRangDelTask = new DeleteRangedPreferencesTask(rangSet);
+                mRangDelTask.execute((Void) null);
+            }
+        }
     }
 
     private void setModes(View b){
         int mod;
 
-        //TODO add image button change
         switch(b.getId()){
             case R.id.mod_1:
                 mod = 2;
@@ -164,11 +222,20 @@ public class PreferencesTab extends Fragment {
                 mod = 1;
         }
 
+        //Change button image
+        b.setSelected(!b.isSelected());
+
+        if (b.isSelected()) {
+            ((ImageButton) b).setImageResource(R.drawable.common_full_open_on_phone);
+        }
+        else {
+            ((ImageButton) b).setImageResource(R.drawable.common_google_signin_btn_icon_light_normal_background);
+        }
+
         boolSet.setMode(Modality.getModalityfor(mod));
     }
 
     private void setMeans(View b){
-        //TODO add image button change
         switch(b.getId()){
             case R.id.mean_1:
                 boolSet.setPersonalBike(!boolSet.personalBike());
@@ -192,10 +259,93 @@ public class PreferencesTab extends Fragment {
                 break;
         }
 
+        //Change button image
+        b.setSelected(!b.isSelected());
+
+        if (!b.isSelected()) {
+            ((ImageButton) b).setImageResource(R.drawable.common_full_open_on_phone);
+        }
+        else {
+            ((ImageButton) b).setImageResource(R.drawable.common_google_signin_btn_icon_light_normal_background);
+        }
+
     }
 
     private void getCurrentData(){
-        //TODO implement
+        ArrayList<RangedPreference> myRang = myUser.getRangedPreferences();
+        BooleanPreferencesSet myBool = myUser.getBoolPreferences();
+
+        this.rangSet = myRang;
+        if(!myBool.equals(null)) {
+            this.boolSet = myBool;
+        }
+        else{
+            this.boolSet = new BooleanPreferencesSet();
+        }
+    }
+
+    private synchronized void updateView(){
+        if(isRangUpdFinished && isBoolUpdFinished && isRangDelFinished){
+            DialogFragment f;
+
+            updateImageButtons(mModesList);
+            updateImageButtons(mMeansList);
+            updateEditText(mEditTextsList);
+
+            showProgress(false);
+
+            if(!isTaskErrorDetected){
+                f = new SavePreferencesOKMessage();
+                f.show(getActivity().getFragmentManager(), "savepreferences_ok");
+            }
+            else{
+                f = new SavePreferencesErrorMessage();
+                f.show(getActivity().getFragmentManager(), "savepreferences_error");
+            }
+        }
+    }
+
+    private void updateImageButtons(ArrayList<ImageButton> buttons){
+        for(ImageButton b : buttons){
+            if(b.isSelected())
+                b.setSelected(true);
+            else
+                b.setSelected(false);
+        }
+    }
+
+    private void updateEditText(ArrayList<EditText> texts) {
+        RangedPreferenceType currType;
+
+        for (EditText t : texts) {
+            switch (t.getId()) {
+                case R.id.walking_editText:
+                    currType = RangedPreferenceType.WALKING_TIME_LIMIT;
+                    break;
+                case R.id.biking_editText:
+                    currType = RangedPreferenceType.BIKING_TIME_LIMIT;
+                    break;
+                case R.id.publicTransport_editText:
+                    currType = RangedPreferenceType.PUBLIC_TRANSPORT_TIME_LIMIT;
+                    break;
+                case R.id.car_editText:
+                    currType = RangedPreferenceType.CAR_TIME_LIMIT;
+                    break;
+                case R.id.cost_editText:
+                    currType = RangedPreferenceType.COST_LIMIT;
+                    break;
+                default:
+                    currType = RangedPreferenceType.WALKING_TIME_LIMIT;
+                    break;
+            }
+
+            for (RangedPreference rp : rangSet) {
+                if (rp.getType().equals(currType)) {
+                    t.setText(rp.getValue());
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -234,8 +384,58 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    public static class SavePreferencesOKMessage extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Save OK").
+                    setMessage("Your preferences have been saved.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //Close pop-up
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    public static class SavePreferencesErrorMessage extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Save error").
+                    setMessage("An unexpected error occurred. Some preferences may not have been saved.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //Close pop-up
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    public static class SavePreferencesNotRequiredMessage extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Save not required").
+                    setMessage("No update since last preferences update has been detected.").
+                    setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //Close pop-up
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
     public class UpdateRangedPreferencesTask extends AsyncTask<Void, Void, ResponseUpdateRangedPreferences> {
-        BooleanPreferencesSet bools;
         ArrayList<RangedPreference> rangs;
         ResponseUpdateRangedPreferences response;
 
@@ -246,6 +446,7 @@ public class PreferencesTab extends Fragment {
         @Override
         protected void onPreExecute(){
             showProgress(true);
+            isRangUpdFinished = false;
         }
 
         @Override
@@ -275,32 +476,32 @@ public class PreferencesTab extends Fragment {
         @Override
         protected void onPostExecute(final ResponseUpdateRangedPreferences response) {
             mRangUpdTask = null;
-            showProgress(false);
 
             if(response.equals(null)){
-                //TODO add pop-up
+                isTaskErrorDetected = true;
                 return;
             }
 
             switch (response.getType()){
                 case OK:
                     myUser.setRangedPreferences(response.getData());
-                    //TODO update view
-                    //TODO add pop-up
                     break;
                 case UPDATE_RANGED_PREFERENCES_INVALID_LOGIN:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
                 case UPDATE_RANGED_PREFERENCES_WRONG_INPUT:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
                 case UPDATE_RANGED_PREFERENCES_CONNECTION_ERROR:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
                 default:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
             }
+
+            isRangUpdFinished = true;
+            updateView();
         }
 
         @Override
@@ -312,7 +513,6 @@ public class PreferencesTab extends Fragment {
 
     public class UpdateBooleanPreferencesTask extends AsyncTask<Void, Void, ResponseUpdateBooleanPreferences>{
         BooleanPreferencesSet bools;
-        ArrayList<RangedPreference> rangs;
         ResponseUpdateBooleanPreferences response;
 
         UpdateBooleanPreferencesTask(BooleanPreferencesSet bs){
@@ -322,27 +522,20 @@ public class PreferencesTab extends Fragment {
         @Override
         protected void onPreExecute(){
             showProgress(true);
+            isBoolUpdFinished = false;
         }
 
         @Override
         protected ResponseUpdateBooleanPreferences doInBackground(Void... params) {
             if(!Data.isOfflineMode()) {
-                ArrayList<Integer> vals = new ArrayList<>();
-                ArrayList<String> ids = new ArrayList<>();
-
-                for(RangedPreference rp : rangSet){
-                    vals.add(rp.getType().getValue());
-                    ids.add(Integer.toString(rp.getValue()));
-                }
-
                 try {
-                    response = NetworkLayer.updateBooleanPreferencesRequest(myUser.getUsername(), myUser.getPassword(), boolSet.personalCar(), boolSet.carSharing(), boolSet.personalBike(), boolSet.bikeSharing(), boolSet.publicTrasport(), boolSet.uberTaxi(), boolSet.mode().getValue());
+                    response = NetworkLayer.updateBooleanPreferencesRequest(myUser.getUsername(), myUser.getPassword(), bools.personalCar(), bools.carSharing(), bools.personalBike(), bools.bikeSharing(), bools.publicTrasport(), bools.uberTaxi(), bools.mode().getValue());
                 } catch (IOException e) {
                     return null;
                 }
             }
             else {
-                response = new ResponseUpdateBooleanPreferences(ResponseUpdateBooleanPreferencesType.OK, boolSet);
+                response = new ResponseUpdateBooleanPreferences(ResponseUpdateBooleanPreferencesType.OK, bools);
             }
 
             return response;
@@ -351,35 +544,32 @@ public class PreferencesTab extends Fragment {
         @Override
         protected void onPostExecute(final ResponseUpdateBooleanPreferences response) {
             mBoolUpdTask = null;
-            showProgress(false);
 
             if(response.equals(null)){
-                //TODO add pop-up
+                isTaskErrorDetected = true;
                 return;
             }
 
             switch (response.getType()){
                 case OK:
                     myUser.setBooleanPreferences(response.getData());
-                    //TODO update view
-                    //TODO add pop-up
                     break;
                 case UPDATE_BOOLEAN_PREFERENCES_INVALID_LOGIN:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
                 case UPDATE_BOOLEAN_PREFERENCES_WRONG_INPUT:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
                 case UPDATE_BOOLEAN_PREFERENCES_CONNECTION_ERROR:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
                 default:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
             }
 
             isBoolUpdFinished = true;
-
+            updateView();
         }
 
         @Override
@@ -400,6 +590,7 @@ public class PreferencesTab extends Fragment {
         @Override
         protected void onPreExecute(){
             showProgress(true);
+            isRangDelFinished = false;
         }
 
         @Override
@@ -407,8 +598,10 @@ public class PreferencesTab extends Fragment {
             if(!Data.isOfflineMode()) {
                 ArrayList<String> ids = new ArrayList<>();
 
-                for(RangedPreference rp : rangSet){
-                    ids.add(Integer.toString(rp.getValue()));
+                for(RangedPreference rp : rangs){
+                    if(rp.getValue() == 0) {
+                        ids.add(Integer.toString(rp.getType().getValue()));
+                    }
                 }
 
                 try {
@@ -418,7 +611,12 @@ public class PreferencesTab extends Fragment {
                 }
             }
             else {
-                response = new ResponseDeleteRangedPreferences(ResponseDeleteRangedPreferencesType.OK, rangSet);
+                for(RangedPreference rp : rangs){
+                    if(rp.getValue() == 0) {
+                        rangs.remove(rp);
+                    }
+                }
+                response = new ResponseDeleteRangedPreferences(ResponseDeleteRangedPreferencesType.OK, rangs);
             }
 
             return response;
@@ -427,32 +625,32 @@ public class PreferencesTab extends Fragment {
         @Override
         protected void onPostExecute(final ResponseDeleteRangedPreferences response) {
             mRangDelTask = null;
-            showProgress(false);
 
             if(response.equals(null)){
-                //TODO add pop-up
+                isTaskErrorDetected = true;
                 return;
             }
 
             switch (response.getType()){
                 case OK:
                     myUser.deleteRangedPreferences(response.getData());
-                    //TODO update view
-                    //TODO add pop-up
                     break;
                 case DELETE_RANGED_PREFERENCES_INVALID_LOGIN:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
                 case DELETE_RANGED_PREFERENCES_WRONG_INPUT:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
                 case DELETE_RANGED_PREFERENCES_CONNECTION_ERROR:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
                 default:
-                    //TODO add pop-up
+                    isTaskErrorDetected = true;
                     break;
             }
+
+            isRangDelFinished = true;
+            updateView();
         }
 
         @Override

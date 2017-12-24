@@ -22,6 +22,7 @@ public class User {
 	public User(String u, String p){
 		this.username=u;
 		this.password=p;
+		this.boolPreferences = new BooleanPreferencesSet();
 	}
 	
 	
@@ -33,7 +34,7 @@ public class User {
 			ris=ris+boolPreferences.toString();
 		return ris;
 	}
-	
+
 	/* SETTERS */
 	public void setCalendar(Calendar c){
 		this.calendar=c;

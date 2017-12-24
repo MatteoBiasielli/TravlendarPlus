@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import biasiellicapodifatta.travlendar.data.user.preferences.Preference;
 import biasiellicapodifatta.travlendar.layouts.CalendarTab;
 import biasiellicapodifatta.travlendar.layouts.PreferencesTab;
 import biasiellicapodifatta.travlendar.layouts.MapTab;

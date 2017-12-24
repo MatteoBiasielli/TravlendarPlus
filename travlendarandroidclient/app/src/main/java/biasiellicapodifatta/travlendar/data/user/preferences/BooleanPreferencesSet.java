@@ -70,4 +70,13 @@ public class BooleanPreferencesSet extends Preference{
 	public boolean isRanged() {
             return false;
         }
+	public boolean equalTo(BooleanPreferencesSet bs){
+		return this.personalCar == bs.personalCar
+				&& this.carSharing == bs.carSharing
+				&& this.personalBike == bs.personalBike
+				&& this.bikeSharing == bs.bikeSharing
+				&& this.publicTransport == bs.publicTransport
+				&& this.uberTaxi == bs.uberTaxi
+				&& this.mode == bs.mode;
+	}
 }

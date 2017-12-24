@@ -1,6 +1,8 @@
 package biasiellicapodifatta.travlendar.layouts;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import biasiellicapodifatta.travlendar.R;
  */
 
 public class CalendarTab extends Fragment {
+    FloatingActionButton mAddButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -21,6 +24,16 @@ public class CalendarTab extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.calendar_tab_layout, container, false);
+        View calendarView = inflater.inflate(R.layout.calendar_tab_layout, container, false);
+        mAddButton = (FloatingActionButton) calendarView.findViewById(R.id.new_act_button);
+        mAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), NewActActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        return calendarView;
     }
 }

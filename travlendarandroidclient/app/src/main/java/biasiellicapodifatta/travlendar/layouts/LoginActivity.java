@@ -370,6 +370,7 @@ public class LoginActivity extends AppCompatActivity {
 
             switch (response.getType()){
                 case OK:
+                    Data.setUser(response.getUser());
                     Intent intent = new Intent(LoginActivity.this, MainTabContainer.class);
                     startActivity(intent);
                     break;

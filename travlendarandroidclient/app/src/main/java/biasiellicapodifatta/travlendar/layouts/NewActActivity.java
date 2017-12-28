@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -44,10 +45,15 @@ public class NewActActivity extends AppCompatActivity {
     private int mStartMin;
     private int mEndHour;
     private int mEndMin;
+    private static String[] userTags = new String[Data.getUser().getFavPositions().size()];
+    private static String selectedStartTag = "";
+    private static String selectedEndTag = "";
 
     //UI references
     private EditText mActivityNameView;
     private EditText mStartPositionView;
+    private EditText mStartTag;
+    private EditText mEndTag;
     private EditText mEndPositionView;
     private EditText mNotesView;
     private EditText mDuration;
@@ -71,6 +77,10 @@ public class NewActActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_act);
+
+        for(int i=0; i < Data.getUser().getFavPositions().size(); i++){
+            userTags[i] = Data.getUser().getFavPositions().get(i).getTag();
+        }
 
         mActivityNameView = findViewById(R.id.activity_name_form);
         mActivityNameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -164,6 +174,28 @@ public class NewActActivity extends AppCompatActivity {
             }
         });
 
+        mStartTag = findViewById(R.id.start_tag);
+        mStartTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StartTagList tags = new StartTagList();
+                tags.show(getFragmentManager(), "start-tag");
+                if(!"".equals(selectedStartTag))
+                    mStartTag.setText(selectedStartTag);
+            }
+        });
+
+        mEndTag = findViewById(R.id.end_tag);
+        mEndTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EndTagList tags = new EndTagList();
+                tags.show(getFragmentManager(), "end-tag");
+                if(!"".equals(selectedEndTag))
+                    mEndTag.setText(selectedEndTag);
+            }
+        });
+
         mDatePickerStart = findViewById(R.id.datePicker_start);
         mDatePickerEnd = findViewById(R.id.datePicker_end);
 
@@ -202,18 +234,16 @@ public class NewActActivity extends AppCompatActivity {
         mStartPositionView.setError(null);
         mEndPositionView.setError(null);
         mNotesView.setError(null);
+        mStartTag.setError(null);
+        mEndTag.setError(null);
 
         String act_name = mActivityNameView.getText().toString();
         String start = mStartPositionView.getText().toString();
         String dest = mEndPositionView.getText().toString();
+        String startTag = selectedStartTag;
+        String endTag = selectedEndTag;
         String notes = mNotesView.getText().toString();
-        /*
-        Calendar start_calendar = Calendar.getInstance();
-        start_calendar.set(mDatePickerStart.getYear(), mDatePickerStart.getMonth(), mDatePickerStart.getDayOfMonth(), 0, 0, 0);
-        Long start_date = calendar.getTimeInMillis();
-        calendar.set(mDatePickerEnd.getYear(), mDatePickerEnd.getMonth(), mDatePickerEnd.getDayOfMonth(), 0, 0, 0);
-        Long end_date = calendar.getTimeInMillis();
-        */
+
         String duration;
         if(mFlexibleSwitch.isChecked())
             duration = mDuration.getText().toString();
@@ -237,11 +267,7 @@ public class NewActActivity extends AppCompatActivity {
 
         Calendar start_calendar = Calendar.getInstance();
         start_calendar.set(mDatePickerStart.getYear(), mDatePickerStart.getMonth(), mDatePickerStart.getDayOfMonth(), start_hour,     start_min, 0);
-        /*
-        start_hour = start_hour * 60 * 60 * 1000;
-        start_min =  start_min * 60 * 1000;
-        start_date = start_date + start_hour + start_min;
-        */
+
         int end_hour =  mEndHour;
         int end_min =  0;
         if(mEndMin <= 12)
@@ -259,11 +285,6 @@ public class NewActActivity extends AppCompatActivity {
 
         Calendar end_calendar = Calendar.getInstance();
         end_calendar.set(mDatePickerEnd.getYear(), mDatePickerEnd.getMonth(), mDatePickerEnd.getDayOfMonth(), end_hour, end_min, 0);
-        /*
-        end_hour = end_hour * 60 * 60 * 1000;
-        end_min = end_min * 60 * 1000;
-        end_date = end_date + end_hour + end_min;
-        */
 
         boolean cancel = false;
         View focusView = null;
@@ -299,7 +320,7 @@ public class NewActActivity extends AppCompatActivity {
             //show a progress bar,
             showProgress(true);
             mAddTask = new AddFixedActivity(Data.getUser().getUsername(), Data.getUser().getPassword(),
-                    act_name, notes, start, dest, start_calendar.getTime(), end_calendar.getTime(), mFlexibleSwitch.isChecked(), duration);
+                    act_name, notes, start, dest, start_calendar.getTime(), end_calendar.getTime(), mFlexibleSwitch.isChecked(), duration, startTag, endTag);
             // ip address set by the login screen
             mAddTask.execute((Void)null);
         }
@@ -385,10 +406,12 @@ public class NewActActivity extends AppCompatActivity {
         private final Date locEndDate;
         private final Boolean locFlexible;
         private final String locDuration;
+        private final String locStartTag;
+        private final String locEndTag;
         private ResponseAddActivity response;
 
         AddFixedActivity(String username, String password, String name, String notes, String startpos,
-                         String endpos, Date startdate, Date enddate, Boolean flexible, String duration){
+                         String endpos, Date startdate, Date enddate, Boolean flexible, String duration, String startTag, String endTag){
             locUsername = username;
             locPassword = password;
             locName = name;
@@ -399,14 +422,16 @@ public class NewActActivity extends AppCompatActivity {
             locEndDate = enddate;
             locFlexible = flexible;
             locDuration = duration;
+            locStartTag = startTag;
+            locEndTag = endTag;
         }
 
         @Override
         protected ResponseAddActivity doInBackground(Void... params){
 
-            try{ //TODO: implement tags
+            try{
                 response = NetworkLayer.addActivityRequest(locUsername, locPassword, locName, locNotes,
-                            locEndPosition, "", locStartPosition, "", locFlexible, locDuration,locStartDate, locEndDate);
+                        locEndPosition, locEndTag, locStartPosition, locStartTag, locFlexible, locDuration,locStartDate, locEndDate);
             }catch (IOException e){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
@@ -616,6 +641,62 @@ public class NewActActivity extends AppCompatActivity {
                         }
                     });
 
+            return builder.create();
+        }
+    }
+
+    public static class StartTagList extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Select a tag")
+                    .setSingleChoiceItems(NewActActivity.userTags, 0, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            NewActActivity.selectedStartTag = NewActActivity.userTags[i];
+                        }
+                    })
+                    .setPositiveButton("Choose", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //hide list
+                        }
+                    })
+                    .setNeutralButton("Hide", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            selectedStartTag = "";
+                            //reset and hide list
+                        }
+                    });
+            return builder.create();
+        }
+    }
+
+    public static class EndTagList extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Select a tag")
+                    .setSingleChoiceItems(NewActActivity.userTags, 0, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            NewActActivity.selectedEndTag = NewActActivity.userTags[i];
+                        }
+                    })
+                    .setPositiveButton("Choose", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //hide list
+                        }
+                    })
+                    .setNeutralButton("Hide", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            selectedEndTag = "";
+                            //reset and hide list
+                        }
+                    });
             return builder.create();
         }
     }

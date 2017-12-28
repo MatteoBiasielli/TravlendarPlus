@@ -19,8 +19,15 @@ public class Route {
 		for(Leg l:legs){
 			out=out+l.toString()+"\n";
 		}
+
+		out = out.replaceAll("<b>", "");
+		out = out.replaceAll("</b>", "");
+		out = out.replaceAll("<div[\\u0000-\\u007F]*>", "");
+		out = out.replaceAll("</div[\\u0000-\\u007F]*>", "");
+
 		return out;	
 	}
+
 	public void setMode(TravelMode m){
 		mode=m;
 	}

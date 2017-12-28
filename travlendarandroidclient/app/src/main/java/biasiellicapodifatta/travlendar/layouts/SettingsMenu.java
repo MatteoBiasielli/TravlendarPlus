@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +45,8 @@ public class SettingsMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_menu);
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         usernameFieldView = findViewById(R.id.username_field);
         usernameFieldView.setText(Data.getUser().getUsername());
 
@@ -71,6 +74,13 @@ public class SettingsMenu extends AppCompatActivity {
         progressView = findViewById(R.id.progressBar);
 
         settingsView = findViewById(R.id.settingsView);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent myIntent = new Intent(getApplicationContext(), MainTabContainer.class);
+        startActivityForResult(myIntent, 0);
+        return true;
+
     }
 
     private void attemptAddition(){

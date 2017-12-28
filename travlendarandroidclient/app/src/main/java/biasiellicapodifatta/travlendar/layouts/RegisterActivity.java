@@ -369,7 +369,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             mAuthTask = null;
             showProgress(false);
 
-            if(response.equals(null)){
+            if(response == null){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
                 Intent intentx = new Intent(RegisterActivity.this, LoginActivity.class);

@@ -100,6 +100,17 @@ public class Calendar {
 		return true;
 	}
 	
+        private boolean breaksDontOverlap(ArrayList<Break> b){
+		int size=b.size();
+		if(size<=1)
+			return true;
+		for(int i=0; i<size-1;i++)
+			for(int j=i+1;j<size;j++)
+				if(!b.get(i).isBefore(b.get(j)) && !b.get(i).isAfter(b.get(j)))
+					return false;
+		return true;
+	}
+        
 	/**
 	 * Verifies if a calendar containing the given activities can exist
 	 * @param fa is the list of FixedActivities
@@ -107,9 +118,110 @@ public class Calendar {
 	 * @return true if the lists together can represent a calendar. false otherwise
 	 */
 	public boolean canBeACalendar(ArrayList<FixedActivity> fa, ArrayList<Break> b){
-		return recursiveCanBeACalendar(fa,b,b.size());
+		return !tooLongDurations(fa,b) && !oneBreakCompletelyIncludedInOneFixed(fa,b) && recursiveCanBeACalendar(fa,b,b.size());
 	}
 	
+        
+        public boolean canBeACalendarOptimized(ArrayList<FixedActivity> fa, ArrayList<Break> b){
+            return isConsistent(fa) && breaksDontOverlap(b) && !tooLongDurations(fa,b) && breaksFit(fa,b);
+        }
+        
+        private boolean breaksFit(ArrayList<FixedActivity> fa, ArrayList<Break> b){
+            Date minStart;
+            Date maxEnd;
+            ArrayList<TimeSlot> slots=new ArrayList<>();
+            if(b.isEmpty())
+                return true;
+            minStart=b.get(0).getStartDate();
+            maxEnd=b.get(0).getEndDate();
+            for(Break br:b){
+                if(br.getStartDate().before(minStart))
+                    minStart=br.getStartDate();
+                if(br.getEndDate().after(maxEnd))
+                    maxEnd=br.getEndDate();
+            }
+            fa.sort(null);
+            if(!fa.isEmpty()){
+                if(minStart.before(fa.get(0).getStartDate()))
+                    setFreeTimeSlots(slots,minStart,fa.get(0).getStartDate());
+                for(int i=0; i<fa.size()-1;i++){
+                    setFreeTimeSlots(slots,fa.get(i).getEndDate(),fa.get(i+1).getStartDate());
+                }
+                if(maxEnd.after(fa.get(fa.size()-1).getEndDate()))
+                    setFreeTimeSlots(slots,fa.get(0).getEndDate(),maxEnd);
+            }else
+                setFreeTimeSlots(slots,minStart,maxEnd);
+            for(int i=0;i<b.size();i++){
+                boolean done=false;
+                slots.sort(null);
+                for(int j=0;j<slots.size();j++){
+                    if(slots.get(j).suitsToBreak(b.get(i))){
+                        TimeSlot toRemove=slots.get(j);
+                        slots.remove(j);
+                        Date st;
+                        Date en;
+                        st=toRemove.getStart().before(b.get(i).getStartDate())?b.get(i).getStartDate():toRemove.getStart();
+                        en=toRemove.getEnd().after(b.get(i).getEndDate())?b.get(i).getEndDate():toRemove.getEnd();
+                        Date endAct=new Date(st.getTime()+b.get(i).getDuration()*60*1000);
+                        slots.add(new TimeSlot(toRemove.getStart(),st));
+                        slots.add(new TimeSlot(endAct,toRemove.getEnd()));
+                        done=true;
+                        break;
+                    }
+                }
+                if(!done)
+                    return false;
+            }
+            return true;
+        }
+        
+        private void setFreeTimeSlots(ArrayList<TimeSlot> slots, Date s, Date e){
+            slots.add(new TimeSlot(s,e));
+        }
+       
+        private boolean tooLongDurations(ArrayList<FixedActivity> fa, ArrayList<Break> b){
+            long acc=0;
+            Date minStart;
+            Date maxEnd;
+            if(b.isEmpty())
+                return false;
+            minStart=b.get(0).getStartDate();
+            maxEnd=b.get(0).getEndDate();
+            for(Break br:b){
+                acc-=br.getDuration()*60*1000;
+                if(br.getStartDate().before(minStart))
+                    minStart=br.getStartDate();
+                if(br.getEndDate().after(maxEnd))
+                    maxEnd=br.getEndDate();
+            }
+            acc+=maxEnd.getTime()-minStart.getTime();
+            for(FixedActivity fact:fa){
+                Date s=null;
+                Date e=null;
+                if(minStart.before(fact.getStartDate()))
+                    s=fact.getStartDate();
+                else
+                    s=minStart;
+                if(maxEnd.after(fact.getEndDate()))
+                    e=fact.getEndDate();
+                else
+                    e=maxEnd;
+                if(s.before(e))
+                    acc-=e.getTime()-s.getTime();
+            }
+                
+            return acc<0;
+        }
+        private boolean oneBreakCompletelyIncludedInOneFixed(ArrayList<FixedActivity> fa, ArrayList<Break> b){
+            for(Break br:b)
+                for(FixedActivity fact:fa)
+                    if((br.getStartDate().equals(fact.getStartDate()) || br.getStartDate().after(fact.getStartDate()))
+                            &&
+                      (br.getEndDate().equals(fact.getEndDate()) || br.getEndDate().before(fact.getEndDate())))
+                        return true;
+            return false;
+        }
+        
 	/**
 	 * Supports canBeACalendar 
 	 * @param fa is the list of FixedActivities
@@ -177,4 +289,40 @@ public class Calendar {
 	public ArrayList<Break> getBreaks(){
 		return breaks;
 	}
+}
+
+class TimeSlot implements Comparable{
+    private Date s;
+    private Date e;
+    private int duration;
+    protected TimeSlot(Date s, Date e){
+        this.s=s;
+        this.e=e;
+        this.duration=(int)((e.getTime()-s.getTime())/(60*1000));
+    }
+    @Override
+    public int compareTo(Object o){
+        if(this.duration<((TimeSlot)o).duration)
+            return -1;
+        if(this.duration>((TimeSlot)o).duration)
+            return 1;
+        return 0;
+    }
+    public int getDur(){
+        return this.duration;
+    }
+    public Date getStart(){
+        return this.s;
+    }
+    public Date getEnd(){
+        return this.e;
+    }
+    public boolean suitsToBreak(Break b){
+        Date st;
+        Date en;
+        st=s.before(b.getStartDate())?b.getStartDate():s;
+        en=e.after(b.getEndDate())?b.getEndDate():e;
+        int dur=(int)((en.getTime()-st.getTime())/(60*1000));
+        return dur>=b.getDuration() && (b.contains(s) || b.contains(e) || b.isContainedIn(s,e));
+    }
 }

@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.sun.xml.internal.ws.api.pipe.PipelineAssembler;
 import travlendarplus.apimanager.APIManager;
 import travlendarplus.calendar.Calendar;
 import travlendarplus.calendar.activities.*;
@@ -576,8 +575,8 @@ public class DataLayer {
 	    Statement statement = conn.createStatement();
 	    String query;
 	    if(notif.getUser_id() == null)
-            query = "INSERT INTO NOTIFICATION VALUES (NULL, NULL, NULL, '"+notif.getText()+"', "+notif.getTimestamp()+" )";
-        else
+                query = "INSERT INTO NOTIFICATION VALUES (NULL, NULL, NULL, '"+notif.getText()+"', "+notif.getTimestamp()+" )";
+            else
 	        query = "INSERT INTO NOTIFICATION VALUES (NULL, "+notif.getUser_id()+", "+notif.getActivity_id()+", '"+notif.getText()+"', "+notif.getTimestamp()+" )";
 
         statement.execute(query);
@@ -586,28 +585,28 @@ public class DataLayer {
 
     public static void checkForNotification() throws SQLException {
 
-	    final long WINDOW_TO_CHECK = 2 * 30 * 1000;
+        final long WINDOW_TO_CHECK = 5 * 30 * 1000;
         final long AN_HOUR = 60 * 60 * 1000;
         final long A_QUARTER = 60 * 15 * 1000;
-	    Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-	    Statement statement = conn.createStatement();
-	    String query = "SELECT USER, KEY_ID, START_DAY_TIME, FLEXIBLE, ESTIMATED_TRAVEL_TIME "
-                        +"FROM ACTIVITY ";
+        Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+        Statement statement = conn.createStatement();
+        String query = "SELECT USER, KEY_ID, START_DAY_TIME, FLEXIBLE, ESTIMATED_TRAVEL_TIME "
+                    +"FROM ACTIVITY ";
 
-	    ResultSet result = statement.executeQuery(query);
+        ResultSet result = statement.executeQuery(query);
         long currentTime = new Date().getTime();
-	    while(result.next()){
-            if (result.getLong("START_DAY_TIME") - result.getInt("ESTIMATED_TRAVEL_TIME") - AN_HOUR  < currentTime + WINDOW_TO_CHECK  &&
-                    result.getLong("START_DAY_TIME") - result.getInt("ESTIMATED_TRAVEL_TIME") - AN_HOUR  > currentTime - WINDOW_TO_CHECK ){
+        while(result.next()){
+            if (result.getLong("START_DAY_TIME") - result.getInt("ESTIMATED_TRAVEL_TIME")*60*1000 - AN_HOUR  <= currentTime + WINDOW_TO_CHECK  &&
+                    result.getLong("START_DAY_TIME") - result.getInt("ESTIMATED_TRAVEL_TIME")*60*1000 - AN_HOUR  >= currentTime - WINDOW_TO_CHECK ){
                 Notification notification = new Notification(result.getInt("USER"), result.getInt("KEY_ID"), "You should leave in about an hour!", currentTime);
                 DataLayer.addNotificationToDB(notification);
-            } else if (result.getLong("START_DAY_TIME") - result.getInt("ESTIMATED_TRAVEL_TIME") - A_QUARTER  < currentTime + WINDOW_TO_CHECK &&
-                        result.getLong("START_DAY_TIME") - result.getInt("ESTIMATED_TRAVEL_TIME") - A_QUARTER  > currentTime - WINDOW_TO_CHECK){
-	                Notification notification = new Notification(result.getInt("USER"), result.getInt("KEY_ID"), "You should leave in few minutes, get ready.", currentTime);
-	                DataLayer.addNotificationToDB(notification);
-                }
+            } else if (result.getLong("START_DAY_TIME") - result.getInt("ESTIMATED_TRAVEL_TIME")*60*1000 - A_QUARTER  <= currentTime + WINDOW_TO_CHECK &&
+                    result.getLong("START_DAY_TIME") - result.getInt("ESTIMATED_TRAVEL_TIME")*60*1000 - A_QUARTER  >= currentTime - WINDOW_TO_CHECK){
+                Notification notification = new Notification(result.getInt("USER"), result.getInt("KEY_ID"), "You should leave in few minutes, get ready.", currentTime);
+                DataLayer.addNotificationToDB(notification);
+            }
         }
         result.close();
-	    conn.close();
+        conn.close();
     }
 }

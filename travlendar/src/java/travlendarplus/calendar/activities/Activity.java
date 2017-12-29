@@ -8,13 +8,12 @@ import travlendarplus.calendar.Calendar;
 import travlendarplus.exceptions.InvalidInputException;
 import travlendarplus.exceptions.InvalidLoginException;
 import travlendarplus.exceptions.InvalidPositionException;
-import travlendarplus.exceptions.NoPathFoundException;
 import travlendarplus.exceptions.UnconsistentValueException;
 import travlendarplus.exceptions.UnsopportedOperationException;
 import travlendarplus.response.responseaddactivity.ResponseAddActivityNotification;
 import travlendarplus.user.User;
 
-public abstract class Activity {
+public abstract class Activity implements Comparable{
 	protected Date startDate;
 	protected Date endDate;
 	protected String label;
@@ -112,6 +111,12 @@ public abstract class Activity {
 	public ActivityStatus getStatus(){
 		return this.actStatus;
 	}
+        
+        @Override
+        public int compareTo(Object o) {
+            return this.startDate.compareTo(((Activity)o).startDate);
+        }
+        
 	public abstract boolean isFlexible();
 	public abstract long getDuration();
         public abstract int getEstimatedTravelTime();

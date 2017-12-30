@@ -133,4 +133,5 @@
     <string name="check_tags">check or delete</string>
     <string name="faq">FAQ:</string>
     <string name="faq1">What does Travlendar+ do?</string>
+    <string name="et_def_value">"0"</string>
 </resources>

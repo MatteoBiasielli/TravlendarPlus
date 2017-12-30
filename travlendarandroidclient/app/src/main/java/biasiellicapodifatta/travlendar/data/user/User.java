@@ -23,6 +23,9 @@ public class User {
 		this.username=u;
 		this.password=p;
 		this.boolPreferences = new BooleanPreferencesSet();
+		this.rangedPreferences = new ArrayList<>();
+		this.favPos = new ArrayList<>();
+		this.notifications = new ArrayList<>();
 	}
 	
 	

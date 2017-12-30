@@ -133,7 +133,11 @@
     <string name="check_tags">check or delete</string>
     <string name="faq">FAQ:</string>
     <string name="faq1">What does Travlendar+ do?</string>
+<<<<<<< HEAD
+    <string name="et_def_value">"0"</string>
+=======
     <string name="indications">Next activity indications</string>
     <string name="select_time">Select time...</string>
     <string name="select_tag">Select tag...</string>
+>>>>>>> b282cdf50d074ededd772ef1f47292fa5383d1de
 </resources>

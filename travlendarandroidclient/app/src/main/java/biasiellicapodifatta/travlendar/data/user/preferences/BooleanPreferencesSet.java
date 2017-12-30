@@ -29,6 +29,16 @@ public class BooleanPreferencesSet extends Preference{
 		this.mode=m;
 	}
 
+	public BooleanPreferencesSet(BooleanPreferencesSet copySet){
+		this.personalCar=copySet.personalCar();
+		this.carSharing=copySet.carSharing();
+		this.personalBike=copySet.personalBike();
+		this.bikeSharing=copySet.bikeSharing();
+		this.publicTransport=copySet.publicTrasport();
+		this.uberTaxi=copySet.uberTaxi();
+		this.mode=copySet.mode();
+	}
+
         
 	/**@return a string human-readable version of the Object**/
 	public String toString(){

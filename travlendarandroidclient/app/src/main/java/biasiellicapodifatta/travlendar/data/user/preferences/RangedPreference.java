@@ -1,5 +1,9 @@
 package biasiellicapodifatta.travlendar.data.user.preferences;
 
+import android.content.res.Resources;
+
+import java.util.ArrayList;
+
 public class RangedPreference extends Preference{
 	private RangedPreferenceType type;
 	private int value;
@@ -30,8 +34,17 @@ public class RangedPreference extends Preference{
 	/* OTHER METHODS */
 	public boolean equalTo(RangedPreference rp){
 		Integer myType = this.type.getValue();
-		Integer rpType = rp.getValue();
+		Integer rpType = rp.getType().getValue();
 
 		return myType.equals(rpType);
+	}
+
+	public RangedPreference getSameTypeIn(ArrayList<RangedPreference> rps) {
+		for(RangedPreference rp : rps){
+			if(this.equalTo(rp)){
+				return rp;
+			}
+		}
+		return null;
 	}
 }

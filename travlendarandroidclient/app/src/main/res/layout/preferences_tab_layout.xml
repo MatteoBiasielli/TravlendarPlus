@@ -5,23 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Space
+        android:id="@+id/space"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ProgressBar
         android:id="@+id/save_progress"
         style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/space"
+        app:layout_constraintStart_toStartOf="@+id/space"
+        app:layout_constraintTop_toBottomOf="@+id/space"
         tools:visibility="gone" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/pref_const"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TableRow
             android:layout_width="wrap_content"
@@ -148,24 +155,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:hint="@string/et_def_value"
                     android:inputType="number"
-                    android:textColor="@android:color/holo_orange_dark" />
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textColorHint="@android:color/holo_orange_dark" />
 
                 <EditText
                     android:id="@+id/biking_editText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:hint="@string/et_def_value"
                     android:inputType="number"
-                    android:textColor="@android:color/holo_orange_dark" />
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textColorHint="@android:color/holo_orange_dark" />
 
                 <EditText
                     android:id="@+id/publicTransport_editText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:hint="@string/et_def_value"
                     android:inputType="number"
                     android:textColor="@android:color/holo_orange_dark"
+                    android:textColorHint="@android:color/holo_orange_dark"
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="284dp" />
 
@@ -174,8 +187,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:hint="@string/et_def_value"
                     android:inputType="number"
                     android:textColor="@android:color/holo_orange_dark"
+                    android:textColorHint="@android:color/holo_orange_dark"
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="238dp" />
 
@@ -184,8 +199,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="numberDecimal"
+                    android:hint="@string/et_def_value"
+                    android:inputType="number"
                     android:textColor="@android:color/holo_orange_dark"
+                    android:textColorHint="@android:color/holo_orange_dark"
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="192dp" />
             </LinearLayout>

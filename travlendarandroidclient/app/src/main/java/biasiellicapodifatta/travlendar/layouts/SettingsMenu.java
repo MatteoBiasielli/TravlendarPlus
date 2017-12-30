@@ -10,8 +10,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,8 +31,11 @@ import biasiellicapodifatta.travlendar.response.responsedeletetag.ResponseDelete
 public class SettingsMenu extends AppCompatActivity {
 
     private AddTagTask addTagTask = null;
-    /*FORSE NON SERVE*/
     private DeleteTagTask deleteTagTask = null;
+
+    protected static ArrayList<String> allTags = new ArrayList<>();
+    protected static ArrayList<Integer> selectedTags = new ArrayList<>();
+    protected static Boolean deletion = false;
 
     private TextView usernameFieldView;
     private EditText addressField;
@@ -43,6 +48,10 @@ public class SettingsMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_menu);
+
+        for (int i=0; i < Data.getUser().getFavPositions().size(); i++) {
+            allTags.add(Data.getUser().getFavPositions().get(i).getTag());
+        }
 
         usernameFieldView = findViewById(R.id.username_field);
         usernameFieldView.setText(Data.getUser().getUsername());
@@ -57,6 +66,12 @@ public class SettingsMenu extends AppCompatActivity {
             public void onClick(View view) {
                 DialogFragment list = new TagList();
                 list.show(getFragmentManager(), "tag-list");
+                if(deletion){
+                    attemptDeletion();
+                    deletion = false;
+                    selectedTags = null;
+                }
+
             }
         });
 
@@ -71,6 +86,13 @@ public class SettingsMenu extends AppCompatActivity {
         progressView = findViewById(R.id.progressBar);
 
         settingsView = findViewById(R.id.settingsView);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent myIntent = new Intent(getApplicationContext(), MainTabContainer.class);
+        startActivityForResult(myIntent, 0);
+        return true;
+
     }
 
     private void attemptAddition(){
@@ -93,6 +115,16 @@ public class SettingsMenu extends AppCompatActivity {
             addTagTask.execute((Void)null);
         }
 
+        tagField.setText(R.string.tag_hint);
+        addressField.setText(R.string.postal_address);
+
+    }
+
+    private void attemptDeletion(){
+        for(Integer n : selectedTags) {
+            deleteTagTask = new DeleteTagTask(Data.getUser().getUsername(), Data.getUser().getPassword(), n);
+            deleteTagTask.execute((Void) null);
+        }
     }
 
     private boolean isTagValid(String tag){
@@ -166,7 +198,7 @@ public class SettingsMenu extends AppCompatActivity {
             addTagTask = null;
             showProgress(false);
 
-            if(response.equals(null)){
+            if(response == null){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexpected-error");
             }
@@ -175,6 +207,8 @@ public class SettingsMenu extends AppCompatActivity {
                 case OK:
                     DialogFragment success = new AddedTag();
                     success.show(getFragmentManager(), "add-success");
+                    //TODO: aggiornare allTags
+                    SettingsMenu.allTags.add(tag);
                     break;
                 case ADD_TAG_LOGIN_ERROR:
                     DialogFragment login = new LoginError();
@@ -208,25 +242,25 @@ public class SettingsMenu extends AppCompatActivity {
         }
     }
 
-    /*FORSE NON SERVE*/
     public class DeleteTagTask extends AsyncTask<Void, Void, ResponseDeleteTag>{
 
         private final String username;
         private final String password;
-        private final String tag;
+        private final Integer tag;
         private ResponseDeleteTag response;
 
-        DeleteTagTask(String username, String password, String tag){
+        DeleteTagTask(String username, String password, Integer index){
             this.username = username;
             this.password = password;
-            this.tag = tag;
+            this.tag = index;
         }
 
         @Override
         protected ResponseDeleteTag doInBackground(Void... voids) {
-            try{
-                response = NetworkLayer.deleteTagRequest(username, password, tag);
-            }catch (IOException  e){
+
+            try {
+                response = NetworkLayer.deleteTagRequest(username, password, SettingsMenu.allTags.get(tag));
+            }catch (IOException e){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexpected-error");
             }
@@ -238,25 +272,31 @@ public class SettingsMenu extends AppCompatActivity {
             deleteTagTask = null;
             showProgress(false);
 
-            if(response.equals(null)) {
+            if(response == null) {
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexpected-error");
             }
 
             switch(response.getType()){
                 case OK:
-                    //TODO: pop-up
+                    DialogFragment delete_success = new DeletedTag();
+                    delete_success.show(getFragmentManager(), "deletion-success");
+                    //TODO: aggiornare allTags
+                    SettingsMenu.allTags.remove(tag);
                     break;
                 case DELETE_TAG_LOGIN_ERROR:
-                    //TODO: pop-up
+                    DialogFragment login = new LoginError();
+                    login.show(getFragmentManager(), "delete-login-err");
                     Intent intent1 = new Intent(SettingsMenu.this, LoginActivity.class);
                     startActivity(intent1);
                     break;
                 case DELETE_TAG_WRONG_INPUT:
-                    //TODO: pop-up
+                    DialogFragment input = new WrongInput();
+                    input.show(getFragmentManager(), "delete-input-err");
                     break;
                 case DELETE_TAG_CONNECTION_ERROR:
-                    //TODO: pop-up
+                    DialogFragment conn = new ConnectionError();
+                    conn.show(getFragmentManager(), "delete-conn-err");
                     break;
                 default:
                     DialogFragment unexp = new UnexpectedError();
@@ -278,11 +318,10 @@ public class SettingsMenu extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             selectedTags = new ArrayList<>();
-            final String[] allTags = new String[Data.getUser().getFavPositions().size()];
+            final String[] allTags = new String[SettingsMenu.allTags.size()];
 
-
-            for (int i=0; i < Data.getUser().getFavPositions().size(); i++) {
-                allTags[i] = Data.getUser().getFavPositions().get(i).getTag();
+            for (int i=0; i < SettingsMenu.allTags.size(); i++) {
+                allTags[i] = SettingsMenu.allTags.get(i);
             }
 
 
@@ -291,69 +330,26 @@ public class SettingsMenu extends AppCompatActivity {
                     .setMultiChoiceItems(allTags, null, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-                                if (isChecked) {
-                                    selectedTags.add(which);
-                                } else if (selectedTags.contains(which)) {
-                                    selectedTags.remove(which);
-                                }
+                            //TODO: problema nel visualizzare la lista
+                            if (isChecked) {
+                                selectedTags.add(which);
+                            } else if (selectedTags.contains(which)) {
+                                selectedTags.remove(which);
+                            }
                         }
                     })
                     .setPositiveButton("Delete tag[s]", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            ResponseDeleteTag response = null;
-
-                            for(Integer n:selectedTags){
-                                try {
-                                    response = NetworkLayer.deleteTagRequest(Data.getUser().getUsername(), Data.getUser().getPassword(), allTags[n]);
-                                }catch (IOException e){
-                                    DialogFragment unexp = new UnexpectedError();
-                                    unexp.show(getFragmentManager(), "unexpected-error");
-                                }
-                            }
-
-                            if(response == null){
-                                DialogFragment unexp = new UnexpectedError();
-                                unexp.show(getFragmentManager(), "unexpected-error");
-                            }else
-                                switch(response.getType()){
-                                    case OK:
-                                        DialogFragment success = new DeletedTag();
-                                        //TODO: funziona??
-                                        dismiss();
-                                        success.show(getFragmentManager(), "delete-success");
-                                        break;
-                                    /*case DELETE_TAG_LOGIN_ERROR:
-                                        DialogFragment login = new LoginError();
-                                        login.show(getFragmentManager(), "login-error");
-                                        Intent intent1 = new Intent(DialogInterface.OnClickListener.this, LoginActivity.class);
-                                        startActivity(intent1);
-                                        break;*/
-                                    case DELETE_TAG_WRONG_INPUT:
-                                        DialogFragment input = new WrongInput();
-                                        //TODO: funziona??
-                                        dismiss();
-                                        input.show(getFragmentManager(), "wrong-input");
-                                        break;
-                                    case DELETE_TAG_CONNECTION_ERROR:
-                                        DialogFragment conn = new ConnectionError();
-                                        //TODO: funziona??
-                                        dismiss();
-                                        conn.show(getFragmentManager(), "connection-error");
-                                        break;
-                                    default:
-                                        DialogFragment unexp = new UnexpectedError();
-                                        //TODO: funziona??
-                                        dismiss();
-                                        unexp.show(getFragmentManager(), "unexpected-error");
-                                        break;
-                                }
-
+                            SettingsMenu.deletion = true;
+                            SettingsMenu.selectedTags.addAll(selectedTags);
+                            selectedTags = null;
                         }
                     })
                     .setNeutralButton("Hide", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            //dismiss this dialog
                         }
                     });
             return builder.create();

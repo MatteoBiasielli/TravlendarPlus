@@ -52,8 +52,8 @@ public class NewActActivity extends AppCompatActivity {
     //UI references
     private EditText mActivityNameView;
     private EditText mStartPositionView;
-    private EditText mStartTag;
-    private EditText mEndTag;
+    private static EditText mStartTag;
+    private static EditText mEndTag;
     private EditText mEndPositionView;
     private EditText mNotesView;
     private EditText mDuration;
@@ -180,8 +180,6 @@ public class NewActActivity extends AppCompatActivity {
             public void onClick(View view) {
                 StartTagList tags = new StartTagList();
                 tags.show(getFragmentManager(), "start-tag");
-                if(!"".equals(selectedStartTag))
-                    mStartTag.setText(selectedStartTag);
             }
         });
 
@@ -191,8 +189,6 @@ public class NewActActivity extends AppCompatActivity {
             public void onClick(View view) {
                 EndTagList tags = new EndTagList();
                 tags.show(getFragmentManager(), "end-tag");
-                if(!"".equals(selectedEndTag))
-                    mEndTag.setText(selectedEndTag);
             }
         });
 
@@ -301,6 +297,13 @@ public class NewActActivity extends AppCompatActivity {
             cancel = true;
         }
 
+        if(!isDateConsistent(start_calendar.getTimeInMillis(), end_calendar.getTimeInMillis())){
+            mActivityNameView.setError("This activity start date is after its end date.");
+            focusView = mActivityNameView;
+            cancel = true;
+        }
+
+
         if(!isNameValid(act_name)){
             mActivityNameView.setError("This is not a valid name for the activity.");
             focusView = mActivityNameView;
@@ -335,6 +338,12 @@ public class NewActActivity extends AppCompatActivity {
     private boolean isDateValid(Long date){
         Date tmp = new Date(date);
         return tmp.after(new Date());
+    }
+
+    private boolean isDateConsistent(Long start, Long end){
+        Date date1 = new Date(start);
+        Date date2 = new Date(end);
+        return date2.after(date1);
     }
 
     /**
@@ -650,22 +659,18 @@ public class NewActActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Select a tag")
-                    .setSingleChoiceItems(NewActActivity.userTags, 0, new DialogInterface.OnClickListener() {
+                    .setItems(NewActActivity.userTags, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             NewActActivity.selectedStartTag = NewActActivity.userTags[i];
+                            mStartTag.setText(NewActActivity.selectedStartTag);
                         }
                     })
-                    .setPositiveButton("Choose", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            //hide list
-                        }
-                    })
-                    .setNeutralButton("Hide", new DialogInterface.OnClickListener() {
+                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             selectedStartTag = "";
+                            mStartTag.setText("");
                             //reset and hide list
                         }
                     });
@@ -678,22 +683,18 @@ public class NewActActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Select a tag")
-                    .setSingleChoiceItems(NewActActivity.userTags, 0, new DialogInterface.OnClickListener() {
+                    .setItems(NewActActivity.userTags, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             NewActActivity.selectedEndTag = NewActActivity.userTags[i];
+                            mEndTag.setText(NewActActivity.selectedEndTag);
                         }
                     })
-                    .setPositiveButton("Choose", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            //hide list
-                        }
-                    })
-                    .setNeutralButton("Hide", new DialogInterface.OnClickListener() {
+                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             selectedEndTag = "";
+                            mEndTag.setText(R.string.select_tag);
                             //reset and hide list
                         }
                     });

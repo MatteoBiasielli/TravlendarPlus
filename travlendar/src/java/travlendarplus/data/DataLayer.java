@@ -26,7 +26,7 @@ public class DataLayer {
 	/**DBMS password**/
 	private static final String PASSWORD="giorgio";
 	/**DBMS url**/
-	private static final String DB_URL="jdbc:mysql://localhost/travlendar?serverTimezone=GMT";
+	private static final String DB_URL="jdbc:mysql://localhost/travlendar?serverTimezone=GMT&useSSL=false";
 	
 	/**Queries the DB to see if a given username exists
 	 * @param username is the username for which existance has to be checked
@@ -525,7 +525,13 @@ public class DataLayer {
                 stmt.execute(query);
                 con.close();
 	}
-
+        
+        /**Given a user, returns all his notifications
+	 * @param u is an object containing username and password of the user that needs to receive its notifications
+	 * @throws InvalidInputException if the given username/password in the input object u are not strings containing only letters
+	 * @throws SQLException  if a database access error occurs
+	 * @throws InvalidLoginException  if the object u doesn't represent a valid login
+	 */
 	public static void getNotification(User u) throws SQLException, InvalidLoginException, InvalidInputException {
 	    if(!validLogin(u.getUsername(), u.getPassword()))
 	        throw new InvalidLoginException("Invalid Username or Password");
@@ -557,10 +563,13 @@ public class DataLayer {
 	    rs.close();
 	    conn.close();
     }
-
+    /** Deletes notifications that are older than a day
+     * 
+     * @throws SQLException if a database access error occurs
+     */
     public static void deleteOldNotification() throws SQLException {
         final long A_DAY = 24 * 60 * 60 * 1000;
-	    Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+	Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
         Statement statement = conn.createStatement();
         long currentTime = new Date().getTime();
         String query = "DELETE FROM NOTIFICATION "
@@ -568,7 +577,11 @@ public class DataLayer {
         statement.execute(query);
         conn.close();
     }
-
+    /** Given a notification object, adds it to the database
+     * 
+     * @param notif is the notification object to add
+     * @throws SQLException if a database access error occurs
+     */
     public static void addNotificationToDB(Notification notif) throws SQLException {
 
 	    Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
@@ -582,7 +595,10 @@ public class DataLayer {
         statement.execute(query);
         conn.close();
     }
-
+    /** Checks all users' activities, and, when necessary, generates a notification
+     * to signal the user that he has to leave to reach the place.
+     * @throws SQLException if a database access error occurs
+    */
     public static void checkForNotification() throws SQLException {
 
         final long WINDOW_TO_CHECK = 5 * 30 * 1000;

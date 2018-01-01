@@ -13,7 +13,10 @@ public class Calendar {
 	private final ArrayList<Break> breaks;
 	
 	/**Written in minutes, SCATTO represents and must be equal to the minimum time
-	 * granularity of the activities*/
+	 * granularity of the activities
+         * This is only used in the canBeACalendar method, which has been
+         * substituted by the canBeACalendarOptimized method.
+         */
 	private static int SCATTO=15;
 	
 	/***********CONSTRUCTORS*****************/
@@ -28,7 +31,7 @@ public class Calendar {
 	
 	/******************************************/
 	/**
-	 * Adds a FixedActivity to the calendar
+	 * Checks if a FixedActivity can be added to the calendar
 	 * @param a is the activity to be added
 	 * @throws CannotBeAddedException is the activity can't be added
 	 */
@@ -39,7 +42,7 @@ public class Calendar {
 		throw new CannotBeAddedException("The activity cannot be added to the calendar");
 	}
 	/**
-	 * Adds a Break to the calendar
+	 * Checks if a Break can be added to the calendar
 	 * @param a is the break to be added
 	 * @throws CannotBeAddedException is the activity can't be added
 	 */
@@ -50,8 +53,11 @@ public class Calendar {
 		throw new CannotBeAddedException("The activity cannot be added to the calendar");
 	}
 
-	/**
+	/** Deletes an activity from this calendar object
 	 *
+         * @param a if the FixedActivity to be deleted from the calendar
+         * @throws NoSuchActivityException if the given activity doesn't belong
+         * to the calendar
 	 */
 	public void deleteActivity(FixedActivity a) throws NoSuchActivityException {
 		FixedActivity toDelete = null;
@@ -67,8 +73,11 @@ public class Calendar {
 			throw new NoSuchActivityException("The activity with id "+a.getKey()+" cannot be found.");
 	}
 
-	/**
+	/** Deletes an activity from this calendar object
 	 *
+         * @param a if the Break to be deleted from the calendar
+         * @throws NoSuchActivityException if the given activity doesn't belong
+         * to the calendar
 	 */
 	public void deleteActivity(Break a) throws NoSuchActivityException {
 		Break toDelete = null;
@@ -112,6 +121,7 @@ public class Calendar {
 	}
         
 	/**
+         * @deprecated 
 	 * Verifies if a calendar containing the given activities can exist
 	 * @param fa is the list of FixedActivities
 	 * @param b is the list of Breaks
@@ -121,11 +131,22 @@ public class Calendar {
 		return !tooLongDurations(fa,b) && !oneBreakCompletelyIncludedInOneFixed(fa,b) && recursiveCanBeACalendar(fa,b,b.size());
 	}
 	
-        
+        /**
+	 * Verifies if a calendar containing the given activities can exist
+	 * @param fa is the list of FixedActivities
+	 * @param b is the list of Breaks
+	 * @return true if the lists together can represent a calendar. false otherwise
+	 */
         public boolean canBeACalendarOptimized(ArrayList<FixedActivity> fa, ArrayList<Break> b){
             return isConsistent(fa) && breaksDontOverlap(b) && !tooLongDurations(fa,b) && breaksFit(fa,b);
         }
         
+        /**Supports canBeACalendarOptimized in verifying wether 
+         * a calendar containing the given activities can exist or not.
+         * @param fa is the list of FixedActivities
+	 * @param b is the list of Breaks
+	 * @return true if the lists together can represent a calendar. false otherwise
+         */
         private boolean breaksFit(ArrayList<FixedActivity> fa, ArrayList<Break> b){
             Date minStart;
             Date maxEnd;
@@ -175,10 +196,19 @@ public class Calendar {
             return true;
         }
         
+        /**Supports breaksFit. It creates TimeSlots used by the algorithm*/
         private void setFreeTimeSlots(ArrayList<TimeSlot> slots, Date s, Date e){
             slots.add(new TimeSlot(s,e));
         }
-       
+        
+        /**Supports canBeACalendarOptimized in verifying wether 
+         * a calendar containing the given activities can exist or not.
+         * @param fa is the list of FixedActivities
+	 * @param b is the list of Breaks
+         * @return true if the sum of the durations of all activities that 
+         * overlap with breaks is LESS THAN OR EQUAL to the total time window 
+         * available for the BREAKS themselves.
+         */
         private boolean tooLongDurations(ArrayList<FixedActivity> fa, ArrayList<Break> b){
             long acc=0;
             Date minStart;
@@ -212,6 +242,13 @@ public class Calendar {
                 
             return acc<0;
         }
+        
+        /**Checks if there are no breaks that are completely included in one 
+         * FixedActivity.
+         * @param fa is the list of FixedActivities
+	 * @param b is the list of Breaks
+         * @return true if no break is completely included into a fixed activity.
+         */
         private boolean oneBreakCompletelyIncludedInOneFixed(ArrayList<FixedActivity> fa, ArrayList<Break> b){
             for(Break br:b)
                 for(FixedActivity fact:fa)
@@ -292,14 +329,22 @@ public class Calendar {
 }
 
 class TimeSlot implements Comparable{
+    
+    /**This class supports the canBeACalendarOptimized algrithm. An instance of
+     * this class representa a time slot, containing the attributes shown below.
+     */
+    /** Starting date of the time slot*/
     private Date s;
+    /** Ending date of the time slot*/
     private Date e;
+    /** Duration computed automatically*/
     private int duration;
     protected TimeSlot(Date s, Date e){
         this.s=s;
         this.e=e;
         this.duration=(int)((e.getTime()-s.getTime())/(60*1000));
     }
+    
     @Override
     public int compareTo(Object o){
         if(this.duration<((TimeSlot)o).duration)
@@ -317,6 +362,12 @@ class TimeSlot implements Comparable{
     public Date getEnd(){
         return this.e;
     }
+    
+    /**Checks if this time slot can contain the break given as parameter.
+     * 
+     * @param b is the break that has to be allocated in the time slot.
+     * @return true if the given break can be allocated in this time slot.
+     */
     public boolean suitsToBreak(Break b){
         Date st;
         Date en;

@@ -211,7 +211,7 @@ public class FixedActivity extends Activity{
             return this.estimatedTravelTime;
         }
         
-        //TOFIX
+
         /**
          * Computes the notification that would be generated when this activity
          * is added to the calendar given as parameter.
@@ -235,7 +235,7 @@ public class FixedActivity extends Activity{
             ArrayList<Break> breaks=new ArrayList<>();
             boundSubCalendar(mod,fixApp, breaks);
             fixApp.add(thisMod);
-            if(!c.canBeACalendar(fixApp,breaks))
+            if(!c.canBeACalendarOptimized(fixApp,breaks))
                 return ResponseAddActivityNotification.OTHER;
             return ResponseAddActivityNotification.NO;
         }

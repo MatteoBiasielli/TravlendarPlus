@@ -14,14 +14,24 @@ import travlendarplus.response.responseaddactivity.ResponseAddActivityNotificati
 import travlendarplus.user.User;
 
 public abstract class Activity implements Comparable{
+    /**This abstract class represents a general activity*/
+        /**The starting date of the activity*/
 	protected Date startDate;
+        /**The ending date of the activity*/
 	protected Date endDate;
+        /**The label given to the activity by the user. It has to be a single word*/
 	protected String label;
+        /**The noted given to the activity by the user*/
 	protected String notes;
+        /**The address of the place where the activity is held*/
 	protected String locationAddress;
+        /**The address of the place from where the user 
+         * will leave to fo to the place where the activity is held*/
 	protected String startPlaceAddress;
 	protected ActivityStatus actStatus;
+        /**The promary key of the activity in the database. It's 0 if it's not set*/
 	protected int key;
+        /**Says if the attribute key has been already set.*/
 	protected boolean keySet;
 	
 	/* *CONSTRUCTORS**/
@@ -46,11 +56,19 @@ public abstract class Activity implements Comparable{
 	}
 	/* **************************************************** */
 	
-	/**Given a calndar, verifies if the activity can be added to the calendar or not
+	/**Given a calendar, verifies if the activity can be added to the calendar or not
 	 *@param c is the calendar
 	 *@return true if the activity doesn't make the calendar become inconsistent, false otherwise 
 	 */
 	public abstract boolean canBeAddedTo(Calendar c);
+        
+        /**When adding this activity to the calendar given as parameter, computes
+         * the notification of type ResponseAddActivityNotification that has to
+         * be sent to the user
+         * @param c is the calendar in which the activity has to be added
+         * @return an object ResponseAddActivityNotification that has to
+         * be sent to the user that is adding the activity
+         */
 	public abstract ResponseAddActivityNotification generateRequiredNotification(Calendar c);
 	/**@return a string human-readable version of the Object**/
         @Override

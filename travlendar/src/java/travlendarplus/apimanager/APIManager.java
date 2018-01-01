@@ -269,7 +269,7 @@ public class APIManager {
     
     /**
      * formats the URL for the request to the Yahoo!Weather service, basing on the parameters
-     * @param citiName is the city
+     * @param cityName is the city
      * @return an URL object representing the url
      */
     private static URL urlCreatorYahooWeather(String cityName) throws MalformedURLException{

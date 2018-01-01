@@ -9,7 +9,9 @@ import travlendarplus.user.User;
 
 public class Break extends Activity{
 	
-	/**minutes**/
+	/**Expressed in minutes, represents the duration of the Break, that has
+         to be shorter (or equal, at most) than the difference between the 
+         ending date and starting date**/
 	private long duration;
 	
 	/****************CONSTRUCTORS*****************/
@@ -121,10 +123,21 @@ public class Break extends Activity{
 		return this.startDate.after(a.endDate) || startDate.equals(a.endDate);
 	}
         
+        /**
+        * @param d is a java.util.Date object
+        * @return true if the Break strictly contains the give Date 
+        */ 
         public boolean contains(Date d){
             return d.compareTo(startDate)>0 && d.compareTo(endDate)<0;
         }
         
+        /**Returns true if this Break is completely contained in the time span
+         * represented by the dates given as parameter.
+         * @param s is the starting date
+         * @param e is the ending date
+         * @return true if this Break is completely contained in the time span
+         * represented by the dates given as parameter.
+         */
         public boolean isContainedIn(Date s, Date e){
             return s.compareTo(startDate)<=0 && e.compareTo(endDate)>=0;
         }

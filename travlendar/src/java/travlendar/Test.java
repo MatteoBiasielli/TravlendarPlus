@@ -44,9 +44,11 @@ public class Test {
        //System.out.println(new Date(1531974600000L));
        //DataLayer.checkForNotification();
        User u=new User("a", "a");
+       u.isValidLogin();
        u.getCalendarFromDB();
        Break b= new Break(new Date(1531987200000L + 6*60*60*1000), new Date(1531987200000L + 8*60*60*1000),"a","a","a","a",ActivityStatus.NOT_STARTED,30);
        u.getCalendar().addActivity(b);
+       System.out.println(u.getCalendar());
        /*ArrayList<Integer> test= new ArrayList<>();
        ArrayList<ArrayList<Integer>> test2= new ArrayList<>();
        test.add(1);

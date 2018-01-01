@@ -3,6 +3,10 @@ package biasiellicapodifatta.travlendar.layouts;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -101,7 +105,10 @@ public class IndicationsScreen extends AppCompatActivity {
             try{
                 response = NetworkLayer.travelRequest(username, password);
             }catch (IOException e){
-                //TODO
+                DialogFragment unexp = new UnexpectedError();
+                unexp.show(getFragmentManager(), "unexp-err");
+                Intent intent = new Intent(IndicationsScreen.this, MainTabContainer.class);
+                startActivity(intent);
             }
             return response;
         }
@@ -111,7 +118,10 @@ public class IndicationsScreen extends AppCompatActivity {
             mDownload = null;
 
             if(response == null){
-                //TODO
+                DialogFragment unexp = new UnexpectedError();
+                unexp.show(getFragmentManager(), "unexp-err");
+                Intent intent = new Intent(IndicationsScreen.this, MainTabContainer.class);
+                startActivity(intent);
             }
 
             switch(response.getType()){
@@ -121,29 +131,166 @@ public class IndicationsScreen extends AppCompatActivity {
                         indicationsText.append(r.toString());
                         indicationsText.append("\n\n-------------------------------------------------------------\n");
                     }
-                    //TODO
                     break;
                 case TRAVEL_NO_EXISTING_ROUTE:
-                    //TODO
+                    DialogFragment route = new NoRoute();
+                    route.show(getFragmentManager(), "no-route");
+                    Intent intent = new Intent(IndicationsScreen.this, MainTabContainer.class);
+                    startActivity(intent);
                     break;
                 case TRAVEL_WRONG_INPUT:
-                    //TODO
+                    DialogFragment wrong_input = new WrongInput();
+                    wrong_input.show(getFragmentManager(), "wrong-input");
+                    Intent intent2 = new Intent(IndicationsScreen.this, MainTabContainer.class);
+                    startActivity(intent2);
                     break;
                 case TRAVEL_NO_ACTIVITY:
-                    //TODO
+                    DialogFragment noAct = new NoActivity();
+                    noAct.show(getFragmentManager(), "no-activity");
+                    Intent intent6 = new Intent(IndicationsScreen.this, MainTabContainer.class);
+                    startActivity(intent6);
                     break;
                 case TRAVEL_LOGIN_ERROR:
-                    //TODO
+                    DialogFragment login_error = new LoginError();
+                    login_error.show(getFragmentManager(), "login-error");
+                    Intent intent3 = new Intent(IndicationsScreen.this, LoginActivity.class);
+                    startActivity(intent3);
                     break;
                 case TRAVEL_CONN_ERROR:
-                    //TODO
+                    DialogFragment conn_error = new ConnectionError();
+                    conn_error.show(getFragmentManager(), "conn-error");
+                    Intent intent4 = new Intent(IndicationsScreen.this, MainTabContainer.class);
+                    startActivity(intent4);
                     break;
                 default:
-                    //TODO
+                    DialogFragment unexp = new UnexpectedError();
+                    unexp.show(getFragmentManager(), "unexp-err");
+                    Intent intent5 = new Intent(IndicationsScreen.this, MainTabContainer.class);
+                    startActivity(intent5);
                     break;
             }
 
             showProgress(false);
+        }
+    }
+
+    /**
+     * Dialog making the user aware of an unexpected error occurred during the processing
+     */
+    public static class UnexpectedError extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Unexpected error").
+                    setMessage("An unexpected error occurred. You'll be directed to the last valid screen.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to calendar
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    /**
+     * Dialog used to make the user aware of a connection problem during the processing
+     */
+    public static class ConnectionError extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Connection error").
+                    setMessage("Seems like our servers are lazy ;) Please try again in a while.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to form
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    /**
+     * Dialog used to make the user aware of some problems in the credentials used for the request
+     */
+    public static class LoginError extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Login error").
+                    setMessage("Who are you?!? A problem with your credentials occured, you'll be disconneted.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to login screen
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    /**
+     * Dialog used to make the user aware of some problems in the data provided by the client
+     */
+    public static class WrongInput extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Wrong input").
+                    setMessage("A problem with data you provided occurred, please check all the fields")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to form
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    /**
+     * Dialog used to make the user aware of some problems in his calendar
+     */
+    public static class NoRoute extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("No Route").
+                    setMessage("No paths have been found for your most impending activity due to your preferences")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to form
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    /**
+     * Dialog used to make the user aware of some problems in his calendar
+     */
+    public static class NoActivity extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("No Activity").
+                    setMessage("No such activity in your calendar to show a path. First add a new activity.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //back to form
+                        }
+                    });
+
+            return builder.create();
         }
     }
 }

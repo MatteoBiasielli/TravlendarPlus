@@ -54,7 +54,8 @@
         <activity android:name=".layouts.RegisterActivity" />
         <activity android:name=".layouts.NewActActivity" />
         <activity android:name=".layouts.SettingsMenu" />
-        <activity android:name=".layouts.IndicationsScreen"></activity>
+        <activity android:name=".layouts.IndicationsScreen" />
+        <activity android:name=".layouts.UpdateActivity"></activity>
     </application>
 
 </manifest>

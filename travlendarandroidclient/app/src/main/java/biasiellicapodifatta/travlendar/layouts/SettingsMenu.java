@@ -34,7 +34,7 @@ public class SettingsMenu extends AppCompatActivity {
     private DeleteTagTask deleteTagTask = null;
 
     protected static ArrayList<String> allTags = new ArrayList<>();
-    protected static ArrayList<Integer> selectedTags = new ArrayList<>();
+    protected static String toDelete;
     protected static Boolean deletion = false;
 
     private TextView usernameFieldView;
@@ -43,7 +43,10 @@ public class SettingsMenu extends AppCompatActivity {
     private View progressView;
     private View settingsView;
 
-
+    /**
+     * Initialize UI components and its listeners by retrieving their id-s
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +72,6 @@ public class SettingsMenu extends AppCompatActivity {
                 if(deletion){
                     attemptDeletion();
                     deletion = false;
-                    selectedTags = null;
                 }
 
             }
@@ -88,13 +90,10 @@ public class SettingsMenu extends AppCompatActivity {
         settingsView = findViewById(R.id.settingsView);
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), MainTabContainer.class);
-        startActivityForResult(myIntent, 0);
-        return true;
-
-    }
-
+    /**
+     * Retrieves data from each field and attempts to add the new tag
+     * connecting to the server
+     */
     private void attemptAddition(){
         String tag = tagField.getText().toString();
         String address = addressField.getText().toString();
@@ -120,13 +119,19 @@ public class SettingsMenu extends AppCompatActivity {
 
     }
 
+    /**
+     * Attempts to delete the selected tag connecting to the server
+     */
     private void attemptDeletion(){
-        for(Integer n : selectedTags) {
-            deleteTagTask = new DeleteTagTask(Data.getUser().getUsername(), Data.getUser().getPassword(), n);
+            deleteTagTask = new DeleteTagTask(Data.getUser().getUsername(), Data.getUser().getPassword(), toDelete);
             deleteTagTask.execute((Void) null);
-        }
     }
 
+    /**
+     * Check if the tag is one word with just uppercase an lowercase letters
+     * @param tag
+     * @return
+     */
     private boolean isTagValid(String tag){
         return tag.matches("([a-z]|[A-Z])+");
     }
@@ -167,6 +172,9 @@ public class SettingsMenu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Task appointed to connect to the server and add the new tag
+     */
     public class AddTagTask extends AsyncTask<Void, Void, ResponseAddTag>{
 
         private final String username;
@@ -201,10 +209,14 @@ public class SettingsMenu extends AppCompatActivity {
             if(response == null){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexpected-error");
+                return;
             }
 
             switch(response.getType()){
                 case OK:
+                    //update local tags
+                    Data.getUser().setFavPositions(response.getPositions());
+
                     DialogFragment success = new AddedTag();
                     success.show(getFragmentManager(), "add-success");
                     //TODO: aggiornare allTags
@@ -242,24 +254,27 @@ public class SettingsMenu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Task appointed to connect to the server and delete the selected tag
+     */
     public class DeleteTagTask extends AsyncTask<Void, Void, ResponseDeleteTag>{
 
         private final String username;
         private final String password;
-        private final Integer tag;
+        private final String tag;
         private ResponseDeleteTag response;
 
-        DeleteTagTask(String username, String password, Integer index){
+        DeleteTagTask(String username, String password, String tag){
             this.username = username;
             this.password = password;
-            this.tag = index;
+            this.tag = tag;
         }
 
         @Override
         protected ResponseDeleteTag doInBackground(Void... voids) {
 
             try {
-                response = NetworkLayer.deleteTagRequest(username, password, SettingsMenu.allTags.get(tag));
+                response = NetworkLayer.deleteTagRequest(username, password, tag);
             }catch (IOException e){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexpected-error");
@@ -279,10 +294,13 @@ public class SettingsMenu extends AppCompatActivity {
 
             switch(response.getType()){
                 case OK:
+                    //update local tags
+                    Data.getUser().setFavPositions(response.getPositions());
+
                     DialogFragment delete_success = new DeletedTag();
                     delete_success.show(getFragmentManager(), "deletion-success");
-                    //TODO: aggiornare allTags
                     SettingsMenu.allTags.remove(tag);
+                    toDelete = null;
                     break;
                 case DELETE_TAG_LOGIN_ERROR:
                     DialogFragment login = new LoginError();
@@ -312,12 +330,14 @@ public class SettingsMenu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog showing user's tags and handling his choice
+     */
     public static class TagList extends DialogFragment{
-        private ArrayList<Integer> selectedTags;
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            selectedTags = new ArrayList<>();
+
             final String[] allTags = new String[SettingsMenu.allTags.size()];
 
             for (int i=0; i < SettingsMenu.allTags.size(); i++) {
@@ -327,23 +347,16 @@ public class SettingsMenu extends AppCompatActivity {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Your tags")
-                    .setMultiChoiceItems(allTags, null, new DialogInterface.OnMultiChoiceClickListener() {
+                    .setSingleChoiceItems(allTags,0,  new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-                            //TODO: problema nel visualizzare la lista
-                            if (isChecked) {
-                                selectedTags.add(which);
-                            } else if (selectedTags.contains(which)) {
-                                selectedTags.remove(which);
-                            }
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            toDelete = allTags[which];
                         }
                     })
-                    .setPositiveButton("Delete tag[s]", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Delete tag", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             SettingsMenu.deletion = true;
-                            SettingsMenu.selectedTags.addAll(selectedTags);
-                            selectedTags = null;
                         }
                     })
                     .setNeutralButton("Hide", new DialogInterface.OnClickListener() {
@@ -356,6 +369,9 @@ public class SettingsMenu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog making the user aware of an unexpected error occurred during the processing
+     */
     public static class UnexpectedError extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -372,6 +388,9 @@ public class SettingsMenu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog used to make the user aware that the new tag has been added successfully
+     */
     public static class AddedTag extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -388,6 +407,9 @@ public class SettingsMenu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog used to make the user aware that the selected tag has been deleted successfully
+     */
     public static class DeletedTag extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -404,6 +426,9 @@ public class SettingsMenu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog used to make the user aware of some problems in the credentials used for the request
+     */
     public static class LoginError extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -420,6 +445,9 @@ public class SettingsMenu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog used to make the user aware of some problems during the addition of the new tag
+     */
     public static class ExistingTag extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -436,6 +464,9 @@ public class SettingsMenu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog used to make the user aware of some problems in the data provided
+     */
     public static class WrongInput extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -453,6 +484,9 @@ public class SettingsMenu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog used to make the user aware of a connection problem during the processing
+     */
     public static class ConnectionError extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){

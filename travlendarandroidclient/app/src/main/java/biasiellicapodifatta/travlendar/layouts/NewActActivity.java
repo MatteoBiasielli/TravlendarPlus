@@ -9,7 +9,6 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +24,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -39,7 +37,7 @@ import static java.lang.Integer.parseInt;
 
 public class NewActActivity extends AppCompatActivity {
 
-    private AddFixedActivity mAddTask = null;
+    private AddActivityTask mAddTask = null;
 
     private int mStartHour;
     private int mStartMin;
@@ -52,8 +50,8 @@ public class NewActActivity extends AppCompatActivity {
     //UI references
     private EditText mActivityNameView;
     private EditText mStartPositionView;
-    private EditText mStartTag;
-    private EditText mEndTag;
+    private static EditText mStartTag;
+    private static EditText mEndTag;
     private EditText mEndPositionView;
     private EditText mNotesView;
     private EditText mDuration;
@@ -180,8 +178,6 @@ public class NewActActivity extends AppCompatActivity {
             public void onClick(View view) {
                 StartTagList tags = new StartTagList();
                 tags.show(getFragmentManager(), "start-tag");
-                if(!"".equals(selectedStartTag))
-                    mStartTag.setText(selectedStartTag);
             }
         });
 
@@ -191,8 +187,6 @@ public class NewActActivity extends AppCompatActivity {
             public void onClick(View view) {
                 EndTagList tags = new EndTagList();
                 tags.show(getFragmentManager(), "end-tag");
-                if(!"".equals(selectedEndTag))
-                    mEndTag.setText(selectedEndTag);
             }
         });
 
@@ -217,6 +211,8 @@ public class NewActActivity extends AppCompatActivity {
         });
 
         mFlexibleSwitch = (Switch) findViewById(R.id.flex_switch);
+
+        mNotesView = findViewById(R.id.notes_form);
 
         mProgressView = findViewById(R.id.progressBar);
         mNewActFormView = findViewById(R.id.new_act_view);
@@ -266,7 +262,7 @@ public class NewActActivity extends AppCompatActivity {
                         }
 
         Calendar start_calendar = Calendar.getInstance();
-        start_calendar.set(mDatePickerStart.getYear(), mDatePickerStart.getMonth(), mDatePickerStart.getDayOfMonth(), start_hour,     start_min, 0);
+        start_calendar.set(mDatePickerStart.getYear(), mDatePickerStart.getMonth(), mDatePickerStart.getDayOfMonth(), start_hour, start_min, 0);
 
         int end_hour =  mEndHour;
         int end_min =  0;
@@ -301,6 +297,13 @@ public class NewActActivity extends AppCompatActivity {
             cancel = true;
         }
 
+        if(!isDateConsistent(start_calendar.getTimeInMillis(), end_calendar.getTimeInMillis())){
+            mActivityNameView.setError("This activity start date is after its end date.");
+            focusView = mActivityNameView;
+            cancel = true;
+        }
+
+
         if(!isNameValid(act_name)){
             mActivityNameView.setError("This is not a valid name for the activity.");
             focusView = mActivityNameView;
@@ -319,7 +322,7 @@ public class NewActActivity extends AppCompatActivity {
         }else{
             //show a progress bar,
             showProgress(true);
-            mAddTask = new AddFixedActivity(Data.getUser().getUsername(), Data.getUser().getPassword(),
+            mAddTask = new AddActivityTask(Data.getUser().getUsername(), Data.getUser().getPassword(),
                     act_name, notes, start, dest, start_calendar.getTime(), end_calendar.getTime(), mFlexibleSwitch.isChecked(), duration, startTag, endTag);
             // ip address set by the login screen
             mAddTask.execute((Void)null);
@@ -335,6 +338,16 @@ public class NewActActivity extends AppCompatActivity {
     private boolean isDateValid(Long date){
         Date tmp = new Date(date);
         return tmp.after(new Date());
+    }
+
+    /**
+     * Support method to check if the {@param end} is in the past w.r.t. the {@param start}, or viceversa.
+     * @return : true if the date is not in the past
+     */
+    private boolean isDateConsistent(Long start, Long end){
+        Date date1 = new Date(start);
+        Date date2 = new Date(end);
+        return date2.after(date1);
     }
 
     /**
@@ -394,7 +407,7 @@ public class NewActActivity extends AppCompatActivity {
     /**
      * Task/thread launched to handle the background and post execution of the request.
      */
-    public class AddFixedActivity extends AsyncTask<Void, Void, ResponseAddActivity>{
+    public class AddActivityTask extends AsyncTask<Void, Void, ResponseAddActivity>{
 
         private final String locUsername;
         private final String locPassword;
@@ -410,8 +423,8 @@ public class NewActActivity extends AppCompatActivity {
         private final String locEndTag;
         private ResponseAddActivity response;
 
-        AddFixedActivity(String username, String password, String name, String notes, String startpos,
-                         String endpos, Date startdate, Date enddate, Boolean flexible, String duration, String startTag, String endTag){
+        AddActivityTask(String username, String password, String name, String notes, String startpos,
+                        String endpos, Date startdate, Date enddate, Boolean flexible, String duration, String startTag, String endTag){
             locUsername = username;
             locPassword = password;
             locName = name;
@@ -457,12 +470,18 @@ public class NewActActivity extends AppCompatActivity {
 
             switch (response.getType()){
                 case OK:
+                    //updated local calendar
+                    Data.getUser().setCalendar(response.getUser().getCalendar());
+
                     DialogFragment pop_up = new ActivityAdded();
                     pop_up.show(getFragmentManager(), "added");
                     Intent intent = new Intent(NewActActivity.this, MainTabContainer.class);
                     startActivity(intent);
                     break;
                 case OK_ESTIMATED_TIME:
+                    //updated local calendar
+                    Data.getUser().setCalendar(response.getUser().getCalendar());
+
                     DialogFragment pop_up_warning = new AddedWithCondition();
                     pop_up_warning.show(getFragmentManager(), "warning");
                     Intent intent2 = new Intent(NewActActivity.this, MainTabContainer.class);
@@ -506,6 +525,9 @@ public class NewActActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog used to make the user aware that the selected activity has been added
+     */
     public static class ActivityAdded extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -523,6 +545,10 @@ public class NewActActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog used to make the user aware that the selected activity has been added but with
+     * some limitation he should take into account
+     */
     public static class AddedWithCondition extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -543,6 +569,9 @@ public class NewActActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog used to make the user aware of some problems in the credentials used for the request
+     */
     public static class LoginError extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -560,6 +589,9 @@ public class NewActActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog used to make the user aware of some problems in the data provided
+     */
     public static class WrongInput extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -577,6 +609,9 @@ public class NewActActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog used to make the user aware of a connection problem during the processing
+     */
     public static class ConnectionError extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -594,6 +629,9 @@ public class NewActActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog making the user aware of problems in the dates
+     */
     public static class Overlap extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -611,6 +649,9 @@ public class NewActActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog making the user aware of problems in the dates
+     */
     public static class Past extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -628,6 +669,9 @@ public class NewActActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog making the user aware of an unexpected error occurred during the processing
+     */
     public static class UnexpectedError extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -645,27 +689,26 @@ public class NewActActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog showing user's tags and handling his choice
+     */
     public static class StartTagList extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Select a tag")
-                    .setSingleChoiceItems(NewActActivity.userTags, 0, new DialogInterface.OnClickListener() {
+                    .setItems(NewActActivity.userTags, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             NewActActivity.selectedStartTag = NewActActivity.userTags[i];
+                            mStartTag.setText(NewActActivity.selectedStartTag);
                         }
                     })
-                    .setPositiveButton("Choose", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            //hide list
-                        }
-                    })
-                    .setNeutralButton("Hide", new DialogInterface.OnClickListener() {
+                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             selectedStartTag = "";
+                            mStartTag.setText("");
                             //reset and hide list
                         }
                     });
@@ -673,27 +716,26 @@ public class NewActActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Dialog showing user's tags and handling his choice
+     */
     public static class EndTagList extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Select a tag")
-                    .setSingleChoiceItems(NewActActivity.userTags, 0, new DialogInterface.OnClickListener() {
+                    .setItems(NewActActivity.userTags, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             NewActActivity.selectedEndTag = NewActActivity.userTags[i];
+                            mEndTag.setText(NewActActivity.selectedEndTag);
                         }
                     })
-                    .setPositiveButton("Choose", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            //hide list
-                        }
-                    })
-                    .setNeutralButton("Hide", new DialogInterface.OnClickListener() {
+                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             selectedEndTag = "";
+                            mEndTag.setText(R.string.select_tag);
                             //reset and hide list
                         }
                     });

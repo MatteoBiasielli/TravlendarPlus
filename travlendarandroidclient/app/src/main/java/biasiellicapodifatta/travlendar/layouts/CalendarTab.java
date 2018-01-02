@@ -19,6 +19,8 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.logging.SimpleFormatter;
 
 import biasiellicapodifatta.travlendar.R;
@@ -58,8 +60,10 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
         mActivityList = (ListView) calendarView.findViewById(R.id.activities_list);
 
         SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
-        String time = fm.format(System.currentTimeMillis());
-        String[] fields = time.split("-", 3);
+        final String date = fm.format(System.currentTimeMillis());
+        String[] fields = date.split("-", 3);
+
+        mDateView.setText(fields[2] + " " + getMonthFor(Integer.parseInt(fields[1])-1) + " " + fields[0]);
 
         final DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this.getContext(), this, Integer.parseInt(fields[0]), Integer.parseInt(fields[1])-1, Integer.parseInt(fields[2]));
@@ -75,6 +79,7 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), NewActActivity.class);
+                intent.putExtra("currDate", date);
                 startActivity(intent);
             }
         });
@@ -86,13 +91,15 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         Calendar calendar = myUser.getCalendar();
-        ArrayList<FixedActivity> myFixed = calendar.getFixedActivities();
-        ArrayList<Break> myBreaks = calendar.getBreaks();
-        ArrayList<Activity> myActivities = new ArrayList<>();
-        myActivities.addAll(myFixed);
-        myActivities.addAll(myBreaks);
-        myActivities.sort(null);
-        int j;
+        if(calendar != null) {
+            ArrayList<FixedActivity> myFixed = calendar.getFixedActivities();
+            ArrayList<Break> myBreaks = calendar.getBreaks();
+            ArrayList<Activity> myActivities = new ArrayList<>();
+            myActivities.addAll(myFixed);
+            myActivities.addAll(myBreaks);
+            Collections.sort(myActivities);
+
+            int j;
 /*
         ActListAdapter adapter = new ActListAdapter(getContext(), R.layout.actlist_layout, myActivities);
         mActivityList.setAdapter(adapter);
@@ -101,7 +108,9 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
             adapter.getView(j, null, null);
         }
         */
+        }
 
+        mDateView.setText(i2 + " " + getMonthFor(i1) + " " + i);
     }
 
     private void addToListView(Activity act){
@@ -110,5 +119,52 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
 
     private void clearListView(){
 
+    }
+
+    private String getMonthFor(int m){
+        String month;
+
+        switch(m){
+            case 0:
+                month = "January";
+                break;
+            case 1:
+                month = "February";
+                break;
+            case 2:
+                month = "March";
+                break;
+            case 3:
+                month = "April";
+                break;
+            case 4:
+                month = "May";
+                break;
+            case 5:
+                month = "June";
+                break;
+            case 6:
+                month = "July";
+                break;
+            case 7:
+                month = "August";
+                break;
+            case 8:
+                month = "September";
+                break;
+            case 9:
+                month = "October";
+                break;
+            case 10:
+                month = "November";
+                break;
+            case 11:
+                month = "December";
+                break;
+            default:
+                month = "January";
+        }
+
+        return month;
     }
 }

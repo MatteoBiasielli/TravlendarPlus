@@ -126,20 +126,17 @@
     <string name="flexible">Is it flexible?</string>
     <string name="duration">Duration, if flexible</string>
     <string name="user_profile">profile</string>
-    <string name="tags">Check your tags:</string>
+    <string name="tags">Check/delete your tags:</string>
     <string name="add_tag">or add a new tag:</string>
     <string name="tag_hint">Tag</string>
     <string name="add_tag_button">add tag</string>
-    <string name="check_tags">check or delete</string>
+    <string name="check_tags">check</string>
     <string name="faq">FAQ:</string>
     <string name="faq1">What does Travlendar+ do?</string>
     <string name="et_def_value">"0"</string>
     <string name="indications">Next activity indications</string>
     <string name="select_time">Select time...</string>
     <string name="select_tag">Select tag...</string>
-<<<<<<< HEAD
-=======
     <string name="update">update</string>
     <string name="delete">delete</string>
->>>>>>> be73852338d717037960b7dd975c8e7da8f990a3
 </resources>

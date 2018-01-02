@@ -126,11 +126,11 @@
     <string name="flexible">Is it flexible?</string>
     <string name="duration">Duration, if flexible</string>
     <string name="user_profile">profile</string>
-    <string name="tags">Check your tags:</string>
+    <string name="tags">Check/delete your tags:</string>
     <string name="add_tag">or add a new tag:</string>
     <string name="tag_hint">Tag</string>
     <string name="add_tag_button">add tag</string>
-    <string name="check_tags">check or delete</string>
+    <string name="check_tags">check</string>
     <string name="faq">FAQ:</string>
     <string name="faq1">What does Travlendar+ do?</string>
     <string name="et_def_value">"0"</string>

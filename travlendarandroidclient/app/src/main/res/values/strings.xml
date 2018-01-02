@@ -137,9 +137,6 @@
     <string name="indications">Next activity indications</string>
     <string name="select_time">Select time...</string>
     <string name="select_tag">Select tag...</string>
-<<<<<<< HEAD
-=======
     <string name="update">update</string>
     <string name="delete">delete</string>
->>>>>>> be73852338d717037960b7dd975c8e7da8f990a3
 </resources>

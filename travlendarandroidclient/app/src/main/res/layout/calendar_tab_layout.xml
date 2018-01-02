@@ -19,16 +19,30 @@
             android:layout_alignParentTop="true"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <CalendarView
-            android:id="@+id/calendarView"
+        <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/space"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="19dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="60dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/space" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/date_picker_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@android:drawable/ic_menu_today"
+                tools:layout_editor_absoluteX="85dp"
+                tools:layout_editor_absoluteY="62dp" />
+
+            <TextView
+                android:id="@+id/date_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=" 10 Dicembre 2017"
+                android:textAlignment="center"
+                android:textSize="30sp" />
+        </TableRow>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/new_act_button"
@@ -44,6 +58,16 @@
             app:backgroundTint="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <ListView
+            android:id="@+id/activities_list"
+            android:layout_width="355dp"
+            android:layout_height="359dp"
+            android:layout_marginBottom="28dp"
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 
 </RelativeLayout>

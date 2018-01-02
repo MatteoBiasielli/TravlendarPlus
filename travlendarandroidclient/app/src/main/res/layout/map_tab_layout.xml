@@ -20,7 +20,7 @@
         tools:context="biasiellicapodifatta.travlendar.lucadondoni.layouts.MapTab" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/compute_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

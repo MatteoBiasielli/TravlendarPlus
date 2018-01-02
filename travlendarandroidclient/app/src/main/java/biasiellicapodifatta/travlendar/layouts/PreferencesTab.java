@@ -595,8 +595,8 @@ public class PreferencesTab extends Fragment {
 
                 for(RangedPreference rp : rangs){
                     if(rp.getValue() != 0) {
-                        vals.add(rp.getType().getValue());
-                        ids.add(Integer.toString(rp.getValue()));
+                        vals.add(rp.getValue());
+                        ids.add(Integer.toString(rp.getType().getValue()));
                     }
                 }
 

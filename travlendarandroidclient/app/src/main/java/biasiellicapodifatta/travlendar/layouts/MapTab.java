@@ -1,11 +1,13 @@
 package biasiellicapodifatta.travlendar.layouts;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,6 +26,8 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
     private static final int MIN_ZOOM_LEVEL = 10;
     private GoogleMap map;
 
+    private ImageButton mComputeButton;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +35,19 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.map_tab_layout, container, false);
+        View mapView = inflater.inflate(R.layout.map_tab_layout, container, false);
+
+        mComputeButton = mapView.findViewById(R.id.compute_button);
+
+        mComputeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), IndicationsScreen.class);
+                startActivity(intent);
+            }
+        });
+
+        return mapView;
     }
 
     @Override

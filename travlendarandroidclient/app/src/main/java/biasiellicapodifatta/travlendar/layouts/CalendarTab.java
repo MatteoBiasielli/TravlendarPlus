@@ -97,17 +97,17 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
             ArrayList<Activity> myActivities = new ArrayList<>();
             myActivities.addAll(myFixed);
             myActivities.addAll(myBreaks);
-            Collections.sort(myActivities);
-
             int j;
-/*
-        ActListAdapter adapter = new ActListAdapter(getContext(), R.layout.actlist_layout, myActivities);
-        mActivityList.setAdapter(adapter);
+            //TODO ADD COMMENT IF NOT WORKING
+            ArrayList<Activity> selectedActivities = Activity.getForDate(myActivities, i, i1, i2);
 
-        for(j = 0; j < myActivities.size(); j++){
-            adapter.getView(j, null, null);
-        }
-        */
+            ActListAdapter adapter = new ActListAdapter(getContext(), R.layout.actlist_layout, selectedActivities);
+            mActivityList.setAdapter(adapter);
+
+            for(j = 0; j < myActivities.size(); j++){
+                adapter.getView(j, null, null);
+            }
+            //TODO END ADD COMMENT IF NOT WORKING
         }
 
         mDateView.setText(i2 + " " + getMonthFor(i1) + " " + i);

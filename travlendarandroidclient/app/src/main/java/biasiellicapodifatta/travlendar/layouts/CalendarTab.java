@@ -7,12 +7,16 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.lang.reflect.Array;
@@ -39,10 +43,13 @@ import biasiellicapodifatta.travlendar.data.user.User;
 public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetListener{
     User myUser = Data.getUser();
 
+    //UI references
     ImageButton mDateButton;
+    TableRow mDateRow;
     TextView mDateView;
-    FloatingActionButton mAddButton;
+    TextView mDescription;
     ListView mActivityList;
+    FloatingActionButton mAddButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -54,8 +61,10 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View calendarView = inflater.inflate(R.layout.calendar_tab_layout, container, false);
 
+        mDateRow = (TableRow) calendarView.findViewById(R.id.date_row);
         mDateButton = (ImageButton) calendarView.findViewById(R.id.date_picker_button);
         mDateView = (TextView) calendarView.findViewById(R.id.date_textView);
+        mDescription = (TextView) calendarView.findViewById(R.id.description);
         mAddButton = (FloatingActionButton) calendarView.findViewById(R.id.new_act_button);
         mActivityList = (ListView) calendarView.findViewById(R.id.activities_list);
 
@@ -64,9 +73,11 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
         String[] fields = date.split("-", 3);
 
         mDateView.setText(fields[2] + " " + getMonthFor(Integer.parseInt(fields[1])-1) + " " + fields[0]);
+        mDateRow.setGravity(Gravity.CENTER | Gravity.BOTTOM);
 
         final DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this.getContext(), this, Integer.parseInt(fields[0]), Integer.parseInt(fields[1])-1, Integer.parseInt(fields[2]));
+        datePickerDialog.
 
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +95,24 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
             }
         });
 
+        ArrayList<Activity> selectedActivities = new ArrayList<>();
+
+        if(myUser.getCalendar() != null){
+            Calendar calendar = myUser.getCalendar();
+            ArrayList<FixedActivity> myFixed = calendar.getFixedActivities();
+            ArrayList<Break> myBreaks = calendar.getBreaks();
+            ArrayList<Activity> myActivities = new ArrayList<>();
+            myActivities.addAll(myFixed);
+            myActivities.addAll(myBreaks);
+            selectedActivities = Activity.getForDate(myActivities, Integer.parseInt(fields[0]), Integer.parseInt(fields[1]), Integer.parseInt(fields[2]));
+            if(!selectedActivities.isEmpty()){
+                mDescription.setText("Choose an activity to see more details.");
+            }
+        }
+        if(selectedActivities.isEmpty()){
+            mDescription.setText("No activity for today. How lazy! :P");
+        }
+
         return calendarView;
     }
 
@@ -91,6 +120,8 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         Calendar calendar = myUser.getCalendar();
+        ArrayList<Activity> selectedActivities = new ArrayList<>();
+
         if(calendar != null) {
             ArrayList<FixedActivity> myFixed = calendar.getFixedActivities();
             ArrayList<Break> myBreaks = calendar.getBreaks();
@@ -98,26 +129,33 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
             myActivities.addAll(myFixed);
             myActivities.addAll(myBreaks);
             int j;
-            //TODO ADD COMMENT IF NOT WORKING
-            ArrayList<Activity> selectedActivities = Activity.getForDate(myActivities, i, i1, i2);
+            selectedActivities = Activity.getForDate(myActivities, i, i1, i2);
 
+            if(!selectedActivities.isEmpty()) {
+                ActListAdapter adapter = new ActListAdapter(getContext(), R.layout.actlist_layout, selectedActivities);
+                mActivityList.setAdapter(adapter);
+                mActivityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        //TODO Show activities info
+                    }
+                });
+                mDescription.setText("Choose an activity to see more details.");
+            }
+        }
+
+        if(selectedActivities.isEmpty()){
             ActListAdapter adapter = new ActListAdapter(getContext(), R.layout.actlist_layout, selectedActivities);
             mActivityList.setAdapter(adapter);
 
-            for(j = 0; j < myActivities.size(); j++){
-                adapter.getView(j, null, null);
-            }
-            //TODO END ADD COMMENT IF NOT WORKING
+            mDescription.setText("No activity for today. How lazy! :P");
         }
 
         mDateView.setText(i2 + " " + getMonthFor(i1) + " " + i);
+        mDateRow.setGravity(Gravity.CENTER | Gravity.BOTTOM);
     }
 
-    private void addToListView(Activity act){
-
-    }
-
-    private void clearListView(){
+    private void setDescription(String description){
 
     }
 

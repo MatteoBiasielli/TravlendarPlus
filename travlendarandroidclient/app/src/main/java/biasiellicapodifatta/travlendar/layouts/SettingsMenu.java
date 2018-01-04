@@ -15,8 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -40,6 +42,7 @@ public class SettingsMenu extends AppCompatActivity {
     private TextView usernameFieldView;
     private EditText addressField;
     private EditText tagField;
+    private static EditText selectTagField;
     private View progressView;
     private View settingsView;
 
@@ -69,11 +72,27 @@ public class SettingsMenu extends AppCompatActivity {
             public void onClick(View view) {
                 DialogFragment list = new TagList();
                 list.show(getFragmentManager(), "tag-list");
+            }
+        });
+
+        selectTagField = findViewById(R.id.selectedTag);
+        selectTagField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment list = new DeletionList();
+                list.show(getFragmentManager(), "deletion-list");
+            }
+        });
+
+        Button deleteButton = findViewById(R.id.deleteButton);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 if(deletion){
                     attemptDeletion();
                     deletion = false;
+                    selectTagField.setText("");
                 }
-
             }
         });
 
@@ -123,8 +142,9 @@ public class SettingsMenu extends AppCompatActivity {
      * Attempts to delete the selected tag connecting to the server
      */
     private void attemptDeletion(){
-            deleteTagTask = new DeleteTagTask(Data.getUser().getUsername(), Data.getUser().getPassword(), toDelete);
-            deleteTagTask.execute((Void) null);
+        showProgress(true);
+        deleteTagTask = new DeleteTagTask(Data.getUser().getUsername(), Data.getUser().getPassword(), toDelete);
+        deleteTagTask.execute((Void) null);
     }
 
     /**
@@ -331,9 +351,36 @@ public class SettingsMenu extends AppCompatActivity {
     }
 
     /**
-     * Dialog showing user's tags and handling his choice
+     * Dialog showing user's tags
      */
     public static class TagList extends DialogFragment{
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            final String[] allTags = new String[SettingsMenu.allTags.size()];
+
+            for (int i=0; i < SettingsMenu.allTags.size(); i++) {
+                allTags[i] = SettingsMenu.allTags.get(i);
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Your tags")
+                    .setItems(allTags, null)
+                    .setNeutralButton("Hide", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //dismiss this dialog
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    /**
+     * Dialog showing user's tags and handling his choice
+     */
+    public static class DeletionList extends DialogFragment{
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -347,16 +394,12 @@ public class SettingsMenu extends AppCompatActivity {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Your tags")
-                    .setSingleChoiceItems(allTags,0,  new DialogInterface.OnClickListener() {
+                    .setItems(allTags, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
                             toDelete = allTags[which];
-                        }
-                    })
-                    .setPositiveButton("Delete tag", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
                             SettingsMenu.deletion = true;
+                            selectTagField.setText(toDelete);
                         }
                     })
                     .setNeutralButton("Hide", new DialogInterface.OnClickListener() {

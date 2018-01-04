@@ -56,8 +56,8 @@ public class NewActActivity extends AppCompatActivity {
     private EditText mNotesView;
     private EditText mDuration;
 
-    private EditText mTimeStart;
-    private EditText mTimeEnd;
+    private TextView mTimeStart;
+    private TextView mTimeEnd;
 
     private View mNewActFormView;
     private View mProgressView;
@@ -143,7 +143,10 @@ public class NewActActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinutes) {
                         mStartHour = selectedHour;
                         mStartMin = selectedMinutes;
-                        mTimeStart.setText(selectedHour + ":" + selectedMinutes);
+                        if(selectedMinutes==0)
+                            mTimeStart.setText("Start time: "+selectedHour + ":" + "00");
+                        else
+                            mTimeStart.setText("Start time: "+selectedHour + ":" + selectedMinutes);
                     }
                 }, hour, minute, true);
                 mTimePicker.setTitle("Select time");
@@ -164,7 +167,10 @@ public class NewActActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinutes) {
                         mEndHour = selectedHour;
                         mEndMin = selectedMinutes;
-                        mTimeEnd.setText(selectedHour + ":" + selectedMinutes);
+                        if(selectedMinutes==0)
+                            mTimeEnd.setText("Start time: "+selectedHour + ":" + "00");
+                        else
+                            mTimeEnd.setText("Start time: "+selectedHour + ":" + selectedMinutes);
                     }
                 }, hour, minute, true);
                 mTimePicker.setTitle("Select time");
@@ -190,8 +196,13 @@ public class NewActActivity extends AppCompatActivity {
             }
         });
 
+        Intent intent = getIntent();
+        String[] date = intent.getStringExtra("currDate").split("-");
         mDatePickerStart = findViewById(R.id.datePicker_start);
+        mDatePickerStart.init(/*YEAR*/Integer.parseInt(date[0]), /*MONTH*/Integer.parseInt(date[1])-1, /*DAY*/Integer.parseInt(date[2]), null);
+
         mDatePickerEnd = findViewById(R.id.datePicker_end);
+        mDatePickerEnd.init(/*YEAR*/Integer.parseInt(date[0]), /*MONTH*/Integer.parseInt(date[1])-1, /*DAY*/Integer.parseInt(date[1]), null);
 
         Button addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {

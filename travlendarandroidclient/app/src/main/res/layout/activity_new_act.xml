@@ -10,8 +10,12 @@
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:layout_height="68dp"
+        android:layout_marginTop="30dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:id="@+id/new_act_view"
@@ -102,13 +106,13 @@
                 android:layout_height="wrap_content"
                 android:headerBackground="@color/colorPrimary" />
 
-            <EditText
+            <TextView
                 android:id="@+id/selectTimeStart"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/select_time"
-                android:inputType="time" />
+                android:layout_height="40dp"
+                android:text="@string/select_time"
+                android:textAlignment="center"
+                android:textSize="20sp" />
 
             <Space
                 android:layout_width="match_parent"
@@ -129,13 +133,13 @@
                 android:layout_height="wrap_content"
                 android:headerBackground="@color/colorPrimary" />
 
-            <EditText
+            <TextView
                 android:id="@+id/selectTimeEnd"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/select_time"
-                android:inputType="time" />
+                android:layout_height="40dp"
+                android:text="@string/select_time"
+                android:textAlignment="center"
+                android:textSize="20sp" />
 
             <Space
                 android:layout_width="match_parent"

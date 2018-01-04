@@ -63,6 +63,7 @@
                 android:id="@+id/tags"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
                 android:paddingTop="20dp"
                 android:text="@string/tags"
                 android:textColor="@color/colorPrimary"
@@ -77,10 +78,33 @@
                 android:layout_marginStart="100dp"
                 android:text="@string/check_tags" />
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="21dp" />
+
+            <EditText
+                android:id="@+id/selectedTag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="80dp"
+                android:layout_marginStart="80dp"
+                android:ems="10"
+                android:hint="@string/select_tag"
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/deleteButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="100dp"
+                android:layout_marginStart="100dp"
+                android:text="@string/delete" />
+
             <TextView
                 android:id="@+id/add_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="@string/add_tag"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -90,6 +114,8 @@
                 android:id="@+id/adress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="0dp"
                 android:ems="10"
                 android:hint="@string/postal_address"
@@ -99,6 +125,8 @@
                 android:id="@+id/tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="0dp"
                 android:ems="10"
                 android:hint="@string/tag_hint"
@@ -117,6 +145,7 @@
                 android:id="@+id/FAQ"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="@string/faq"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -126,6 +155,7 @@
                 android:id="@+id/FAQ1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="@string/faq1" />
 
         </LinearLayout>

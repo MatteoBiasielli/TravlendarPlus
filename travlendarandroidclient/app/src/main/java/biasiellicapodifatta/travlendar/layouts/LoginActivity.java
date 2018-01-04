@@ -3,6 +3,10 @@ package biasiellicapodifatta.travlendar.layouts;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -322,6 +326,28 @@ public class LoginActivity extends AppCompatActivity {
         int IS_PRIMARY = 1;
     }*/
 
+    private void showLoginError(){
+        DialogFragment df = new LoginError();
+        df.show(getFragmentManager(), "login_error");
+    }
+
+    public static class LoginError extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Login error").
+                    setMessage("An unexpected error occurred. Please try again in a while.")
+                    .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //Close pop-up
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
     /**
      * Represents an asynchronous login task used to authenticate
      * the user.
@@ -363,8 +389,8 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask = null;
             showProgress(false);
 
-            if(response.equals(null)){
-                //TODO add pop-up
+            if(response == null){
+                showLoginError();
                 return;
             }
 
@@ -387,10 +413,10 @@ public class LoginActivity extends AppCompatActivity {
                     mUsernameView.requestFocus();
                     break;
                 case LOGIN_CONNECTION_ERROR:
-                    //TODO add behaviour
+                    showLoginError();
                     break;
                 default:
-                    //TODO add behaviour
+                    showLoginError();
                     break;
             }
         }

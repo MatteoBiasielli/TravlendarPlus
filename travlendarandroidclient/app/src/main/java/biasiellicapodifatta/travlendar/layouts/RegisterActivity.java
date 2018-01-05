@@ -202,7 +202,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
         // Check for a valid username.
         if (!isUsernameValid(username)) {
-            mUsernameView.setError("Username must contain only lower-case ans/or upper-case letters.");
+            mUsernameView.setError("Username must contain only lower-case and/or upper-case letters.");
             focusView = mUsernameView;
             cancel = true;
         }
@@ -357,8 +357,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             }catch(IOException e){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
-                Intent intentx = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intentx);
             }
 
             return response;
@@ -372,8 +370,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             if(response == null){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
-                Intent intentx = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intentx);
                 return;
             }
 
@@ -381,8 +377,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 case OK:
                     DialogFragment success = new Registered();
                     success.show(getFragmentManager(), "registered");
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent);
                     break;
                 case REGISTER_USERNAME_ERROR:
                     mUsernameView.setError(response.getType().getMessage());
@@ -399,8 +393,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 default:
                     DialogFragment unexp = new UnexpectedError();
                     unexp.show(getFragmentManager(), "unexp-err");
-                    Intent intentx = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intentx);
                     break;
             }
         }
@@ -421,7 +413,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            //back to calendar
                         }
                     });
 
@@ -438,7 +429,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            //back to calendar
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                            //back to login
                         }
                     });
 

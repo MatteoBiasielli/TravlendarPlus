@@ -139,4 +139,6 @@
     <string name="select_tag">Select tag...</string>
     <string name="update">update</string>
     <string name="delete">delete</string>
+    <string name="update_act">Update activity:</string>
+    <string name="info">If (start/end) day changes, please re-insert also the (start/end) time.</string>
 </resources>

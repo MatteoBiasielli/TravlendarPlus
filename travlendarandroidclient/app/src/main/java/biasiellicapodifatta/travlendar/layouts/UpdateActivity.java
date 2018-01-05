@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import biasiellicapodifatta.travlendar.R;
 import biasiellicapodifatta.travlendar.data.Data;
@@ -41,9 +42,11 @@ import biasiellicapodifatta.travlendar.response.responseupdateactivity.ResponseU
 
 public class UpdateActivity extends AppCompatActivity {
 
+    //task reference
     private UpdateActivityTask mUpdateTask = null;
     private DeleteActivityTask mDeleteTask = null;
 
+    //auxiliary fields
     private int mNewStartHour;
     private int mNewStartMin;
     private int mNewEndHour;
@@ -52,6 +55,7 @@ public class UpdateActivity extends AppCompatActivity {
     private static String selectedStartTag = "";
     private static String selectedEndTag = "";
     private static Boolean deletion = false;
+    private Activity currActivity;
 
     //UI references
     private TextView mHead;
@@ -64,8 +68,8 @@ public class UpdateActivity extends AppCompatActivity {
     private static EditText mStartTag;
     private static EditText mEndTag;
 
-    private EditText mTimeStart;
-    private EditText mTimeEnd;
+    private TextView mTimeStart;
+    private TextView mTimeEnd;
 
     private View mUpdateFormView;
     private View mProgressView;
@@ -86,37 +90,37 @@ public class UpdateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update);
 
         Intent intent = getIntent();
-        mHead = findViewById(R.id.head);
-        //TODO: settare nome attività
-        mHead.setText("Update activity "+intent.getStringExtra("activityName"));
-
-        Activity tmp = null;
+        currActivity = null;
         for(FixedActivity a : Data.getUser().getCalendar().getFixedActivities())
-            if(a.getLabel().equals(intent.getStringExtra("activityName"))) {
-                tmp = a;
+            if(Integer.toString(a.getKey()).equals(intent.getStringExtra("activityID"))) {
+                currActivity = a;
                 break;
             }
 
-        if(tmp == null){
-            for(Break b : Data.getUser().getCalendar().getBreaks())
-                if(b.getLabel().equals(intent.getStringExtra("activityName"))) {
-                    tmp = b;
+        if(currActivity == null) {
+            for (Break b : Data.getUser().getCalendar().getBreaks())
+                if (Integer.toString(b.getKey()).equals(intent.getStringExtra("activityID"))) {
+                    currActivity = b;
                     break;
                 }
         }
 
+        mHead = findViewById(R.id.head);
+        mHead.setText(currActivity.getLabel());
+
         mNewStartPosition = findViewById(R.id.start_position_form);
-        mNewStartPosition.setText(tmp.getStartPlaceAddress());
+        mNewStartPosition.setText(currActivity.getStartPlaceAddress());
 
         mNewEndPosition = findViewById(R.id.destination_position_form);
-        mNewEndPosition.setText(tmp.getLocationAddress());
+        mNewEndPosition.setText(currActivity.getLocationAddress());
 
         mNewDuration = findViewById(R.id.duration_form);
-        mNewDuration.setText(""+tmp.getDuration());
+        mNewDuration.setText(Long.toString(currActivity.getDuration()));
 
         mTimeStart = findViewById(R.id.selectTimeStart);
-        //TODO:testare
-        mTimeStart.setText(new SimpleDateFormat("HH:mm", Locale.ITALY).format(tmp.getStartDate()));
+        mTimeStart.setText(new SimpleDateFormat("HH:mm").format(currActivity.getStartDate()));
+        mNewStartHour = Integer.parseInt(new SimpleDateFormat("HH").format(currActivity.getStartDate()));
+        mNewStartMin = Integer.parseInt(new SimpleDateFormat("mm").format(currActivity.getStartDate()));
         mTimeStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,7 +133,10 @@ public class UpdateActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinutes) {
                         mNewStartHour = selectedHour;
                         mNewStartMin = selectedMinutes;
-                        mTimeStart.setText(selectedHour + ":" + selectedMinutes);
+                        if(selectedMinutes==0)
+                            mTimeStart.setText("Start time: "+selectedHour + ":00");
+                        else
+                            mTimeStart.setText("Start time: "+selectedHour + ":" + selectedMinutes);
                     }
                 }, hour, minute, true);
                 mTimePicker.setTitle("Select time");
@@ -138,8 +145,9 @@ public class UpdateActivity extends AppCompatActivity {
         });
 
         mTimeEnd = findViewById(R.id.selectTimeEnd);
-        //TODO: testare
-        mTimeEnd.setText(new SimpleDateFormat("HH:mm", Locale.ITALY).format(tmp.getEndDate()));
+        mTimeEnd.setText(new SimpleDateFormat("HH:mm").format(currActivity.getEndDate()));
+        mNewEndHour = Integer.parseInt(new SimpleDateFormat("HH").format(currActivity.getEndDate()));
+        mNewEndMin = Integer.parseInt(new SimpleDateFormat("mm").format(currActivity.getEndDate()));
         mTimeEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,7 +160,10 @@ public class UpdateActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinutes) {
                         mNewEndHour = selectedHour;
                         mNewEndMin = selectedMinutes;
-                        mTimeEnd.setText(selectedHour + ":" + selectedMinutes);
+                        if(selectedMinutes==0)
+                            mTimeEnd.setText("Start time: "+selectedHour + ":" + "00");
+                        else
+                            mTimeEnd.setText("Start time: "+selectedHour + ":" + selectedMinutes);
                     }
                 }, hour, minute, true);
                 mTimePicker.setTitle("Select time");
@@ -179,8 +190,12 @@ public class UpdateActivity extends AppCompatActivity {
         });
 
         mDatePickerStart = findViewById(R.id.datePicker_start);
-
+        Calendar c = Calendar.getInstance();
+        c.setTime(currActivity.getStartDate());
+        mDatePickerStart.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), null);
         mDatePickerEnd = findViewById(R.id.datePicker_end);
+        c.setTime(currActivity.getEndDate());
+        mDatePickerEnd.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), null);
 
         Button updateButton = findViewById(R.id.update_button);
         updateButton.setOnClickListener(new View.OnClickListener() {
@@ -203,23 +218,18 @@ public class UpdateActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment confirm = new DeletionConfirmation();
-                confirm.show(getFragmentManager(), "confirmation");
-                if(deletion)
-                    attemptDelete();
-
-                deletion = false;
+                attemptDelete();
             }
         });
 
-        mFlexibleSwitch = (Switch) findViewById(R.id.flex_switch);
-        mFlexibleSwitch.setChecked(tmp.isFlexible());
+        mFlexibleSwitch = findViewById(R.id.flex_switch);
+        mFlexibleSwitch.setChecked(currActivity.isFlexible());
 
         mNewNotes = findViewById(R.id.notes_form);
-        mNewNotes.setText(tmp.getNotes());
+        mNewNotes.setText(currActivity.getNotes());
 
-        mProgressView = findViewById(R.id.progressBar);
-        mUpdateFormView = findViewById(R.id.new_act_view);
+        mProgressView = findViewById(R.id.progressBar2);
+        mUpdateFormView = findViewById(R.id.scrollView2);
     }
 
     /**
@@ -274,8 +284,7 @@ public class UpdateActivity extends AppCompatActivity {
         mStartTag.setError(null);
         mEndTag.setError(null);
 
-        Intent intent = getIntent();
-        String act_name = intent.getStringExtra("activityName");
+        String act_name = currActivity.getLabel();
         String start_pos = mNewStartPosition.getText().toString();
         String end_pos = mNewEndPosition.getText().toString();
         String start_tag = selectedStartTag;
@@ -304,7 +313,7 @@ public class UpdateActivity extends AppCompatActivity {
         }
 
         Calendar start_calendar = Calendar.getInstance();
-        start_calendar.set(mDatePickerStart.getYear(), mDatePickerStart.getMonth(), mDatePickerStart.getDayOfMonth(), start_hour,     start_min, 0);
+        start_calendar.set(mDatePickerStart.getYear(), mDatePickerStart.getMonth(), mDatePickerStart.getDayOfMonth(), start_hour-1, start_min, 0);
 
         int end_hour =  mNewEndHour;
         int end_min =  0;
@@ -322,12 +331,34 @@ public class UpdateActivity extends AppCompatActivity {
         }
 
         Calendar end_calendar = Calendar.getInstance();
-        end_calendar.set(mDatePickerEnd.getYear(), mDatePickerEnd.getMonth(), mDatePickerEnd.getDayOfMonth(), end_hour, end_min, 0);
+        end_calendar.set(mDatePickerEnd.getYear(), mDatePickerEnd.getMonth(), mDatePickerEnd.getDayOfMonth(), end_hour-1, end_min, 0);
 
         boolean cancel = false;
         View focusView = null;
 
-        //TODO: controlli
+        if(!isDateValid(start_calendar.getTimeInMillis())){
+            mNewNotes.setError("This activity begins in the past.");
+            focusView = mHead;
+            cancel = true;
+        }
+
+        if(!isDateValid(end_calendar.getTimeInMillis())){
+            mNewNotes.setError("This activity ends in the past.");
+            focusView = mHead;
+            cancel = true;
+        }
+
+        if(!isDateConsistent(start_calendar.getTimeInMillis(), end_calendar.getTimeInMillis())){
+            mNewNotes.setError("This activity start date is after its end date.");
+            focusView = mHead;
+            cancel = true;
+        }
+
+        if(!isNotesValid(notes)){
+            mNewNotes.setError("Too long notes field.");
+            focusView = mNewNotes;
+            cancel = true;
+        }
 
         if(cancel){
             //if one or more errors occur, focus the error view on the first error occured
@@ -336,10 +367,39 @@ public class UpdateActivity extends AppCompatActivity {
             //show a progress bar,
             showProgress(true);
             mUpdateTask = new UpdateActivityTask(Data.getUser().getUsername(), Data.getUser().getPassword(),
-                    act_name, notes, start_pos, end_pos, start_calendar.getTime(), end_calendar.getTime(), mFlexibleSwitch.isChecked(), duration, start_tag, end_tag);
+                    act_name, notes, start_pos, end_pos, start_calendar.getTime(), end_calendar.getTime(),
+                        mFlexibleSwitch.isChecked(), duration, start_tag, end_tag, currActivity.getKey());
             // ip address set by the login screen
             mUpdateTask.execute((Void)null);
         }
+    }
+
+    /**
+     * Support method to check if the {@param date} is in the past w.r.t. the moment the addition
+     * is requested.
+     * @return : true if the date is not in the past
+     */
+    private boolean isDateValid(Long date){
+        Date tmp = new Date(date);
+        return tmp.after(new Date());
+    }
+
+    /**
+     * Support method to check if the {@param end} is in the past w.r.t. the {@param start}, or viceversa.
+     * @return : true if the date is not in the past
+     */
+    private boolean isDateConsistent(Long start, Long end){
+        Date date1 = new Date(start);
+        Date date2 = new Date(end);
+        return date2.after(date1);
+    }
+
+    /**
+     * Support method to check if the {@param notes} field is longer than a threshold.
+     * @return : true if the notes are not longer than the threshold.
+     */
+    private boolean isNotesValid(String notes){
+        return notes.length() <= 100;
     }
 
     /**
@@ -347,8 +407,8 @@ public class UpdateActivity extends AppCompatActivity {
      * connecting to the server
      */
     private void attemptDelete(){
-        Intent intent = getIntent();
-        mDeleteTask = new DeleteActivityTask(Data.getUser().getUsername(), Data.getUser().getPassword(), intent.getStringExtra("activityName"));
+        showProgress(true);
+        mDeleteTask = new DeleteActivityTask(Data.getUser().getUsername(), Data.getUser().getPassword(), currActivity.getLabel(), currActivity.getKey());
         mDeleteTask.execute((Void)null);
     }
 
@@ -374,7 +434,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         UpdateActivityTask(String username, String password, String actName, String notes, String startPos,
                            String endPos, Date startDate, Date endDate, Boolean isFlexible, String duration,
-                           String startTag, String endTag){
+                           String startTag, String endTag, Integer ID){
 
             locUsername = username;
             locPassword = password;
@@ -388,28 +448,7 @@ public class UpdateActivity extends AppCompatActivity {
             locDuration = duration;
             locStartTag = startTag;
             locEndTag = endTag;
-            Integer id = null;
-            for(FixedActivity a : Data.getUser().getCalendar().getFixedActivities())
-                if(a.getLabel().equals(locName)) {
-                    id = a.getKey();
-                    break;
-                }
-
-            if(id == null){
-                for(Break b : Data.getUser().getCalendar().getBreaks())
-                    if(b.getLabel().equals(locName)) {
-                        id = b.getKey();
-                        break;
-                    }
-            }
-            try {
-                actID = id;
-            }catch(NullPointerException e){
-                DialogFragment unexp = new UnexpectedError();
-                unexp.show(getFragmentManager(), "unexp-err");
-                Intent intent = new Intent(UpdateActivity.this, MainTabContainer.class);
-                startActivity(intent);
-            }
+            actID = ID;
 
         }
 
@@ -422,8 +461,6 @@ public class UpdateActivity extends AppCompatActivity {
             }catch (IOException e){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
-                Intent intent = new Intent(UpdateActivity.this, MainTabContainer.class);
-                startActivity(intent);
             }
 
             return response;
@@ -438,8 +475,6 @@ public class UpdateActivity extends AppCompatActivity {
             if(response == null){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
-                Intent intentx = new Intent(UpdateActivity.this, MainTabContainer.class);
-                startActivity(intentx);
                 return;
             }
 
@@ -450,8 +485,6 @@ public class UpdateActivity extends AppCompatActivity {
 
                     DialogFragment pop_up = new ActivityUpdated();
                     pop_up.show(getFragmentManager(), "updated");
-                    Intent intent = new Intent(UpdateActivity.this, MainTabContainer.class);
-                    startActivity(intent);
                     break;
                 case OK_ESTIMATED_TIME:
                     //update local calendar
@@ -459,14 +492,10 @@ public class UpdateActivity extends AppCompatActivity {
 
                     DialogFragment pop_up_warning = new UpdatedWithCondition();
                     pop_up_warning.show(getFragmentManager(), "warning");
-                    Intent intent2 = new Intent(UpdateActivity.this, MainTabContainer.class);
-                    startActivity(intent2);
                     break;
                 case UPDATE_ACTIVITY_LOGIN_ERROR:
                     DialogFragment login_error = new LoginError();
                     login_error.show(getFragmentManager(), "login-error");
-                    Intent intent3 = new Intent(UpdateActivity.this, LoginActivity.class);
-                    startActivity(intent3);
                     break;
                 case UPDATE_ACTIVITY_WRONG_INPUT:
                     DialogFragment wrong_input = new WrongInput();
@@ -479,16 +508,18 @@ public class UpdateActivity extends AppCompatActivity {
                 case UPDATE_ACTIVITY_OVERLAPPING_ERROR:
                     DialogFragment overlap = new Overlap();
                     overlap.show(getFragmentManager(), "overlap");
+                    mNewNotes.setError(response.getType().getMessage());
+                    mNewNotes.requestFocus();
                     break;
                 case UPDATE_ACTIVITY_PAST_INSERTION:
                     DialogFragment past = new Past();
                     past.show(getFragmentManager(), "past-act");
+                    mNewNotes.setError(response.getType().getMessage());
+                    mNewNotes.requestFocus();
                     break;
                 default:
                     DialogFragment unexp = new UnexpectedError();
                     unexp.show(getFragmentManager(), "unexp-err");
-                    Intent intentx = new Intent(UpdateActivity.this, MainTabContainer.class);
-                    startActivity(intentx);
                     break;
             }
         }
@@ -510,33 +541,11 @@ public class UpdateActivity extends AppCompatActivity {
         private String actID;
         private ResponseDeleteActivity response;
 
-        DeleteActivityTask(String user, String pass, String name){
+        DeleteActivityTask(String user, String pass, String name, Integer ID){
 
             username = user;
             password = pass;
-
-            Integer id = null;
-            for(FixedActivity a : Data.getUser().getCalendar().getFixedActivities())
-                if(a.getLabel().equals(name)) {
-                    id = a.getKey();
-                    break;
-                }
-
-            if(id == null){
-                for(Break b : Data.getUser().getCalendar().getBreaks())
-                    if(b.getLabel().equals(name)) {
-                        id = b.getKey();
-                        break;
-                    }
-            }
-            try {
-                actID = ""+id;
-            }catch(NullPointerException e){
-                DialogFragment unexp = new UnexpectedError();
-                unexp.show(getFragmentManager(), "unexp-err");
-                Intent intent = new Intent(UpdateActivity.this, MainTabContainer.class);
-                startActivity(intent);
-            }
+            actID = Integer.toString(ID);
         }
 
         @Override
@@ -547,8 +556,6 @@ public class UpdateActivity extends AppCompatActivity {
             }catch (IOException e){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
-                Intent intent = new Intent(UpdateActivity.this, MainTabContainer.class);
-                startActivity(intent);
             }
 
             return response;
@@ -563,8 +570,6 @@ public class UpdateActivity extends AppCompatActivity {
             if(response == null){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
-                Intent intentx = new Intent(UpdateActivity.this, MainTabContainer.class);
-                startActivity(intentx);
                 return;
             }
 
@@ -575,14 +580,10 @@ public class UpdateActivity extends AppCompatActivity {
 
                     DialogFragment pop_up = new ActivityDeleted();
                     pop_up.show(getFragmentManager(), "deleted");
-                    Intent intent = new Intent(UpdateActivity.this, MainTabContainer.class);
-                    startActivity(intent);
                     break;
                 case DELETE_ACTIVITY_LOGIN_ERROR:
                     DialogFragment login_error = new LoginError();
                     login_error.show(getFragmentManager(), "login-error");
-                    Intent intent3 = new Intent(UpdateActivity.this, LoginActivity.class);
-                    startActivity(intent3);
                     break;
                 case DELETE_ACTIVITY_WRONG_INPUT:
                     DialogFragment wrong_input = new WrongInput();
@@ -595,8 +596,6 @@ public class UpdateActivity extends AppCompatActivity {
                 default:
                     DialogFragment unexp = new UnexpectedError();
                     unexp.show(getFragmentManager(), "unexp-err");
-                    Intent intentx = new Intent(UpdateActivity.this, MainTabContainer.class);
-                    startActivity(intentx);
                     break;
             }
         }
@@ -614,6 +613,8 @@ public class UpdateActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
                             //back to tab container
                         }
                     });
@@ -634,6 +635,8 @@ public class UpdateActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
                             //back to tab container
                         }
                     });
@@ -658,6 +661,8 @@ public class UpdateActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
                             //back to tab container
                         }
                     });
@@ -678,6 +683,8 @@ public class UpdateActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
                             //back to login screen
                         }
                     });
@@ -778,6 +785,8 @@ public class UpdateActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
                             //back to calendar
                         }
                     });
@@ -794,7 +803,7 @@ public class UpdateActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("WARNING")
-                    .setMessage("By clicking 'Delete' the selected activity will be permanently delete from your calendar")
+                    .setMessage("By clicking 'Delete' the selected activity will be permanently deleted from your calendar")
                     .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {

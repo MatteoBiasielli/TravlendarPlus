@@ -66,4 +66,7 @@ public class User {
         public ArrayList<Notification> getNotifications() {
 		return this.notifications;
 	}
+        public void setNotifications(ArrayList<Notification> notif){
+		this.notifications = notif;
+	}
 }

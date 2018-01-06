@@ -6,12 +6,24 @@ package travlendardesktopclient;
  * and open the template in the editor.
  */
 
+import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.MapReadyListener;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.InfoWindow;
+import com.lynden.gmapsfx.javascript.object.InfoWindowOptions;
+import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
+import com.lynden.gmapsfx.javascript.object.Marker;
+import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -26,6 +38,9 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.TilePane;
+import javafx.stage.Stage;
 import travlendardesktopclient.data.Data;
 import travlendardesktopclient.data.activities.Activity;
 import travlendardesktopclient.data.activities.Break;
@@ -47,6 +62,10 @@ import travlendardesktopclient.network.deleterangedpreferenceresponse.ResponseDe
 import travlendardesktopclient.network.deleterangedpreferenceresponse.ResponseDeleteRangedPreferencesType;
 import travlendardesktopclient.network.deletetagresponse.ResponseDeleteTag;
 import travlendardesktopclient.network.deletetagresponse.ResponseDeleteTagType;
+import travlendardesktopclient.network.retrievenotificationsresponse.ResponseRetrieveNotifications;
+import travlendardesktopclient.network.retrievenotificationsresponse.ResponseRetrieveNotificationsType;
+import travlendardesktopclient.network.updateactivityresponse.ResponseUpdateActivity;
+import travlendardesktopclient.network.updateactivityresponse.ResponseUpdateActivityType;
 import travlendardesktopclient.network.updatebooleanpreferencesresponse.ResponseUpdateBooleanPreferences;
 import travlendardesktopclient.network.updatebooleanpreferencesresponse.ResponseUpdateBooleanPreferencesType;
 import travlendardesktopclient.network.updaterangedpreferencesresponse.ResponseUpdateRangedPreferences;
@@ -57,7 +76,9 @@ import travlendardesktopclient.network.updaterangedpreferencesresponse.ResponseU
  *
  * @author matteo
  */
-public class MainWindowController implements Initializable {
+public class MainWindowController implements Initializable,MapComponentInitializedListener {
+    private UpdateNotificationsThread notifThread;
+    private Stage thisStage;
     private ArrayList<Activity> selectedDayActivities;
     private int totActivitiesForSelectedDay=0;
     private int actualActivity=0;
@@ -197,8 +218,10 @@ public class MainWindowController implements Initializable {
     private ComboBox actUpdateEndMinute;
     @FXML
     private DatePicker actUpdateDatePicker;
+    @FXML
+    private GoogleMapView maps;
     
-    
+    private GoogleMap map;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -206,20 +229,125 @@ public class MainWindowController implements Initializable {
         this.actNewStartHour.getItems().addAll("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24");
         this.actNewEndMinute.getItems().addAll("00","15","30","45");
         this.actNewStartMinute.getItems().addAll("00","15","30","45");
+        this.actUpdateEndHour.getItems().addAll("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24");
+        this.actUpdateStartHour.getItems().addAll("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24");
+        this.actUpdateEndMinute.getItems().addAll("00","15","30","45");
+        this.actUpdateStartMinute.getItems().addAll("00","15","30","45");
         this.actNewDuration.setDisable(true);
+        /*TilePane dayPane=(TilePane) this.thisStage.getScene().lookup("#day");
+        for(int i=0;i<4;i++){
+            dayPane.getChildren().add(new TableView());
+        }*/
+        
+    }
+    public void startNotificationThread(){
+        this.notifThread=new UpdateNotificationsThread(this);
+        this.notifThread.start();
     }    
     @FXML
     public void init(){
         
+    }
+    /*public void initializeDayOverview(){
+        TilePane dayPane=(TilePane) this.thisStage.getScene().lookup("#1000");
+        for(int i=0;i<4;i++){
+            TableView toAdd=new TableView();
+            dayPane.getChildren().add(toAdd);
+        }
+    }*/
+    public void initMap(){
+        maps.addMapInitializedListener(this);
+        //maps.addMapReadyListener(this);
+    }
+    @Override
+    public void mapInitialized() {
+        maps.addMapInitializedListener(this);
+        MapOptions mapOptions = new MapOptions();
+        
+        mapOptions.center(new LatLong(45.4800783,9.2472984))
+                .mapType(MapTypeIdEnum.ROADMAP)
+                .overviewMapControl(false)
+                .panControl(false)
+                .rotateControl(false)
+                .scaleControl(false)
+                .zoomControl(false)
+                .zoom(12).clickableIcons(false);
+        map = maps.createMap(mapOptions,false);
+        MarkerOptions mOpt=new MarkerOptions();
+        InfoWindowOptions infoWindowOptions = new InfoWindowOptions();
+        infoWindowOptions.content("Casa Mia");
+        InfoWindow myHouse = new InfoWindow(infoWindowOptions);
+        mOpt.position(new LatLong(45.4800783,9.2472984));
+        Marker myMarker=new Marker(mOpt);
+        map.addMarker(myMarker);
+        myHouse.open(map,myMarker );
+    }
+
+    public void setStage(Stage s){
+        this.thisStage=s;
+    }
+    public void onUpdateActivity(){
+        try{
+            String l=this.actUpdateLabel.getText();
+            String n=this.actUpdateNotes.getText()==null?"":this.actUpdateNotes.getText();
+            String startAddr=this.actUpdateStart.getText()==null?"":this.actUpdateStart.getText();
+            String startAddrTag=this.actUpdateStartTag.getValue()==null?"":((FavouritePosition)this.actUpdateStartTag.getValue()).getTag();
+            String locationAddr=this.actUpdateLocation.getText()==null?"":this.actUpdateLocation.getText();
+            String locationAddrTag=this.actUpdateLocationTag.getValue()==null?"":((FavouritePosition)this.actUpdateLocationTag.getValue()).getTag();
+            Boolean flexible=this.actUpdateBreak.isSelected();
+            String duration="0";
+            if(flexible)
+                duration=this.actUpdateDuration.getValue()==null?"":(String)this.actUpdateDuration.getValue();
+            Integer startMinute=Integer.parseInt((String)this.actUpdateStartMinute.getValue());
+            Integer startHour=Integer.parseInt((String)this.actUpdateStartHour.getValue());
+            Integer endMinute=Integer.parseInt((String)this.actUpdateEndMinute.getValue());
+            Integer endHour=Integer.parseInt((String)this.actUpdateEndHour.getValue());
+            Date startDate=this.localDateToDate(this.actUpdateStartDatePicker.getValue());
+            Date endDate=this.localDateToDate(this.actUpdateEndDatePicker.getValue());
+            int id=this.selectedDayActivitiesUpdate.get(this.actualActivityUpdate).getKey();
+            startDate.setHours(startHour);
+            startDate.setMinutes(startMinute);
+            endDate.setHours(endHour);
+            endDate.setMinutes(endMinute);
+            if(l==null || "".equals(l) || "".equals(duration)){
+                showAlert("Invalid Input Data");
+                return;
+            }
+            if("".equals(startAddr) && "".equals(startAddrTag) || "".equals(locationAddrTag) && "".equals(locationAddr)){
+                showAlert("Invalid Input Data");
+                return;
+            }    
+            ResponseUpdateActivity rua=NetworkLayer.updateActivityRequest(Data.getUser().getUsername(), Data.getUser().getPassword(), l, n, locationAddr, locationAddrTag, startAddr, startAddrTag, flexible, duration, startDate, endDate,id);
+            if(rua.getType()==ResponseUpdateActivityType.OK){
+                String text="Actvity updated correctly.";
+                if(rua.getNotification()!=ResponseAddActivityNotification.NO)
+                    text=text+"\n"+rua.getNotification().getMessage();
+                Data.getUser().setCalendar(rua.getU().getCalendar());
+                this.onDateSelect();
+                showAlert(text);
+            }else if(rua.getType()==ResponseUpdateActivityType.OK_ESTIMATED_TIME){
+                String text=rua.getType().getMessage();
+                if(rua.getNotification()!=ResponseAddActivityNotification.NO)
+                    text=text+"\n"+rua.getNotification().getMessage();
+                Data.getUser().setCalendar(rua.getU().getCalendar());
+                this.onDateSelect();
+                showAlert(text);
+            }else
+               showAlert(rua.getType().getMessage()); 
+        }catch(NumberFormatException|NullPointerException e){
+            showAlert("Invalid Input Data");
+        }catch(IOException e){
+            showAlert("Check your internet connection.");
+        }
     }
     public void onAddActivity(){
         try{
             String l=this.actNewLabel.getText();
             String n=this.actNewNotes.getText()==null?"":this.actNewNotes.getText();
             String startAddr=this.actNewStart.getText()==null?"":this.actNewStart.getText();
-            String startAddrTag=this.actNewStartTag.getValue()==null?"":(String)this.actNewStartTag.getValue();
+            String startAddrTag=this.actNewStartTag.getValue()==null?"":((FavouritePosition)this.actNewStartTag.getValue()).getTag();
             String locationAddr=this.actNewLocation.getText()==null?"":this.actNewLocation.getText();
-            String locationAddrTag=this.actNewLocationTag.getValue()==null?"":(String)this.actNewLocationTag.getValue();
+            String locationAddrTag=this.actNewLocationTag.getValue()==null?"":((FavouritePosition)this.actNewLocationTag.getValue()).getTag();
             Boolean flexible=this.actNewBreak.isSelected();
             String duration="0";
             if(flexible)
@@ -365,6 +493,24 @@ public class MainWindowController implements Initializable {
             this.selectedDayActivitiesUpdate.sort(null);
             Activity a=this.selectedDayActivitiesUpdate.get(0);
             this.setUpdateArea(a.getLabel(), a.getNotes(), a.getLocationAddress(), a.getStartPlaceAddress(), a.isFlexible(), Long.toString(a.getDuration()), a.getStartDate(), a.getEndDate());
+        }
+    }
+    public void onNextActivityUpdate(){
+        if(this.selectedDayActivitiesUpdate!=null && !this.selectedDayActivitiesUpdate.isEmpty()){
+            if(this.actualActivityUpdate+1<this.totActivitiesForSelectedDayUpdate){
+                Activity a=this.selectedDayActivitiesUpdate.get(this.actualActivityUpdate+1);
+                this.setUpdateArea(a.getLabel(), a.getNotes(), a.getLocationAddress(), a.getStartPlaceAddress(), a.isFlexible(), Long.toString(a.getDuration()), a.getStartDate(), a.getEndDate());
+                this.actualActivityUpdate++;
+            }   
+        }
+    }
+    public void onPreviousActivityUpdate(){
+        if(this.selectedDayActivitiesUpdate!=null && !this.selectedDayActivitiesUpdate.isEmpty()){
+            if(this.actualActivityUpdate-1>=0){
+                Activity a=this.selectedDayActivitiesUpdate.get(this.actualActivityUpdate-1);
+                this.setUpdateArea(a.getLabel(), a.getNotes(), a.getLocationAddress(), a.getStartPlaceAddress(), a.isFlexible(), Long.toString(a.getDuration()), a.getStartDate(), a.getEndDate());
+                this.actualActivityUpdate--;
+            }   
         }
     }
     public void onSelectTag(){
@@ -531,8 +677,31 @@ public class MainWindowController implements Initializable {
             this.selectedDayActivities.sort(null);
             Activity a=this.selectedDayActivities.get(0);
             this.setActivityLabels(a.getLabel(), a.getNotes(), a.getLocationAddress(), a.getStartPlaceAddress(), a.isFlexible(), a.getDuration(), a.getStartDate(), a.getEndDate());
+            this.setDayOverview();
         }
     }
+    public void setDayOverview(){
+        //((TilePane dayPane=(TilePane) this.thisStage.getScene().lookup("#day");
+        /*Label night=new Label("Night:");
+        dayPane.getChildren().add(night);
+        TilePane nightPane= new TilePane();
+        nightPane.setOrientation(Orientation.HORIZONTAL);
+        dayPane.getChildren().add(nightPane);
+        for(Activity a:this.selectedDayActivities){
+            int sHour=a.getStartDate().getHours();
+            int sMin=a.getStartDate().getMinutes();
+            int eHour=a.getEndDate().getHours();
+            int eMin=a.getEndDate().getMinutes();
+            String l=a.getLabel();
+            if(sHour>=0 && sHour<7){
+                
+            }
+            else
+                break;
+        }*/
+        //initializeDayOverview();
+    }
+    
     public void onNextAct(){
         if(this.selectedDayActivities!=null && !this.selectedDayActivities.isEmpty()){
             if(this.actualActivity+1<this.totActivitiesForSelectedDay){
@@ -597,6 +766,15 @@ public class MainWindowController implements Initializable {
     public void update(){
         updateTags();
         updatePreferences();
+        //updateNotifications();
+    }
+    protected void updateNotifications(){
+        TilePane notPane=(TilePane) this.thisStage.getScene().lookup("#101");
+        Label title= (Label) this.thisStage.getScene().lookup("#102");
+        notPane.getChildren().clear();
+        notPane.getChildren().add(title);
+        for(int i=0;i<Data.getUser().getNotifications().size();i++)
+            notPane.getChildren().add(new Label(this.setNewLines(50,Data.getUser().getNotifications().get(i).toString())));
     }
     private void updateTags(){
         ArrayList<FavouritePosition> favPos=Data.getUser().getFavPositions();
@@ -604,6 +782,8 @@ public class MainWindowController implements Initializable {
         chosenTag.setItems(list);
         this.actNewLocationTag.setItems(list);
         this.actNewStartTag.setItems(list);
+        this.actUpdateLocationTag.setItems(list);
+        this.actUpdateStartTag.setItems(list);
         selectedTagAddress.setText("");
     }
     private void updatePreferences(){
@@ -709,5 +889,51 @@ public class MainWindowController implements Initializable {
             actUpdateDuration.setValue(null);
         else
             actUpdateDuration.setValue(duration);
+    }
+
+    void stopNotificationThread() {
+        if(this.notifThread!=null)
+            this.notifThread.stop();
+    }
+
+    
+
+    
+    
+}
+
+class UpdateNotificationsThread extends Thread{
+    MainWindowController thisControll;
+    private final long ONE_MINUTE=60*1000;
+    UpdateNotificationsThread(MainWindowController thisControll){
+        this.thisControll=thisControll;
+    }
+    @Override
+    public void run(){
+        while(true){
+            try{
+                ResponseRetrieveNotifications rrn=NetworkLayer.retrieveNotificationsRequest(Data.getUser().getUsername(), Data.getUser().getPassword());
+                if(rrn.getType()==ResponseRetrieveNotificationsType.OK){
+                    Data.getUser().setNotifications(rrn.getNotifications());
+                    Platform.runLater(new UpdateNotificationsTask(thisControll));
+                }
+                sleep(ONE_MINUTE);
+            }catch(IOException e){
+
+            }catch(InterruptedException e){
+                break;
+            }
+        }
+    }
+}
+
+class UpdateNotificationsTask implements Runnable{
+    MainWindowController thisControll;
+    UpdateNotificationsTask(MainWindowController thisControll){
+        this.thisControll=thisControll;
+    }
+    @Override
+    public void run() {
+        thisControll.updateNotifications();
     }
 }

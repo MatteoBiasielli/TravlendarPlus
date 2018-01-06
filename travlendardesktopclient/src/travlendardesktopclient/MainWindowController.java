@@ -248,19 +248,20 @@ public class MainWindowController implements Initializable,MapComponentInitializ
     public void init(){
         
     }
-    public void initializeDayOverview(){
+    /*public void initializeDayOverview(){
         TilePane dayPane=(TilePane) this.thisStage.getScene().lookup("#1000");
         for(int i=0;i<4;i++){
             TableView toAdd=new TableView();
             dayPane.getChildren().add(toAdd);
         }
-    }
+    }*/
     public void initMap(){
         maps.addMapInitializedListener(this);
         //maps.addMapReadyListener(this);
     }
     @Override
     public void mapInitialized() {
+        maps.addMapInitializedListener(this);
         MapOptions mapOptions = new MapOptions();
         
         mapOptions.center(new LatLong(45.4800783,9.2472984))
@@ -698,7 +699,7 @@ public class MainWindowController implements Initializable,MapComponentInitializ
             else
                 break;
         }*/
-        initializeDayOverview();
+        //initializeDayOverview();
     }
     
     public void onNextAct(){

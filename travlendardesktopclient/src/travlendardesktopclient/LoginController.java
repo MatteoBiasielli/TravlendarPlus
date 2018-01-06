@@ -25,7 +25,6 @@ import travlendardesktopclient.network.loginresponse.ResponseLogin;
 import travlendardesktopclient.network.loginresponse.ResponseLoginType;
 import travlendardesktopclient.network.registerresponse.ResponseRegister;
 import travlendardesktopclient.network.registerresponse.ResponseRegisterType;
-import org.slf4j.LoggerFactory;
 
 
 /**

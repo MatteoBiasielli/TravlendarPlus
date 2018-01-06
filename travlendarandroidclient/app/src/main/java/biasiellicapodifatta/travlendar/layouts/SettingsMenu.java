@@ -10,17 +10,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -65,14 +61,14 @@ public class SettingsMenu extends AppCompatActivity {
             allTags.add(Data.getUser().getFavPositions().get(i).getTag());
         }
 
-        usernameFieldView = findViewById(R.id.username_field);
+        usernameFieldView = findViewById(R.id.username_field2);
         usernameFieldView.setText(Data.getUser().getUsername());
 
-        addressField = findViewById(R.id.adress);
+        addressField = findViewById(R.id.adress2);
 
-        tagField = findViewById(R.id.tag);
+        tagField = findViewById(R.id.tag2);
 
-        selectTagField = findViewById(R.id.selectedTag);
+        selectTagField = findViewById(R.id.selectedTag2);
         selectTagField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +77,7 @@ public class SettingsMenu extends AppCompatActivity {
             }
         });
 
-        Button deleteButton = findViewById(R.id.deleteButton);
+        Button deleteButton = findViewById(R.id.deleteButton2);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,7 +89,7 @@ public class SettingsMenu extends AppCompatActivity {
             }
         });
 
-        Button addButton = findViewById(R.id.addButton);
+        Button addButton = findViewById(R.id.addButton2);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,6 +100,7 @@ public class SettingsMenu extends AppCompatActivity {
         mListView = findViewById(R.id.list_view);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, allTags);
         mListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         progressView = findViewById(R.id.progressBar);
 

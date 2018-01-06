@@ -36,6 +36,7 @@
                 android:id="@+id/head"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/new_act"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
@@ -213,6 +214,13 @@
                 android:inputType="text|textMultiLine"
                 android:textAlignment="textStart" />
 
+            <TextView
+                android:id="@+id/warning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/info_new_activity" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="43dp" />
@@ -235,9 +243,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100dp"
                 android:layout_marginRight="100dp"
-                android:backgroundTint="?attr/colorError"
+                android:backgroundTint="?attr/colorButtonNormal"
                 android:text="@string/cancel"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
                 android:textStyle="bold" />
 
             <Space

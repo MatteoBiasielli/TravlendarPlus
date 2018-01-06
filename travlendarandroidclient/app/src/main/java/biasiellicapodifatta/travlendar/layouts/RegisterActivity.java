@@ -69,8 +69,10 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     private View mProgressView;
     private View mRegisterFormView;
 
-   //Class invoked at start to set up the register form
-    @Override
+    /**
+     * Initialize UI components and its listeners by retrieving their id-s
+     * @param savedInstanceState
+     */    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
@@ -117,6 +119,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         mProgressView = findViewById(R.id.register_progress);
     }
 
+    /**
+     * Auto-generated method by Android
+     */
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -125,6 +130,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         getLoaderManager().initLoader(0, null, this);
     }
 
+    /**
+     * Auto-generated method by Android
+     */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -228,18 +236,39 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         }
     }
 
+    /**
+     * Support method used to check if the username provided by the user is a single string of just upper and/or lower cases
+     * @param username
+     * @return
+     */
     private boolean isUsernameValid(String username) {
         return username.matches("([a-z]|[A-Z])+");
     }
 
+    /**
+     * Support method used to check if the password chosen by the user is a single string of just upper and/or lower cases
+     * @param password
+     * @return
+     */
     private boolean isPasswordValid(String password) {
         return password.matches("([a-z]|[A-Z])+");
     }
 
+    /**
+     * Support method used to check if the confirmation password is equals to the password of the first field
+     * @param password
+     * @param password_two
+     * @return
+     */
     private boolean passwordsMatch(String password, String password_two){
         return password.equals(password_two);
     }
 
+    /**
+     * Support method use to check if the IP address provided is a well-formed IP address.
+     * @param ip
+     * @return
+     */
     private boolean isIPValid(String ip){
         return ip.matches("^[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}$");
     }
@@ -280,6 +309,12 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         }
     }
 
+    /**
+     * Auto-generated method by Android
+     * @param i
+     * @param bundle
+     * @return
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -297,6 +332,11 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
+    /**
+     * Auto-generated method by Android
+     * @param cursorLoader
+     * @param cursor
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
@@ -309,11 +349,19 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         addEmailsToAutoComplete(emails);
     }
 
+    /**
+     * Auto-genereated method by Android
+     * @param cursorLoader
+     */
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
 
+    /**
+     * Auto-generated method by Android
+     * @param emailAddressCollection
+     */
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -323,7 +371,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         mUsernameView.setAdapter(adapter);
     }
 
-
+    /**
+     * Auto-generated method by Android
+     */
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -420,6 +470,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         }
     }
 
+    /**
+     * Dialog to be shown when the registration routine is successful
+     */
     public static class Registered extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){

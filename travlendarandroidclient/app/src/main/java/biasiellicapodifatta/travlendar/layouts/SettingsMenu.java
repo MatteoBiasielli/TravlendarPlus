@@ -35,7 +35,7 @@ public class SettingsMenu extends AppCompatActivity {
     private DeleteTagTask deleteTagTask = null;
 
     //support fields
-    protected static ArrayList<String> allTags = new ArrayList<>();
+    protected static ArrayList<String> allTags;
     protected static String toDelete;
     protected static Boolean deletion = false;
 
@@ -57,6 +57,7 @@ public class SettingsMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_menu);
 
+        allTags = new ArrayList<>();
         for (int i=0; i < Data.getUser().getFavPositions().size(); i++) {
             allTags.add(Data.getUser().getFavPositions().get(i).getTag());
         }

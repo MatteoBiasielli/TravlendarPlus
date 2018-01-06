@@ -23,6 +23,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/travlendar_logo" />
+
+            <ImageView
                 android:id="@+id/image_logo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

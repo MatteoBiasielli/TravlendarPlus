@@ -143,4 +143,5 @@
     <string name="update_act">Update activity:</string>
     <string name="info">If (start/end) day changes, please re-insert also the (start/end) time.</string>
     <string name="info_new_activity">Please notice that in order to enhance server performances and provide you a better user experience, new activities can be added with interval of 15 mins. Feel free to create your activities as you wish, the system will handle this for you, optimizing your schedule.</string>
+    <string name="search_bar_hint">Lookin\' for something?</string>
 </resources>

@@ -132,10 +132,9 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Activity a = (Activity) adapterView.getItemAtPosition(i);
-                        mDescription.setText(a.getKey());
-                        //Intent intent = new Intent(getContext(), UpdateActivity.class);
-                        //intent.putExtra("activityID", selSet.get(i).getKey());
-                        //startActivity(intent);
+                        Intent intent = new Intent(getContext(), UpdateActivity.class);
+                        intent.putExtra("activityID", a.getKey());
+                        startActivity(intent);
                     }
                 });
                 mDescription.setText("Choose an activity to see more details.");

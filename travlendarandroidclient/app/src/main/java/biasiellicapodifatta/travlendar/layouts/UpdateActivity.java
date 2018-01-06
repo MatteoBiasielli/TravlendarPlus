@@ -92,14 +92,14 @@ public class UpdateActivity extends AppCompatActivity {
         Intent intent = getIntent();
         currActivity = null;
         for(FixedActivity a : Data.getUser().getCalendar().getFixedActivities())
-            if(Integer.toString(a.getKey()).equals(intent.getStringExtra("activityID"))) {
+            if(a.getKey() == intent.getIntExtra("activityID", 0)) {
                 currActivity = a;
                 break;
             }
 
         if(currActivity == null) {
             for (Break b : Data.getUser().getCalendar().getBreaks())
-                if (Integer.toString(b.getKey()).equals(intent.getStringExtra("activityID"))) {
+                if (b.getKey() == intent.getIntExtra("activityID", 0)) {
                     currActivity = b;
                     break;
                 }

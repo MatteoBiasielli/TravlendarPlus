@@ -245,12 +245,14 @@ public class SettingsMenu extends AppCompatActivity {
                 case ADD_TAG_LOGIN_ERROR:
                     DialogFragment login = new LoginError();
                     login.show(getFragmentManager(), "login-error");
-                    Intent intent1 = new Intent(SettingsMenu.this, LoginActivity.class);
-                    startActivity(intent1);
                     break;
                 case ADD_TAG_ALREADY_EXISTING:
                     DialogFragment alreadyEx = new ExistingTag();
                     alreadyEx.show(getFragmentManager(), "already-existing-tag");
+                    addressField.setError(response.getType().getMessage());
+                    addressField.requestFocus();
+                    tagField.setError(response.getType().getMessage());
+                    tagField.requestFocus();
                     break;
                 case ADD_TAG_WRONG_INPUT:
                     DialogFragment input = new WrongInput();
@@ -310,6 +312,7 @@ public class SettingsMenu extends AppCompatActivity {
             if(response == null) {
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexpected-error");
+                return;
             }
 
             switch(response.getType()){
@@ -325,8 +328,6 @@ public class SettingsMenu extends AppCompatActivity {
                 case DELETE_TAG_LOGIN_ERROR:
                     DialogFragment login = new LoginError();
                     login.show(getFragmentManager(), "delete-login-err");
-                    Intent intent1 = new Intent(SettingsMenu.this, LoginActivity.class);
-                    startActivity(intent1);
                     break;
                 case DELETE_TAG_WRONG_INPUT:
                     DialogFragment input = new WrongInput();
@@ -424,6 +425,9 @@ public class SettingsMenu extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i){
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
+                            //back to tab container
                         }
                     });
 
@@ -481,6 +485,9 @@ public class SettingsMenu extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i){
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                            //back to login
                         }
                     });
 

@@ -31,16 +31,29 @@
             android:orientation="vertical" >
 
             <TextView
+                android:id="@+id/title"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="200dp"
+                android:layout_marginStart="120dp"
+                android:layout_marginTop="50dp"
+                android:text="@string/update_act"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/head"
                 android:layout_width="111dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="200dp"
                 android:layout_marginStart="150dp"
-                android:layout_marginTop="50dp"
                 android:text="TextView"
                 android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold|italic" />
 
             <Space
                 android:layout_width="match_parent"
@@ -50,6 +63,8 @@
                 android:id="@+id/flex_switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
                 android:text="@string/flexible"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -59,6 +74,7 @@
                 android:id="@+id/duration_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:ems="10"
                 android:hint="@string/duration"
                 android:inputType="number" />
@@ -68,9 +84,26 @@
                 android:layout_height="50dp" />
 
             <TextView
+                android:id="@+id/info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/info"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <TextView
                 android:id="@+id/start_head"
                 android:layout_width="match_parent"
                 android:layout_height="34dp"
+                android:layout_marginStart="10dp"
                 android:text="@string/start_time"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -83,13 +116,13 @@
                 android:layout_marginStart="15dp"
                 android:headerBackground="@color/colorPrimary" />
 
-            <EditText
+            <TextView
                 android:id="@+id/selectTimeStart"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/select_time"
-                android:inputType="time" />
+                android:layout_height="40dp"
+                android:text="@string/select_time"
+                android:textAlignment="center"
+                android:textSize="20sp" />
 
             <Space
                 android:layout_width="match_parent"
@@ -99,6 +132,7 @@
                 android:id="@+id/end_head"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:layout_marginStart="10dp"
                 android:text="@string/end_time"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -111,13 +145,13 @@
                 android:layout_marginStart="15dp"
                 android:headerBackground="@color/colorPrimary" />
 
-            <EditText
+            <TextView
                 android:id="@+id/selectTimeEnd"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/select_time"
-                android:inputType="time" />
+                android:layout_height="40dp"
+                android:text="@string/select_time"
+                android:textAlignment="center"
+                android:textSize="20sp" />
 
             <Space
                 android:layout_width="match_parent"
@@ -127,6 +161,7 @@
                 android:id="@+id/start_position_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="@string/starting_point"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -136,6 +171,7 @@
                 android:id="@+id/start_position_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:ems="10"
                 android:hint="@string/postal_address"
                 android:inputType="textPostalAddress" />
@@ -144,6 +180,7 @@
                 android:id="@+id/start_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:ems="10"
                 android:hint="@string/select_tag"
                 android:inputType="text" />
@@ -152,6 +189,7 @@
                 android:id="@+id/destination_position_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="@string/where"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -161,6 +199,7 @@
                 android:id="@+id/destination_position_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:ems="10"
                 android:hint="@string/postal_address"
                 android:inputType="textPostalAddress" />
@@ -169,6 +208,7 @@
                 android:id="@+id/end_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:ems="10"
                 android:hint="@string/select_tag"
                 android:inputType="text" />
@@ -177,6 +217,7 @@
                 android:id="@+id/notes_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="@string/notes"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -186,6 +227,7 @@
                 android:id="@+id/notes_form"
                 android:layout_width="match_parent"
                 android:layout_height="87dp"
+                android:layout_marginStart="10dp"
                 android:ems="10"
                 android:hint="@string/notes"
                 android:inputType="text|textMultiLine"

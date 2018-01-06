@@ -107,8 +107,6 @@ public class IndicationsScreen extends AppCompatActivity {
             }catch (IOException e){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
-                Intent intent = new Intent(IndicationsScreen.this, MainTabContainer.class);
-                startActivity(intent);
             }
             return response;
         }
@@ -120,8 +118,6 @@ public class IndicationsScreen extends AppCompatActivity {
             if(response == null){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
-                Intent intent = new Intent(IndicationsScreen.this, MainTabContainer.class);
-                startActivity(intent);
             }
 
             switch(response.getType()){
@@ -135,38 +131,26 @@ public class IndicationsScreen extends AppCompatActivity {
                 case TRAVEL_NO_EXISTING_ROUTE:
                     DialogFragment route = new NoRoute();
                     route.show(getFragmentManager(), "no-route");
-                    Intent intent = new Intent(IndicationsScreen.this, MainTabContainer.class);
-                    startActivity(intent);
                     break;
                 case TRAVEL_WRONG_INPUT:
                     DialogFragment wrong_input = new WrongInput();
                     wrong_input.show(getFragmentManager(), "wrong-input");
-                    Intent intent2 = new Intent(IndicationsScreen.this, MainTabContainer.class);
-                    startActivity(intent2);
                     break;
                 case TRAVEL_NO_ACTIVITY:
                     DialogFragment noAct = new NoActivity();
                     noAct.show(getFragmentManager(), "no-activity");
-                    Intent intent6 = new Intent(IndicationsScreen.this, MainTabContainer.class);
-                    startActivity(intent6);
                     break;
                 case TRAVEL_LOGIN_ERROR:
                     DialogFragment login_error = new LoginError();
                     login_error.show(getFragmentManager(), "login-error");
-                    Intent intent3 = new Intent(IndicationsScreen.this, LoginActivity.class);
-                    startActivity(intent3);
                     break;
                 case TRAVEL_CONN_ERROR:
                     DialogFragment conn_error = new ConnectionError();
                     conn_error.show(getFragmentManager(), "conn-error");
-                    Intent intent4 = new Intent(IndicationsScreen.this, MainTabContainer.class);
-                    startActivity(intent4);
                     break;
                 default:
                     DialogFragment unexp = new UnexpectedError();
                     unexp.show(getFragmentManager(), "unexp-err");
-                    Intent intent5 = new Intent(IndicationsScreen.this, MainTabContainer.class);
-                    startActivity(intent5);
                     break;
             }
 
@@ -186,7 +170,9 @@ public class IndicationsScreen extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            //back to calendar
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
+                            //back to tab container
                         }
                     });
 
@@ -206,7 +192,9 @@ public class IndicationsScreen extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            //back to form
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
+                            //back to tab container
                         }
                     });
 
@@ -226,6 +214,8 @@ public class IndicationsScreen extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
                             //back to login screen
                         }
                     });
@@ -246,7 +236,9 @@ public class IndicationsScreen extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            //back to form
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
+                            //back to tab container
                         }
                     });
 
@@ -266,7 +258,9 @@ public class IndicationsScreen extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            //back to form
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
+                            //back to tab container
                         }
                     });
 
@@ -286,7 +280,9 @@ public class IndicationsScreen extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            //back to form
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
+                            //back to tab container
                         }
                     });
 

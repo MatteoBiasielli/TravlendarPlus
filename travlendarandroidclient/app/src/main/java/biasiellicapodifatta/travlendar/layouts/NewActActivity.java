@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -26,6 +27,8 @@ import android.widget.TimePicker;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import biasiellicapodifatta.travlendar.R;
 import biasiellicapodifatta.travlendar.data.Data;
@@ -144,7 +147,7 @@ public class NewActActivity extends AppCompatActivity {
                         mStartHour = selectedHour;
                         mStartMin = selectedMinutes;
                         if(selectedMinutes==0)
-                            mTimeStart.setText("Start time: "+selectedHour + ":" + "00");
+                            mTimeStart.setText("Start time: "+selectedHour + ":00");
                         else
                             mTimeStart.setText("Start time: "+selectedHour + ":" + selectedMinutes);
                     }
@@ -168,7 +171,7 @@ public class NewActActivity extends AppCompatActivity {
                         mEndHour = selectedHour;
                         mEndMin = selectedMinutes;
                         if(selectedMinutes==0)
-                            mTimeEnd.setText("Start time: "+selectedHour + ":" + "00");
+                            mTimeEnd.setText("Start time: "+selectedHour + ":00");
                         else
                             mTimeEnd.setText("Start time: "+selectedHour + ":" + selectedMinutes);
                     }
@@ -273,7 +276,7 @@ public class NewActActivity extends AppCompatActivity {
                         }
 
         Calendar start_calendar = Calendar.getInstance();
-        start_calendar.set(mDatePickerStart.getYear(), mDatePickerStart.getMonth(), mDatePickerStart.getDayOfMonth(), start_hour, start_min, 0);
+        start_calendar.set(mDatePickerStart.getYear(), mDatePickerStart.getMonth(), mDatePickerStart.getDayOfMonth(), start_hour-1, start_min, 0);
 
         int end_hour =  mEndHour;
         int end_min =  0;
@@ -291,7 +294,7 @@ public class NewActActivity extends AppCompatActivity {
                     }
 
         Calendar end_calendar = Calendar.getInstance();
-        end_calendar.set(mDatePickerEnd.getYear(), mDatePickerEnd.getMonth(), mDatePickerEnd.getDayOfMonth(), end_hour, end_min, 0);
+        end_calendar.set(mDatePickerEnd.getYear(), mDatePickerEnd.getMonth(), mDatePickerEnd.getDayOfMonth(), end_hour-1, end_min, 0);
 
         boolean cancel = false;
         View focusView = null;
@@ -459,8 +462,6 @@ public class NewActActivity extends AppCompatActivity {
             }catch (IOException e){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
-                Intent intent = new Intent(NewActActivity.this, MainTabContainer.class);
-                startActivity(intent);
             }
 
             return response;
@@ -474,8 +475,6 @@ public class NewActActivity extends AppCompatActivity {
             if(response == null){
                 DialogFragment unexp = new UnexpectedError();
                 unexp.show(getFragmentManager(), "unexp-err");
-                Intent intentx = new Intent(NewActActivity.this, MainTabContainer.class);
-                startActivity(intentx);
                 return;
             }
 
@@ -486,8 +485,6 @@ public class NewActActivity extends AppCompatActivity {
 
                     DialogFragment pop_up = new ActivityAdded();
                     pop_up.show(getFragmentManager(), "added");
-                    Intent intent = new Intent(NewActActivity.this, MainTabContainer.class);
-                    startActivity(intent);
                     break;
                 case OK_ESTIMATED_TIME:
                     //updated local calendar
@@ -495,14 +492,10 @@ public class NewActActivity extends AppCompatActivity {
 
                     DialogFragment pop_up_warning = new AddedWithCondition();
                     pop_up_warning.show(getFragmentManager(), "warning");
-                    Intent intent2 = new Intent(NewActActivity.this, MainTabContainer.class);
-                    startActivity(intent2);
                     break;
                 case ADD_ACTIVITY_LOGIN_ERROR:
                     DialogFragment login_error = new LoginError();
                     login_error.show(getFragmentManager(), "login-error");
-                    Intent intent3 = new Intent(NewActActivity.this, LoginActivity.class);
-                    startActivity(intent3);
                     break;
                 case ADD_ACTIVITY_WRONG_INPUT:
                     DialogFragment wrong_input = new WrongInput();
@@ -515,6 +508,8 @@ public class NewActActivity extends AppCompatActivity {
                 case ADD_ACTIVITY_OVERLAPPING:
                     DialogFragment overlap = new Overlap();
                     overlap.show(getFragmentManager(), "overlap");
+                    mActivityNameView.setError(response.getType().getMessage());
+                    mActivityNameView.requestFocus();
                     break;
                 case ADD_ACTIVITY_PAST:
                     DialogFragment past = new Past();
@@ -523,8 +518,6 @@ public class NewActActivity extends AppCompatActivity {
                 default:
                     DialogFragment unexp = new UnexpectedError();
                     unexp.show(getFragmentManager(), "unexp-err");
-                    Intent intentx = new Intent(NewActActivity.this, MainTabContainer.class);
-                    startActivity(intentx);
                     break;
             }
         }
@@ -548,6 +541,8 @@ public class NewActActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
                             //back to tab container
                         }
                     });
@@ -572,6 +567,8 @@ public class NewActActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
                             //back to tab container
                         }
                     });
@@ -592,6 +589,8 @@ public class NewActActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
                             //back to login screen
                         }
                     });
@@ -692,6 +691,8 @@ public class NewActActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
+                            startActivity(intent);
                             //back to calendar
                         }
                     });

@@ -54,6 +54,8 @@ public class MainTabContainer extends AppCompatActivity {
         simpleViewPager.setAdapter(adapter);
         // addOnPageChangeListener event change the tab on slide
         simpleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        simpleViewPager.setCurrentItem(calendarTab.getPosition());
     }
 
 }

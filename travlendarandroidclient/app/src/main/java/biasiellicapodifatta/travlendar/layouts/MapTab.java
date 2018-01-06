@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import biasiellicapodifatta.travlendar.R;
@@ -22,6 +24,9 @@ import biasiellicapodifatta.travlendar.R;
  * Created by Emilio on 29/11/2017.
  */
 
+/**
+ * This class represents a tab in which the user can interact with a map.
+ */
 public class MapTab extends Fragment implements OnMapReadyCallback {
     private static final int MIN_ZOOM_LEVEL = 10;
     private GoogleMap map;
@@ -74,7 +79,16 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
     private void setUpMap() {
         LatLng milan = new LatLng(45.465454, 9.186515999999983);
         map.addMarker(new MarkerOptions().position(milan).title("Marker in Milan"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(milan));
+
+        //Constraining view to the area of Milan.
         map.setMinZoomPreference(MIN_ZOOM_LEVEL);
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(new LatLng(45.4088700, 9.1256500));
+        builder.include(new LatLng(45.5332900, 9.2258500));
+        LatLngBounds bounds = builder.build();
+
+        map.setLatLngBoundsForCameraTarget(bounds);
+        map.moveCamera(CameraUpdateFactory.newLatLng(milan));
     }
 }

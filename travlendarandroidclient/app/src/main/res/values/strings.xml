@@ -139,10 +139,7 @@
     <string name="select_tag">Select tag...</string>
     <string name="update">update</string>
     <string name="delete">delete</string>
-<<<<<<< HEAD
     <string name="welcome_message">Just wait a few seconds. You\'ll have many more back thanks to Travlendar+ ;)</string>
-=======
     <string name="update_act">Update activity:</string>
     <string name="info">If (start/end) day changes, please re-insert also the (start/end) time.</string>
->>>>>>> 949acc16430826d6e4a411f89b04d32845c6e04c
 </resources>

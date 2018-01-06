@@ -1,18 +1,20 @@
 package biasiellicapodifatta.travlendar.adapters;
 
-/**
- * Created by Emilio on 29/11/2017.
- */
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import biasiellicapodifatta.travlendar.data.user.preferences.Preference;
 import biasiellicapodifatta.travlendar.layouts.CalendarTab;
 import biasiellicapodifatta.travlendar.layouts.PreferencesTab;
 import biasiellicapodifatta.travlendar.layouts.MapTab;
 
+/**
+ * Created by Emilio on 29/11/2017.
+ */
+
+/**
+ * The objective of this class is to inject the tabs contained in the TabAdapter of the MainTabContainer class.
+ */
 public class TabAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
 
@@ -43,5 +45,4 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return mNumOfTabs;
     }
-
 }

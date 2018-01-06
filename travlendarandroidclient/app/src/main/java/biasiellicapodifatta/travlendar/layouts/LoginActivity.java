@@ -13,17 +13,13 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -36,7 +32,7 @@ import biasiellicapodifatta.travlendar.response.responselogin.ResponseLogin;
 import biasiellicapodifatta.travlendar.response.responselogin.ResponseLoginType;
 
 /**
- * A login screen that offers login via username/password.
+ * This class offers a login screen that manages an authentication procedure via username/password.
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -99,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
+     * If there are form errors (invalid username, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
@@ -215,6 +211,9 @@ public class LoginActivity extends AppCompatActivity {
         df.show(getFragmentManager(), "login_error");
     }
 
+    /**
+     * A dialog shown in case of login errors.
+     */
     public static class LoginError extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){

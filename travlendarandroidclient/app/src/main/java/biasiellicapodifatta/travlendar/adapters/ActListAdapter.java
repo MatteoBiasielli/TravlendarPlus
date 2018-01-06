@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import biasiellicapodifatta.travlendar.R;
@@ -18,6 +17,9 @@ import biasiellicapodifatta.travlendar.data.activities.Activity;
  * Created by Emilio on 02/01/2018.
  */
 
+/**
+ * The objective of this class is to inject the given Activity objects into the ListView of the CalendarTab class.
+ */
 public class ActListAdapter extends ArrayAdapter<Activity>{
 
     public ActListAdapter(Context context, int resource, List<Activity> items) {

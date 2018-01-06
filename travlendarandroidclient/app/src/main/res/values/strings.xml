@@ -132,7 +132,7 @@
     <string name="add_tag_button">add tag</string>
     <string name="check_tags">check</string>
     <string name="faq">FAQ:</string>
-    <string name="faq1">What does Travlendar+ do?</string>
+    <string name="faq1">What does Travlendar+ do? Travlendar helps you to schedule in the better way possible your day.</string>
     <string name="et_def_value">"0"</string>
     <string name="indications">Next activity indications</string>
     <string name="select_time">Select time...</string>
@@ -142,4 +142,5 @@
     <string name="welcome_message">Just wait a few seconds. You\'ll have many more back thanks to Travlendar+ ;)</string>
     <string name="update_act">Update activity:</string>
     <string name="info">If (start/end) day changes, please re-insert also the (start/end) time.</string>
+    <string name="info_new_activity">Please notice that in order to enhance server performances and provide you a better user experience, new activities can be added with interval of 15 mins. Feel free to create your activities as you wish, the system will handle this for you, optimizing your schedule.</string>
 </resources>

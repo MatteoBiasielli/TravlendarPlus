@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -32,13 +34,17 @@ import biasiellicapodifatta.travlendar.response.responsedeletetag.ResponseDelete
 
 public class SettingsMenu extends AppCompatActivity {
 
+    //tasks
     private AddTagTask addTagTask = null;
     private DeleteTagTask deleteTagTask = null;
 
+    //support fields
     protected static ArrayList<String> allTags = new ArrayList<>();
     protected static String toDelete;
     protected static Boolean deletion = false;
 
+    //UI references
+    private ListView mListView;
     private TextView usernameFieldView;
     private EditText addressField;
     private EditText tagField;
@@ -65,15 +71,6 @@ public class SettingsMenu extends AppCompatActivity {
         addressField = findViewById(R.id.adress);
 
         tagField = findViewById(R.id.tag);
-
-        Button checkTags = findViewById(R.id.checkButton);
-        checkTags.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment list = new TagList();
-                list.show(getFragmentManager(), "tag-list");
-            }
-        });
 
         selectTagField = findViewById(R.id.selectedTag);
         selectTagField.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +100,10 @@ public class SettingsMenu extends AppCompatActivity {
                 attemptAddition();
             }
         });
+
+        mListView = findViewById(R.id.list_view);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, allTags);
+        mListView.setAdapter(adapter);
 
         progressView = findViewById(R.id.progressBar);
 
@@ -239,7 +240,6 @@ public class SettingsMenu extends AppCompatActivity {
 
                     DialogFragment success = new AddedTag();
                     success.show(getFragmentManager(), "add-success");
-                    //TODO: aggiornare allTags
                     SettingsMenu.allTags.add(tag);
                     break;
                 case ADD_TAG_LOGIN_ERROR:

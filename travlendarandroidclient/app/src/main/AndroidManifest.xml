@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".layouts.LoginActivity"
+            android:name=".layouts.WelcomeActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,6 +49,7 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity android:name=".layouts.LoginActivity"/>
         <activity android:name=".layouts.RegisterActivity" />
         <activity android:name=".layouts.NewActActivity" />
         <activity android:name=".layouts.SettingsMenu" />

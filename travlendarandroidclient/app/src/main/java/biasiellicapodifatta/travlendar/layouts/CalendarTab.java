@@ -25,12 +25,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.logging.SimpleFormatter;
 
 import biasiellicapodifatta.travlendar.R;
 import biasiellicapodifatta.travlendar.adapters.ActListAdapter;
 import biasiellicapodifatta.travlendar.data.Data;
 import biasiellicapodifatta.travlendar.data.activities.Activity;
+import biasiellicapodifatta.travlendar.data.activities.ActivityStatus;
 import biasiellicapodifatta.travlendar.data.activities.Break;
 import biasiellicapodifatta.travlendar.data.activities.Calendar;
 import biasiellicapodifatta.travlendar.data.activities.FixedActivity;
@@ -43,6 +45,9 @@ import biasiellicapodifatta.travlendar.data.user.User;
 public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetListener{
     User myUser = Data.getUser();
 
+    ArrayList<Activity> actSet;
+    ArrayList<Activity> selSet;
+
     //UI references
     ImageButton mDateButton;
     TableRow mDateRow;
@@ -54,6 +59,8 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        actSet = new ArrayList<>();
+        selSet = new ArrayList<>();
     }
 
     @TargetApi(24)
@@ -77,7 +84,6 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
 
         final DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this.getContext(), this, Integer.parseInt(fields[0]), Integer.parseInt(fields[1])-1, Integer.parseInt(fields[2]));
-        datePickerDialog.
 
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,21 +101,17 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
             }
         });
 
-        ArrayList<Activity> selectedActivities = new ArrayList<>();
+        if(myUser.getCalendar() != null) {
+            actSet.addAll(myUser.getCalendar().getFixedActivities());
+            actSet.addAll(myUser.getCalendar().getBreaks());
 
-        if(myUser.getCalendar() != null){
-            Calendar calendar = myUser.getCalendar();
-            ArrayList<FixedActivity> myFixed = calendar.getFixedActivities();
-            ArrayList<Break> myBreaks = calendar.getBreaks();
-            ArrayList<Activity> myActivities = new ArrayList<>();
-            myActivities.addAll(myFixed);
-            myActivities.addAll(myBreaks);
-            selectedActivities = Activity.getForDate(myActivities, Integer.parseInt(fields[0]), Integer.parseInt(fields[1]), Integer.parseInt(fields[2]));
-            if(!selectedActivities.isEmpty()){
+            selSet = Activity.getForDate(actSet, Integer.parseInt(fields[0]), Integer.parseInt(fields[1]), Integer.parseInt(fields[2]));
+            if(!selSet.isEmpty()){
                 mDescription.setText("Choose an activity to see more details.");
             }
         }
-        if(selectedActivities.isEmpty()){
+
+        if(selSet.isEmpty()){
             mDescription.setText("No activity for today. How lazy! :P");
         }
 
@@ -119,44 +121,34 @@ public class CalendarTab extends Fragment implements DatePickerDialog.OnDateSetL
     @TargetApi(24)
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-        Calendar calendar = myUser.getCalendar();
-        ArrayList<Activity> selectedActivities = new ArrayList<>();
+        if(myUser.getCalendar() != null) {
+            selSet = Activity.getForDate(actSet, i, i1, i2);
 
-        if(calendar != null) {
-            ArrayList<FixedActivity> myFixed = calendar.getFixedActivities();
-            ArrayList<Break> myBreaks = calendar.getBreaks();
-            ArrayList<Activity> myActivities = new ArrayList<>();
-            myActivities.addAll(myFixed);
-            myActivities.addAll(myBreaks);
-            int j;
-            selectedActivities = Activity.getForDate(myActivities, i, i1, i2);
-
-            if(!selectedActivities.isEmpty()) {
-                ActListAdapter adapter = new ActListAdapter(getContext(), R.layout.actlist_layout, selectedActivities);
+            if(!selSet.isEmpty()) {
+                ActListAdapter adapter = new ActListAdapter(getContext(), R.layout.actlist_layout, selSet);
                 mActivityList.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
                 mActivityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        //TODO Show activities info
+                        Intent intent = new Intent(getContext(), UpdateActivity.class);
+                        intent.putExtra("activityID", selSet.get(i).getKey());
+                        startActivity(intent);
                     }
                 });
                 mDescription.setText("Choose an activity to see more details.");
             }
         }
 
-        if(selectedActivities.isEmpty()){
-            ActListAdapter adapter = new ActListAdapter(getContext(), R.layout.actlist_layout, selectedActivities);
+        if(selSet.isEmpty()){
+            ActListAdapter adapter = new ActListAdapter(getContext(), R.layout.actlist_layout, selSet);
             mActivityList.setAdapter(adapter);
-
+            adapter.notifyDataSetChanged();
             mDescription.setText("No activity for today. How lazy! :P");
         }
 
         mDateView.setText(i2 + " " + getMonthFor(i1) + " " + i);
         mDateRow.setGravity(Gravity.CENTER | Gravity.BOTTOM);
-    }
-
-    private void setDescription(String description){
-
     }
 
     private String getMonthFor(int m){

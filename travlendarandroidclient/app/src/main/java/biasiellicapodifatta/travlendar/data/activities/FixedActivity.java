@@ -16,7 +16,7 @@ public class FixedActivity extends Activity{
 	 */
 	public FixedActivity(Date s, Date e,String l, String n, String lA, String sP, ActivityStatus actSt){
 		super(s,e,l,n,lA,sP,actSt);
-                this.estimatedTravelTime=0;
+		this.estimatedTravelTime=0;
 	}
 	/**
 	 * @param fa is the FixedActivity to copy
@@ -31,7 +31,7 @@ public class FixedActivity extends Activity{
 		this.actStatus=fa.actStatus;
 		this.key=fa.key;
 		this.keySet=fa.keySet;
-                this.estimatedTravelTime=fa.estimatedTravelTime;
+		this.estimatedTravelTime=fa.estimatedTravelTime;
 	}
 
 	/**

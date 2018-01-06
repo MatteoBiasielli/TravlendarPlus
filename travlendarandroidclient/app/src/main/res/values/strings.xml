@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Travlendar</string>
+    <string name="app_name">Travlendar+</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -139,4 +139,5 @@
     <string name="select_tag">Select tag...</string>
     <string name="update">update</string>
     <string name="delete">delete</string>
+    <string name="welcome_message">Just wait a few seconds. You\'ll have many more back thanks to Travlendar+ ;)</string>
 </resources>

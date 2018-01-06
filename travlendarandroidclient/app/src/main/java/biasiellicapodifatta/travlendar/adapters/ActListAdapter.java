@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import biasiellicapodifatta.travlendar.R;
@@ -18,10 +19,6 @@ import biasiellicapodifatta.travlendar.data.activities.Activity;
  */
 
 public class ActListAdapter extends ArrayAdapter<Activity>{
-
-    public ActListAdapter(Context context, int textViewResourceId) {
-        super(context, textViewResourceId);
-    }
 
     public ActListAdapter(Context context, int resource, List<Activity> items) {
         super(context, resource, items);
@@ -47,11 +44,13 @@ public class ActListAdapter extends ArrayAdapter<Activity>{
             SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
 
             if (actStartDate != null) {
-                actStartDate.setText(localDateFormat.format(act.getStartDate()));
+                actStartDate.setText(localDateFormat.format(act.getStartDate()) + " -> " + localDateFormat.format(act.getEndDate()));
+                actStartDate.setTextColor(getContext().getResources().getColor(R.color.holo_orange));
             }
 
             if (actLabel != null) {
                 actLabel.setText(act.getLabel());
+                actLabel.setTextColor(getContext().getResources().getColor(R.color.holo_orange));
             }
         }
 

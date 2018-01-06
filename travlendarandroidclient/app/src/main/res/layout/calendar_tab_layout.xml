@@ -54,12 +54,11 @@
 
     <ListView
         android:id="@+id/activities_list"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="318dp"
-        android:layout_marginBottom="28dp"
-        android:layout_marginStart="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/new_act_button"

@@ -219,8 +219,7 @@ public class NewActActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(NewActActivity.this, MainTabContainer.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -541,8 +540,7 @@ public class NewActActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
-                            startActivity(intent);
+                            getActivity().finish();
                             //back to tab container
                         }
                     });
@@ -567,8 +565,7 @@ public class NewActActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
-                            startActivity(intent);
+                            getActivity().finish();
                             //back to tab container
                         }
                     });
@@ -585,13 +582,12 @@ public class NewActActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState){
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Login error").
-                    setMessage("Who are you?!? A problem with your credentials occured, you'll be disconneted.")
+                    setMessage("Who are you?!? A problem with your credentials occurred.")
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(getActivity(), LoginActivity.class);
-                            startActivity(intent);
-                            //back to login screen
+                            getActivity().finish();
+                            //back to tab container
                         }
                     });
 
@@ -691,8 +687,7 @@ public class NewActActivity extends AppCompatActivity {
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(getActivity(), MainTabContainer.class);
-                            startActivity(intent);
+                            getActivity().finish();
                             //back to calendar
                         }
                     });

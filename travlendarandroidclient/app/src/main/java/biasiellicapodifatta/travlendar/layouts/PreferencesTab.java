@@ -40,24 +40,32 @@ import biasiellicapodifatta.travlendar.response.responseupdaterangedpreferences.
  * Created by Emilio on 03/12/2017.
  */
 
+/**
+ * This class represents a tab that let the user change his travel preferences.
+ */
 public class PreferencesTab extends Fragment {
     private User myUser;
+
+    // Running task references.
+    private UpdateBooleanPreferencesTask mBoolUpdTask = null;
+    private UpdateRangedPreferencesTask mRangUpdTask = null;
+    private DeleteRangedPreferencesTask mRangDelTask = null;
+
+    // Results of ranged preferences related tasks.
+    private ArrayList<RangedPreference> rangUpdResult = null;
+    private ArrayList<RangedPreference> rangDelResult = null;
+
+    // Task status parameters.
     private boolean isBoolUpdFinished;
     private boolean isRangUpdFinished;
     private boolean isRangDelFinished;
     private boolean isTaskErrorDetected;
 
-    private UpdateBooleanPreferencesTask mBoolUpdTask = null;
-    private UpdateRangedPreferencesTask mRangUpdTask = null;
-    private DeleteRangedPreferencesTask mRangDelTask = null;
-
-    private ArrayList<RangedPreference> rangUpdResult = null;
-    private ArrayList<RangedPreference> rangDelResult = null;
-
+    // Preferences sets.
     private BooleanPreferencesSet boolSet;
     private ArrayList<RangedPreference> rangSet;
 
-    //UI references
+    // UI references.
     private View mPreferencesFormView;
     private View mProgressView;
     private ArrayList<ImageButton> mModesList;
@@ -86,29 +94,29 @@ public class PreferencesTab extends Fragment {
         mPreferencesFormView = preferencesView.findViewById(R.id.pref_const);
         mProgressView = preferencesView.findViewById(R.id.save_progress);
 
-        //Getting references for modes
+        // Get references for modes.
         mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_1));
         mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_2));
         mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_3));
         mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_4));
 
-        //Getting references for ranged parameters
+        // Get references for ranged parameters.
         mEditTextsList.add((EditText) preferencesView.findViewById(R.id.walking_editText));
         mEditTextsList.add((EditText) preferencesView.findViewById(R.id.biking_editText));
         mEditTextsList.add((EditText) preferencesView.findViewById(R.id.publicTransport_editText));
         mEditTextsList.add((EditText) preferencesView.findViewById(R.id.car_editText));
         mEditTextsList.add((EditText) preferencesView.findViewById(R.id.cost_editText));
 
-        //Getting references for boolean parameters
+        // Get references for boolean parameters.
         mMeansList.add((ImageButton) preferencesView.findViewById(R.id.mean_1));
         mMeansList.add((ImageButton) preferencesView.findViewById(R.id.mean_2));
         mMeansList.add((ImageButton) preferencesView.findViewById(R.id.mean_3));
         mMeansList.add((ImageButton) preferencesView.findViewById(R.id.mean_4));
         mMeansList.add((ImageButton) preferencesView.findViewById(R.id.mean_5));
         mMeansList.add((ImageButton) preferencesView.findViewById(R.id.mean_6));
-        //Getting save button and setting listener
-        mSaveButton = (Button) preferencesView.findViewById(R.id.save_prefs);
 
+        // Get save button and set buttons' listeners.
+        mSaveButton = (Button) preferencesView.findViewById(R.id.save_prefs);
         for(ImageButton b : mModesList){
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -117,7 +125,6 @@ public class PreferencesTab extends Fragment {
                 }
             });
         }
-
         for(ImageButton b : mMeansList){
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -126,7 +133,6 @@ public class PreferencesTab extends Fragment {
                 }
             });
         }
-
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,7 +140,7 @@ public class PreferencesTab extends Fragment {
             }
         });
 
-        //Update view with current data
+        // Update view with current data.
         updateModesView();
         updateEditTextsView();
         updateMeansView();
@@ -142,6 +148,9 @@ public class PreferencesTab extends Fragment {
         return preferencesView;
     }
 
+    /**
+     * Allows to save the user preferences, if needed.
+     */
     private void savePreferences(){
         boolean isBoolUpdDetected = !myUser.getBoolPreferences().equalTo(boolSet);
         boolean isRangUpdDetected = false;
@@ -156,6 +165,7 @@ public class PreferencesTab extends Fragment {
         RangedPreferenceType currType;
         RangedPreference newRang, oldRang;
 
+        // Check for changes since last update.
         for (EditText t : mEditTextsList) {
             switch (t.getId()) {
                 case R.id.walking_editText:
@@ -185,7 +195,7 @@ public class PreferencesTab extends Fragment {
             newRang = new RangedPreference(currType, Integer.parseInt(t.getText().toString()));
             oldRang = newRang.getSameTypeIn(rangSet);
 
-            //newRang is in the old ranged preferences set with a different value, thus add to the set of preferences to save.
+            // newRang is in the old ranged preferences set with a different value, thus add to the set of preferences to save.
             if(oldRang != null && newRang.getValue() != oldRang.getValue()){
                     newRangSet.add(newRang);
                     if(newRang.getValue() == 0){
@@ -196,20 +206,21 @@ public class PreferencesTab extends Fragment {
                     }
             }
 
-            //newRang has a value different from 0 (update ranged request) and is not in the old ranged preferences set,
-            //thus add to the set of preferences to save.
+            // newRang has a value different from 0 (update ranged request) and is not in the old ranged preferences set,
+            // thus add to the set of preferences to save.
             else if(oldRang == null && newRang.getValue() != 0){
                 newRangSet.add(newRang);
                 isRangUpdDetected = true;
             }
         }
 
+        // Check if update is needed.
         if(!isRangUpdDetected && !isBoolUpdDetected && !isRangDelDetected){
             f = new SavePreferencesNotRequiredMessage();
             f.show(getActivity().getFragmentManager(), "savepreferences_notrequired");
         }
         else {
-            //Set tasks to execute. Needed due to synchronization issues.
+            // Set tasks to execute. Needed due to synchronization issues.
             if(isRangUpdDetected){
                 isRangUpdFinished = false;
             }
@@ -230,7 +241,8 @@ public class PreferencesTab extends Fragment {
             }
 
             showProgress(true);
-            //Execute tasks
+
+            // Execute tasks.
             if(isRangUpdDetected) {
                 mRangUpdTask = new UpdateRangedPreferencesTask(newRangSet);
                 mRangUpdTask.execute((Void) null);
@@ -246,6 +258,10 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * Sets the modality of the boolean preferences set depending on which button was pressed.
+     * @param b A view that represents the button that was pressed.
+     */
     private void setModes(View b){
         int mod;
 
@@ -270,6 +286,10 @@ public class PreferencesTab extends Fragment {
         updateModesView();
     }
 
+    /**
+     * Sets the means of the boolean preferences set depending on which button was pressed.
+     * @param b A view that represents the button that was pressed.
+     */
     private void setMeans(View b){
         int ifSelectedResId;
         int ifNotSelectedResId;
@@ -315,6 +335,9 @@ public class PreferencesTab extends Fragment {
         updateButtonImage((ImageButton) b, ifSelectedResId, ifNotSelectedResId);
     }
 
+    /**
+     * Updates the local boolean and ranged preferences sets with the ones contained into the Data class.
+     */
     private void getCurrentData(){
         ArrayList<RangedPreference> myRang = myUser.getRangedPreferences();
         BooleanPreferencesSet myBool = myUser.getBoolPreferences();
@@ -323,18 +346,23 @@ public class PreferencesTab extends Fragment {
         this.boolSet = new BooleanPreferencesSet(myBool);
     }
 
+    /**
+     * Updates the whole preferences view with the updated data received from the tasks.
+     * It's run by every task after its completion.
+     * It only kicks off when the last one is finished.
+     */
     private synchronized void updateView(){
         if(isRangUpdFinished && isBoolUpdFinished && isRangDelFinished){
             DialogFragment f;
 
             mergeRangResults();
 
-            //Show appropriate pop-up
+            // Show appropriate dialog.
             if(!isTaskErrorDetected){
-                //Update data
+                // Update data.
                 getCurrentData();
 
-                //Update view (useless since view's context is automatically saved, but formally correct)
+                // Update view (useless since view's context is automatically saved, but formally correct).
                 updateModesView();
                 updateEditTextsView();
                 updateMeansView();
@@ -349,7 +377,7 @@ public class PreferencesTab extends Fragment {
 
             showProgress(false);
 
-            //Reset task status values
+            // Reset task status parameters.
             isRangUpdFinished = false;
             isBoolUpdFinished = false;
             isRangDelFinished = false;
@@ -357,6 +385,9 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * Updates the modes button accordingly to the values of the corresponding preferences.
+     */
     private void updateModesView(){
         int ifSelectedResId;
         int ifNotSelectedResId;
@@ -394,6 +425,9 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * Updates the ranged preferences edit texts accordingly to the values of the corresponding preferences.
+     */
     private void updateEditTextsView() {
         RangedPreferenceType currType;
         RangedPreference upd;
@@ -426,6 +460,9 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * Updates the means button accordingly to the values of the corresponding preferences.
+     */
     private void updateMeansView(){
         int ifSelectedResId;
         int ifNotSelectedResId;
@@ -472,6 +509,9 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * Updates the button image according to its selection status.
+     */
     private void updateButtonImage(ImageButton b, int ifSelectedResId, int ifNotSelectedResId){
         if (!b.isSelected()) {
             ((ImageButton) b).setImageResource(ifNotSelectedResId);
@@ -481,6 +521,9 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * Puts together the ranged update and ranged deletion results, maintaining the latest data.
+     */
     private void mergeRangResults() {
         if(rangUpdResult != null && rangDelResult != null) {
             myUser.setRangedPreferences(rangUpdResult.size() == rangDelResult.size() ? rangUpdResult : rangDelResult);
@@ -528,6 +571,9 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * A dialog that represents a successful preferences update.
+     */
     public static class SavePreferencesOKMessage extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -545,6 +591,9 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * A dialog that represents a failure in preferences update.
+     */
     public static class SavePreferencesErrorMessage extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -562,6 +611,9 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * A dialog that represents the superfluity of an update request.
+     */
     public static class SavePreferencesNotRequiredMessage extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -579,6 +631,9 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * Represents an asynchronous preferences update task used to update some ranged preferences.
+     */
     public class UpdateRangedPreferencesTask extends AsyncTask<Void, Void, ResponseUpdateRangedPreferences> {
         ArrayList<RangedPreference> rangs;
         ResponseUpdateRangedPreferences response;
@@ -656,6 +711,9 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * Represents an asynchronous preferences update task used to update some boolean preferences.
+     */
     public class UpdateBooleanPreferencesTask extends AsyncTask<Void, Void, ResponseUpdateBooleanPreferences>{
         BooleanPreferencesSet bools;
         ResponseUpdateBooleanPreferences response;
@@ -710,6 +768,9 @@ public class PreferencesTab extends Fragment {
         }
     }
 
+    /**
+     * Represents an asynchronous preferences update task used to delete some ranged preferences.
+     */
     public class DeleteRangedPreferencesTask extends AsyncTask<Void, Void, ResponseDeleteRangedPreferences>{
         ArrayList<RangedPreference> rangs;
         ResponseDeleteRangedPreferences response;

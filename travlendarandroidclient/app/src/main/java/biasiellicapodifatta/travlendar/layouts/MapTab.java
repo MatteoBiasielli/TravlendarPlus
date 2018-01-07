@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,6 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import biasiellicapodifatta.travlendar.R;
@@ -45,7 +45,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap map;
 
-    //UI references
+    // UI references.
     private ImageButton mSearchButton;
     private ImageButton mComputeButton;
     private EditText mSearchBar;
@@ -59,10 +59,12 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mapView = inflater.inflate(R.layout.map_tab_layout, container, false);
 
+        // Get UI references.
         mSearchBar = mapView.findViewById(R.id.search_bar);
         mComputeButton = mapView.findViewById(R.id.compute_button);
         mSearchButton = mapView.findViewById(R.id.search_button);
 
+        // Set listeners.
         mComputeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +72,6 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
                 startActivity(intent);
             }
         });
-
         mSearchButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -84,7 +85,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
                     // Getting a maximum of 3 Address that matches the input text
                     addresses = geocoder.getFromLocationName(g, 3);
                     if (addresses != null && !addresses.equals(""))
-                        search(addresses);
+                        showSearchResult(addresses);
 
                 } catch (Exception e) {
                     DialogFragment fm = new NoResultDialog();
@@ -97,21 +98,50 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
         return mapView;
     }
 
-    protected void search(List<Address> addresses) {
-        Address address = (Address) addresses.get(0);
-        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+    /**
+     * Shows the result of the user search query.
+     * @param addresses A list of addresses that match the previous search.
+     */
+    protected void showSearchResult(List<Address> addresses) {
+        ArrayList<MarkerOptions> markers = new ArrayList<>();
 
-        MarkerOptions markerOptions = new MarkerOptions();
+        // Analyze results.
+        if(addresses.size() >= 1) {
+            LatLng firstLatLng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+            MarkerOptions firstMarkerOptions = new MarkerOptions();
+            firstMarkerOptions.position(firstLatLng);
+            if(isWithinBounds(firstLatLng)) {
+                markers.add(firstMarkerOptions);
+            }
+        }
+        if(addresses.size() >= 2) {
+            LatLng secondLatLng = new LatLng(addresses.get(1).getLatitude(), addresses.get(1).getLongitude());
+            MarkerOptions secondMarkerOptions = new MarkerOptions();
+            secondMarkerOptions.position(secondLatLng);
+            if(isWithinBounds(secondLatLng)) {
+                markers.add(secondMarkerOptions);
+            }
+        }
+        if(addresses.size() == 3) {
+            LatLng thirdLatLng = new LatLng(addresses.get(2).getLatitude(), addresses.get(2).getLongitude());
+            MarkerOptions thirdMarkerOptions = new MarkerOptions();
+            thirdMarkerOptions.position(thirdLatLng);
+            if(isWithinBounds(thirdLatLng)) {
+                markers.add(thirdMarkerOptions);
+            }
+        }
 
-        markerOptions.position(latLng);
-
-        if(isWithinBounds(latLng)) {
+        if(!markers.isEmpty()) {
+            // Add markers to the map and zoom to the first result.
             map.clear();
-            map.addMarker(markerOptions);
-            map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            for(MarkerOptions m : markers) {
+                map.addMarker(m);
+            }
+            map.moveCamera(CameraUpdateFactory.newLatLng(markers.get(0).getPosition()));
             map.animateCamera(CameraUpdateFactory.zoomTo(15));
         }
         else{
+            // Show a warning dialog.
             DialogFragment fm = new NoResultDialog();
             fm.show(getActivity().getFragmentManager(), "no_result");
         }
@@ -144,16 +174,20 @@ public class MapTab extends Fragment implements OnMapReadyCallback {
 
         //Constraining view to the area of Milan.
         map.setMinZoomPreference(MIN_ZOOM_LEVEL);
-
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(new LatLng(LAT_MIN_BOUND, LNG_MAX_BOUND));
         builder.include(new LatLng(LAT_MAX_BOUND, LNG_MIN_BOUND));
         LatLngBounds bounds = builder.build();
-
         map.setLatLngBoundsForCameraTarget(bounds);
+
         map.moveCamera(CameraUpdateFactory.newLatLng(milan));
     }
 
+    /**
+     * Checks that the given place is within the bounds of the interesting portion of the map.
+     * @param place The place to check the position of.
+     * @return true, if the place is within bounds; false, otherwise.
+     */
     private static boolean isWithinBounds(LatLng place){
         if(place.latitude < LAT_MIN_BOUND || place.latitude > LAT_MAX_BOUND || place.longitude < LNG_MIN_BOUND || place.longitude > LNG_MAX_BOUND){
             return false;

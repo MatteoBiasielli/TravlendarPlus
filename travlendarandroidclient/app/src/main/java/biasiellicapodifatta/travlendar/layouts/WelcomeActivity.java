@@ -13,7 +13,7 @@ import biasiellicapodifatta.travlendar.R;
  */
 
 /**
- * The objective of this class is to show a loading screen when Travlendar+ is run.
+ * This class shows a loading screen when Travlendar+ is run.
  */
 public class WelcomeActivity extends AppCompatActivity{
     @Override

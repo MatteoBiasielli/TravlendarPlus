@@ -11,6 +11,9 @@ import android.view.View;
 import biasiellicapodifatta.travlendar.R;
 import biasiellicapodifatta.travlendar.adapters.TabAdapter;
 
+/**
+ * This class represents the activity that will host the tabs of the application.
+ */
 public class MainTabContainer extends AppCompatActivity {
     ViewPager simpleViewPager;
     TabLayout tabLayout;
@@ -21,26 +24,27 @@ public class MainTabContainer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_tab_container_layout);
 
+        // Get UI references.
         simpleViewPager = (ViewPager) findViewById(R.id.simpleViewPager);
         tabLayout = (TabLayout) findViewById(R.id.simpleTabLayout);
         menuButton = (FloatingActionButton) findViewById(R.id.menu_button);
 
-        //Map tab declaration
+        // Map tab declaration.
         TabLayout.Tab mapTab = tabLayout.newTab();
         mapTab.setIcon(android.R.drawable.ic_menu_mapmode);
         tabLayout.addTab(mapTab);
 
-        //Calendar tab declaration
+        // Calendar tab declaration.
         TabLayout.Tab calendarTab = tabLayout.newTab();
         calendarTab.setIcon(android.R.drawable.ic_menu_my_calendar);
         tabLayout.addTab(calendarTab);
 
-        //Preferences tab declaration
+        // Preferences tab declaration.
         TabLayout.Tab preferencesTab = tabLayout.newTab();
         preferencesTab.setIcon(android.R.drawable.ic_menu_edit);
         tabLayout.addTab(preferencesTab);
 
-        //Menu button ini
+        // Set menu button listener.
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,12 +53,15 @@ public class MainTabContainer extends AppCompatActivity {
             }
         });
 
+        // Adapter declaration.
         TabAdapter adapter = new TabAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         simpleViewPager.setAdapter(adapter);
-        // addOnPageChangeListener event change the tab on slide
+
+        // Set listener to change tabs.
         simpleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
+        // Set initial tab.
         simpleViewPager.setCurrentItem(calendarTab.getPosition());
     }
 

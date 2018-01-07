@@ -35,10 +35,6 @@ import biasiellicapodifatta.travlendar.response.responselogin.ResponseLoginType;
  * This class offers a login screen that manages an authentication procedure via username/password.
  */
 public class LoginActivity extends AppCompatActivity {
-
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -70,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // Get button references and set listeners.
         Button mUsernameSignInButton = (Button) findViewById(R.id.username_sign_in_button);
         mUsernameSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -86,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // Get missing UI references.
         mLoginFormView = findViewById(R.id.login_form);
         mRegistrationFormView = findViewById(R.id.username_register_button);
         mProgressView = findViewById(R.id.login_progress);
@@ -153,6 +151,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Launches the registration activity.
+     */
     private void showRegistrationForm() {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
@@ -206,6 +207,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Shows a login error dialog.
+     */
     private void showLoginError(){
         DialogFragment df = new LoginError();
         df.show(getFragmentManager(), "login_error");

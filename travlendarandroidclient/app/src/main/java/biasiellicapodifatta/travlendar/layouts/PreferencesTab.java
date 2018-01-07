@@ -95,10 +95,10 @@ public class PreferencesTab extends Fragment {
         mProgressView = preferencesView.findViewById(R.id.save_progress);
 
         // Get references for modes.
-        mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_1));
-        mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_2));
-        mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_3));
-        mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_4));
+        mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_1)); // Minimize time.
+        mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_2)); // Minimize cost.
+        mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_3)); // Minimize footprint.
+        mModesList.add((ImageButton) preferencesView.findViewById(R.id.mod_4)); // Standard.
 
         // Get references for ranged parameters.
         mEditTextsList.add((EditText) preferencesView.findViewById(R.id.walking_editText));

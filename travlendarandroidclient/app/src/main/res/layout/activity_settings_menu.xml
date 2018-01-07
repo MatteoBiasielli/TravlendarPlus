@@ -9,142 +9,154 @@
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="400dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="89dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="28dp"
         android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/settingsView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imageView3"
+        <LinearLayout
+            android:id="@+id/settingsView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="160dp"
-            android:layout_marginStart="160dp"
-            android:layout_marginTop="20dp"
-            android:background="@android:color/white"
-            android:contentDescription="@string/user_profile"
-            app:srcCompat="@android:drawable/sym_def_app_icon" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/username_field2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginEnd="100dp"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/username"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textSize="18sp"
-            android:textStyle="bold|italic" />
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="160dp"
+                android:layout_marginStart="160dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:contentDescription="@string/user_profile"
+                app:srcCompat="@android:drawable/sym_def_app_icon" />
 
-        <TextView
-            android:id="@+id/tags2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:paddingBottom="5dp"
-            android:text="@string/tags"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/username_field2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="100dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/username"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                android:textStyle="bold|italic" />
 
-        <ListView
-            android:id="@+id/list_view"
-            android:layout_width="match_parent"
-            android:layout_height="85dp"
-            android:layout_marginEnd="100dp"
-            android:layout_marginStart="100dp" />
+            <TextView
+                android:id="@+id/tags2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:paddingBottom="5dp"
+                android:text="@string/tags"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="21dp" />
+            <ListView
+                android:id="@+id/list_view"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:layout_marginEnd="100dp"
+                android:layout_marginStart="100dp" />
 
-        <EditText
-            android:id="@+id/selectedTag2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="80dp"
-            android:layout_marginStart="80dp"
-            android:ems="10"
-            android:hint="@string/select_tag"
-            android:inputType="text" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="21dp" />
 
-        <Button
-            android:id="@+id/deleteButton2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="100dp"
-            android:layout_marginStart="100dp"
-            android:text="@string/delete" />
+            <EditText
+                android:id="@+id/selectedTag2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="80dp"
+                android:layout_marginStart="80dp"
+                android:ems="10"
+                android:hint="@string/select_tag"
+                android:inputType="text" />
 
-        <TextView
-            android:id="@+id/add_tag2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/add_tag"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            <Button
+                android:id="@+id/deleteButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
+                android:layout_marginStart="100dp"
+                android:text="@string/delete" />
 
-        <EditText
-            android:id="@+id/adress2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="0dp"
-            android:ems="10"
-            android:hint="@string/postal_address"
-            android:inputType="textPostalAddress" />
+            <TextView
+                android:id="@+id/add_tag2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/add_tag"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/tag2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="0dp"
-            android:ems="10"
-            android:hint="@string/tag_hint"
-            android:inputType="text" />
+            <EditText
+                android:id="@+id/adress2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="0dp"
+                android:ems="10"
+                android:hint="@string/postal_address"
+                android:inputType="textPostalAddress" />
 
-        <Button
-            android:id="@+id/addButton2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="100dp"
-            android:layout_marginStart="100dp"
-            android:text="@string/add_tag_button"
-            android:textAlignment="center" />
+            <EditText
+                android:id="@+id/tag2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="0dp"
+                android:ems="10"
+                android:hint="@string/tag_hint"
+                android:inputType="text" />
 
-        <TextView
-            android:id="@+id/FAQ2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/faq"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            <Button
+                android:id="@+id/addButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
+                android:layout_marginStart="100dp"
+                android:text="@string/add_tag_button"
+                android:textAlignment="center" />
 
-        <TextView
-            android:id="@+id/FAQ3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:text="@string/faq1" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/FAQ2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/faq"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/FAQ3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/faq1" />
+        </LinearLayout>
+
+    </ScrollView>
+
 </android.support.constraint.ConstraintLayout>

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/save_progress"
+        style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/space"
+        app:layout_constraintStart_toStartOf="@+id/space"
+        app:layout_constraintTop_toBottomOf="@+id/space"
+        tools:visibility="gone" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/pref_const"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="84dp"
+            android:layout_marginTop="48dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="8dp">
+
+            <ImageButton
+                android:id="@+id/mod_1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/minimize_time" />
+
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="match_parent" />
+
+            <ImageButton
+                android:id="@+id/mod_2"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:backgroundTint="@android:color/holo_green_dark"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/minimize_cost" />
+
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="match_parent" />
+
+            <ImageButton
+                android:id="@+id/mod_3"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:backgroundTint="@android:color/holo_green_light"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/minimize_footprint" />
+
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="match_parent" />
+
+            <ImageButton
+                android:id="@+id/mod_4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:backgroundTint="@color/holo_yellow"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/standard" />
+        </TableRow>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="382dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="152dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="0dp">
+
+                <TextView
+                    android:id="@+id/walking_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Maximum\nWalking Time"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="152dp" />
+
+                <TextView
+                    android:id="@+id/biking_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Maximum\nBiking Time"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/publicTransport_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Maximum\nPublic Transport Time"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/car_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Maximum\nCar Time"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/cost_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Maximum\nTravel Cost"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="152dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="191dp">
+
+                <EditText
+                    android:id="@+id/walking_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/et_def_value"
+                    android:inputType="number"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textColorHint="@android:color/holo_orange_dark" />
+
+                <EditText
+                    android:id="@+id/biking_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/et_def_value"
+                    android:inputType="number"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textColorHint="@android:color/holo_orange_dark" />
+
+                <EditText
+                    android:id="@+id/publicTransport_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/et_def_value"
+                    android:inputType="number"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textColorHint="@android:color/holo_orange_dark"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:layout_editor_absoluteY="284dp" />
+
+                <EditText
+                    android:id="@+id/car_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/et_def_value"
+                    android:inputType="number"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textColorHint="@android:color/holo_orange_dark"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:layout_editor_absoluteY="238dp" />
+
+                <EditText
+                    android:id="@+id/cost_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/et_def_value"
+                    android:inputType="number"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textColorHint="@android:color/holo_orange_dark"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:layout_editor_absoluteY="192dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Space
+            android:id="@+id/space2"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <TableRow
+            android:id="@+id/tableRow"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/space2">
+
+            <ImageButton
+                android:id="@+id/mean_1"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/personal_car"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="394dp" />
+
+            <Space android:layout_width="5dp" />
+
+            <ImageButton
+                android:id="@+id/mean_2"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/personal_bike"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="394dp" />
+
+            <Space android:layout_width="5dp" />
+
+            <ImageButton
+                android:id="@+id/mean_3"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/public_transportation"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="394dp" />
+
+            <Space android:layout_width="5dp" />
+
+            <ImageButton
+                android:id="@+id/mean_4"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/car_sharing"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="394dp" />
+
+            <Space android:layout_width="5dp" />
+
+            <ImageButton
+                android:id="@+id/mean_5"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/bike_sharing"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="394dp" />
+
+            <Space android:layout_width="5dp" />
+
+            <ImageButton
+                android:id="@+id/mean_6"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/uber_taxi"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="394dp" />
+
+        </TableRow>
+
+        <Button
+            android:id="@+id/save_prefs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/save_pref"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableRow" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

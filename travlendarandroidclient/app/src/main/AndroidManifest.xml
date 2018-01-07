@@ -22,8 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".layouts.LoginActivity"
-            android:label="@string/title_activity_login">
+            android:name=".layouts.WelcomeActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,10 +44,12 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".layouts.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".layouts.LoginActivity"/>
+        <activity android:name=".layouts.RegisterActivity" />
+        <activity android:name=".layouts.NewActActivity" />
+        <activity android:name=".layouts.SettingsMenu" />
+        <activity android:name=".layouts.IndicationsScreen" />
+        <activity android:name=".layouts.UpdateActivity"></activity>
     </application>
 
 </manifest>

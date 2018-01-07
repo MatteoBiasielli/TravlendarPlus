@@ -1,6 +1,8 @@
 package biasiellicapodifatta.travlendar.data.activities;
 
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -81,4 +83,26 @@ public abstract class Activity implements Comparable{
     public int compareTo(Object o) {
         return this.startDate.compareTo(((Activity)o).startDate);
     }
+
+    public static ArrayList<Activity> getForDate(ArrayList<Activity> allAct, int i, int i1, int i2){
+		SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
+		ArrayList<Activity> result = new ArrayList<>();
+		int currY, currM, currD;
+    	String parsDate;
+    	String[] parsFields;
+
+    	for(Activity a : allAct){
+    		parsDate = fm.format(a.getStartDate());
+    		parsFields = parsDate.split("-", 3);
+    		currY = Integer.parseInt(parsFields[0]);
+    		currM = Integer.parseInt(parsFields[1]);
+    		currD = Integer.parseInt(parsFields[2]);
+
+    		if(currY == i && currM == i1 + 1 && currD == i2){
+    			result.add(a);
+			}
+		}
+
+		return result;
+	}
 }

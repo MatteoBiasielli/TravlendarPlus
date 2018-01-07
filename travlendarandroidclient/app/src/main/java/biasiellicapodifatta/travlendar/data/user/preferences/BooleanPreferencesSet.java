@@ -1,7 +1,5 @@
 package biasiellicapodifatta.travlendar.data.user.preferences;
 
-
-
 public class BooleanPreferencesSet extends Preference{
 	private boolean personalCar;
 	private boolean carSharing;
@@ -11,10 +9,16 @@ public class BooleanPreferencesSet extends Preference{
 	private boolean uberTaxi;
 	private Modality mode;
 	
-        
-        public BooleanPreferencesSet(){
-            super();
+	public BooleanPreferencesSet(){
+		this.personalCar=true;
+		this.carSharing=true;
+		this.personalBike=true;
+		this.bikeSharing=true;
+		this.publicTransport=true;
+		this.uberTaxi=true;
+		this.mode=Modality.MINIMIZE_TIME;
         }
+
 	public BooleanPreferencesSet(boolean pC, boolean cS, boolean pB, boolean bS, boolean pT, boolean uT, Modality m){
 		this.personalCar=pC;
 		this.carSharing=cS;
@@ -23,6 +27,16 @@ public class BooleanPreferencesSet extends Preference{
 		this.publicTransport=pT;
 		this.uberTaxi=uT;
 		this.mode=m;
+	}
+
+	public BooleanPreferencesSet(BooleanPreferencesSet copySet){
+		this.personalCar=copySet.personalCar();
+		this.carSharing=copySet.carSharing();
+		this.personalBike=copySet.personalBike();
+		this.bikeSharing=copySet.bikeSharing();
+		this.publicTransport=copySet.publicTrasport();
+		this.uberTaxi=copySet.uberTaxi();
+		this.mode=copySet.mode();
 	}
 
         
@@ -54,11 +68,25 @@ public class BooleanPreferencesSet extends Preference{
 		return this.mode;
 	}
 
+	/*SETTERS*/
+	public void setPersonalCar(boolean pC){ this.personalCar = pC; }
+	public void setCarSharing(boolean cS){ this.carSharing = cS; }
+	public void setPersonalBike(boolean pB){ this.personalBike = pB; }
+	public void setBikeSharing(boolean bS){ this.bikeSharing = bS; }
+	public void setPublicTransport(boolean pT){ this.publicTransport = pT; }
+	public void setUberTaxi(boolean uT){ this.uberTaxi = uT; }
+	public void setMode(Modality m){ this.mode = m; }
 
-        public boolean isRanged() {
+	public boolean isRanged() {
             return false;
         }
-
-        
-	
+	public boolean equalTo(BooleanPreferencesSet bs){
+		return this.personalCar == bs.personalCar
+				&& this.carSharing == bs.carSharing
+				&& this.personalBike == bs.personalBike
+				&& this.bikeSharing == bs.bikeSharing
+				&& this.publicTransport == bs.publicTransport
+				&& this.uberTaxi == bs.uberTaxi
+				&& this.mode == bs.mode;
+	}
 }

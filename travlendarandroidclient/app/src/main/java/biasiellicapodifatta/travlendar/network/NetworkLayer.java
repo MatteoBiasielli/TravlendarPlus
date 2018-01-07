@@ -23,6 +23,7 @@ import biasiellicapodifatta.travlendar.response.responsedeletetag.ResponseDelete
 import biasiellicapodifatta.travlendar.response.responselogin.ResponseLogin;
 import biasiellicapodifatta.travlendar.response.responseregister.ResponseRegister;
 import biasiellicapodifatta.travlendar.response.responseretrievenotifications.ResponseRetrieveNotifications;
+import biasiellicapodifatta.travlendar.response.responsetravel.ResponseTravel;
 import biasiellicapodifatta.travlendar.response.responseupdateactivity.ResponseUpdateActivity;
 import biasiellicapodifatta.travlendar.response.responseupdatebooleanpreferences.ResponseUpdateBooleanPreferences;
 import biasiellicapodifatta.travlendar.response.responseupdaterangedpreferences.ResponseUpdateRangedPreferences;
@@ -273,5 +274,19 @@ public class NetworkLayer {
         return json;
     }
 
+    public static ResponseTravel travelRequest(String user, String pass) throws IOException{
+        return parseTravel(requestHTTP(travelURLBuilder(user, pass)));
+    }
 
+    private static ResponseTravel parseTravel(String json){
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(json, ResponseTravel.class);
+    }
+
+    private static URL travelURLBuilder(String user, String pass) throws MalformedURLException{
+        String url = urlHead+ip+urlCenter+"travel?";
+        url+="user="+user;
+        url+="&pass="+pass;
+        return new URL(url);
+    }
 }

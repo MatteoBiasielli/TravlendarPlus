@@ -118,7 +118,7 @@ public class UpdateActivity extends AppCompatActivity {
         mNewDuration.setText(Long.toString(currActivity.getDuration()));
 
         mTimeStart = findViewById(R.id.selectTimeStart);
-        mTimeStart.setText(new SimpleDateFormat("HH:mm").format(currActivity.getStartDate()));
+        mTimeStart.setText(new SimpleDateFormat("HH:mm", Locale.ITALY).format(currActivity.getStartDate()));
         mNewStartHour = Integer.parseInt(new SimpleDateFormat("HH").format(currActivity.getStartDate()));
         mNewStartMin = Integer.parseInt(new SimpleDateFormat("mm").format(currActivity.getStartDate()));
         mTimeStart.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +145,7 @@ public class UpdateActivity extends AppCompatActivity {
         });
 
         mTimeEnd = findViewById(R.id.selectTimeEnd);
-        mTimeEnd.setText(new SimpleDateFormat("HH:mm").format(currActivity.getEndDate()));
+        mTimeEnd.setText(new SimpleDateFormat("HH:mm", Locale.ITALY).format(currActivity.getEndDate()));
         mNewEndHour = Integer.parseInt(new SimpleDateFormat("HH").format(currActivity.getEndDate()));
         mNewEndMin = Integer.parseInt(new SimpleDateFormat("mm").format(currActivity.getEndDate()));
         mTimeEnd.setOnClickListener(new View.OnClickListener() {
@@ -161,9 +161,9 @@ public class UpdateActivity extends AppCompatActivity {
                         mNewEndHour = selectedHour;
                         mNewEndMin = selectedMinutes;
                         if(selectedMinutes==0)
-                            mTimeEnd.setText("Start time: "+selectedHour + ":" + "00");
+                            mTimeEnd.setText("End time: "+selectedHour + ":" + "00");
                         else
-                            mTimeEnd.setText("Start time: "+selectedHour + ":" + selectedMinutes);
+                            mTimeEnd.setText("End time: "+selectedHour + ":" + selectedMinutes);
                     }
                 }, hour, minute, true);
                 mTimePicker.setTitle("Select time");
@@ -313,7 +313,7 @@ public class UpdateActivity extends AppCompatActivity {
         }
 
         Calendar start_calendar = Calendar.getInstance();
-        start_calendar.set(mDatePickerStart.getYear(), mDatePickerStart.getMonth(), mDatePickerStart.getDayOfMonth(), start_hour-1, start_min, 0);
+        start_calendar.set(mDatePickerStart.getYear(), mDatePickerStart.getMonth(), mDatePickerStart.getDayOfMonth(), start_hour, start_min, 0);
 
         int end_hour =  mNewEndHour;
         int end_min =  0;
@@ -331,7 +331,7 @@ public class UpdateActivity extends AppCompatActivity {
         }
 
         Calendar end_calendar = Calendar.getInstance();
-        end_calendar.set(mDatePickerEnd.getYear(), mDatePickerEnd.getMonth(), mDatePickerEnd.getDayOfMonth(), end_hour-1, end_min, 0);
+        end_calendar.set(mDatePickerEnd.getYear(), mDatePickerEnd.getMonth(), mDatePickerEnd.getDayOfMonth(), end_hour, end_min, 0);
 
         boolean cancel = false;
         View focusView = null;

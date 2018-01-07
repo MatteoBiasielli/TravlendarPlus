@@ -33,19 +33,20 @@
         tools:layout_editor_absoluteY="0dp">
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="84dp"
             android:layout_marginTop="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="8dp">
 
             <ImageButton
                 android:id="@+id/mod_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:backgroundTint="@android:color/holo_red_light"
-                app:srcCompat="@drawable/common_full_open_on_phone" />
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/minimize_time" />
 
             <Space
                 android:layout_width="5dp"
@@ -53,10 +54,11 @@
 
             <ImageButton
                 android:id="@+id/mod_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:backgroundTint="@android:color/holo_green_dark"
-                app:srcCompat="@drawable/common_full_open_on_phone" />
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/minimize_cost" />
 
             <Space
                 android:layout_width="5dp"
@@ -64,10 +66,11 @@
 
             <ImageButton
                 android:id="@+id/mod_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:backgroundTint="@android:color/holo_green_light"
-                app:srcCompat="@drawable/common_full_open_on_phone" />
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/minimize_footprint" />
 
             <Space
                 android:layout_width="5dp"
@@ -75,10 +78,11 @@
 
             <ImageButton
                 android:id="@+id/mod_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/holo_orange_light"
-                app:srcCompat="@drawable/common_full_open_on_phone" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:backgroundTint="@color/holo_yellow"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/standard" />
         </TableRow>
 
         <LinearLayout
@@ -226,20 +230,19 @@
 
         <TableRow
             android:id="@+id/tableRow"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.517"
-            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center_horizontal"
             app:layout_constraintTop_toBottomOf="@+id/space2">
 
             <ImageButton
                 android:id="@+id/mean_1"
                 android:layout_width="55dp"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:backgroundTint="@android:color/holo_blue_dark"
-                app:srcCompat="@drawable/common_full_open_on_phone"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/personal_car"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="394dp" />
 
@@ -248,9 +251,10 @@
             <ImageButton
                 android:id="@+id/mean_2"
                 android:layout_width="55dp"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:backgroundTint="@android:color/holo_blue_dark"
-                app:srcCompat="@drawable/common_full_open_on_phone"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/personal_bike"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="394dp" />
 
@@ -259,9 +263,10 @@
             <ImageButton
                 android:id="@+id/mean_3"
                 android:layout_width="55dp"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:backgroundTint="@android:color/holo_blue_dark"
-                app:srcCompat="@drawable/common_full_open_on_phone"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/public_transportation"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="394dp" />
 
@@ -270,9 +275,10 @@
             <ImageButton
                 android:id="@+id/mean_4"
                 android:layout_width="55dp"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:backgroundTint="@android:color/holo_blue_dark"
-                app:srcCompat="@drawable/common_full_open_on_phone"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/car_sharing"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="394dp" />
 
@@ -281,9 +287,10 @@
             <ImageButton
                 android:id="@+id/mean_5"
                 android:layout_width="55dp"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:backgroundTint="@android:color/holo_blue_dark"
-                app:srcCompat="@drawable/common_full_open_on_phone"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/bike_sharing"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="394dp" />
 
@@ -292,9 +299,10 @@
             <ImageButton
                 android:id="@+id/mean_6"
                 android:layout_width="55dp"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:backgroundTint="@android:color/holo_blue_dark"
-                app:srcCompat="@drawable/common_full_open_on_phone"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/uber_taxi"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="394dp" />
 

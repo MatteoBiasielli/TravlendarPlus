@@ -7,10 +7,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,6 +141,10 @@ public class PreferencesTab extends Fragment {
                 savePreferences();
             }
         });
+
+        // Set selectors for background tint.
+        setModesSelector();
+        setMeansSelector();
 
         // Update view with current data.
         updateModesView();
@@ -291,48 +297,29 @@ public class PreferencesTab extends Fragment {
      * @param b A view that represents the button that was pressed.
      */
     private void setMeans(View b){
-        int ifSelectedResId;
-        int ifNotSelectedResId;
-
         switch(b.getId()){
             case R.id.mean_1:
                 boolSet.setPersonalBike(!boolSet.personalBike());
-                ifSelectedResId = R.drawable.common_full_open_on_phone;
-                ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                 break;
             case R.id.mean_2:
                 boolSet.setPersonalCar(!boolSet.personalCar());
-                ifSelectedResId = R.drawable.common_full_open_on_phone;
-                ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                 break;
             case R.id.mean_3:
                 boolSet.setPublicTransport(!boolSet.publicTrasport());
-                ifSelectedResId = R.drawable.common_full_open_on_phone;
-                ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                 break;
             case R.id.mean_4:
                 boolSet.setBikeSharing(!boolSet.bikeSharing());
-                ifSelectedResId = R.drawable.common_full_open_on_phone;
-                ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                 break;
             case R.id.mean_5:
                 boolSet.setCarSharing(!boolSet.carSharing());
-                ifSelectedResId = R.drawable.common_full_open_on_phone;
-                ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                 break;
             case R.id.mean_6:
                 boolSet.setUberTaxi(!boolSet.uberTaxi());
-                ifSelectedResId = R.drawable.common_full_open_on_phone;
-                ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                 break;
             default:
-                ifSelectedResId = R.drawable.common_full_open_on_phone;
-                ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                 break;
         }
         b.setSelected(!b.isSelected());
-
-        updateButtonImage((ImageButton) b, ifSelectedResId, ifNotSelectedResId);
     }
 
     /**
@@ -389,39 +376,23 @@ public class PreferencesTab extends Fragment {
      * Updates the modes button accordingly to the values of the corresponding preferences.
      */
     private void updateModesView(){
-        int ifSelectedResId;
-        int ifNotSelectedResId;
-
         for(ImageButton b : mModesList) {
             switch (b.getId()) {
                 case R.id.mod_1:
                     b.setSelected(boolSet.mode().getValue() == 4);
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
                 case R.id.mod_2:
                     b.setSelected(boolSet.mode().getValue() == 3);
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
                 case R.id.mod_3:
                     b.setSelected(boolSet.mode().getValue() == 2);
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
                 case R.id.mod_4:
                     b.setSelected(boolSet.mode().getValue() == 1);
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
                 default:
-                    b.setSelected(boolSet.mode().getValue() == 4);
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
             }
-
-            updateButtonImage(b, ifSelectedResId, ifNotSelectedResId);
         }
     }
 
@@ -464,60 +435,65 @@ public class PreferencesTab extends Fragment {
      * Updates the means button accordingly to the values of the corresponding preferences.
      */
     private void updateMeansView(){
-        int ifSelectedResId;
-        int ifNotSelectedResId;
-
         for(ImageButton b : mMeansList){
             switch(b.getId()){
                 case R.id.mean_1:
                     b.setSelected(boolSet.personalBike());
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
                 case R.id.mean_2:
                     b.setSelected(boolSet.personalCar());
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
                 case R.id.mean_3:
                     b.setSelected(boolSet.publicTrasport());
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
                 case R.id.mean_4:
                     b.setSelected(boolSet.bikeSharing());
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
                 case R.id.mean_5:
                     b.setSelected(boolSet.carSharing());
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
                 case R.id.mean_6:
                     b.setSelected(boolSet.uberTaxi());
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
                 default:
-                    ifSelectedResId = R.drawable.common_full_open_on_phone;
-                    ifNotSelectedResId = R.drawable.common_google_signin_btn_icon_light_normal_background;
                     break;
             }
-
-            updateButtonImage(b, ifSelectedResId, ifNotSelectedResId);
         }
     }
 
     /**
-     * Updates the button image according to its selection status.
+     * Set the modes' selectors so to update their background tint accordingly to their selection state.
      */
-    private void updateButtonImage(ImageButton b, int ifSelectedResId, int ifNotSelectedResId){
-        if (!b.isSelected()) {
-            ((ImageButton) b).setImageResource(ifNotSelectedResId);
+    private void setModesSelector() {
+        int selectorId;
+
+        for (ImageButton b : mModesList) {
+            switch(b.getId()){
+                case R.id.mod_1:
+                    selectorId = R.color.minimize_time_state;
+                    break;
+                case R.id.mod_2:
+                    selectorId = R.color.minimize_cost_state;
+                    break;
+                case R.id.mod_3:
+                    selectorId = R.color.minimize_footprint_state;
+                    break;
+                case R.id.mod_4:
+                    selectorId = R.color.standard_state;
+                    break;
+                default:
+                    selectorId = R.color.minimize_time_state;
+            }
+            b.setBackgroundTintList(getContext().getResources().getColorStateList(selectorId, null));
         }
-        else {
-            ((ImageButton) b).setImageResource(ifSelectedResId);
+    }
+
+    /**
+     * Set the means' selector so to update their background tint accordingly to their selection state.
+     */
+    private void setMeansSelector() {
+        for (ImageButton b : mMeansList) {
+            b.setBackgroundTintList(getContext().getResources().getColorStateList(R.color.mean_state, null));
         }
     }
 

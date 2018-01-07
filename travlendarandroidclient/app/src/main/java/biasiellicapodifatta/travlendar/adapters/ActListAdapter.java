@@ -47,12 +47,12 @@ public class ActListAdapter extends ArrayAdapter<Activity>{
 
             if (actStartDate != null) {
                 actStartDate.setText(localDateFormat.format(act.getStartDate()) + " -> " + localDateFormat.format(act.getEndDate()));
-                actStartDate.setTextColor(getContext().getResources().getColor(R.color.holo_orange));
+                actStartDate.setTextColor(getContext().getResources().getColor(R.color.holo_orange, null));
             }
 
             if (actLabel != null) {
                 actLabel.setText(act.getLabel());
-                actLabel.setTextColor(getContext().getResources().getColor(R.color.holo_orange));
+                actLabel.setTextColor(getContext().getResources().getColor(R.color.holo_orange, null));
             }
         }
 

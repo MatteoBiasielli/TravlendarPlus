@@ -21,9 +21,7 @@ public class WelcomeActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_layout);
 
-        ImageView mTempImage = findViewById(R.id.image_logo);
         ProgressBar mTempBar = findViewById(R.id.welcome_bar);
-
         mTempBar.setIndeterminate(true);
 
         Thread welcomeThread = new Thread() {

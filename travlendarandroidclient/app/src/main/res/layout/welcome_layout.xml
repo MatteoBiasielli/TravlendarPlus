@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:srcCompat="@color/colorPrimaryDark" />
@@ -23,13 +23,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/image_logo"
+                android:layout_width="350dp"
+                android:layout_height="150dp"
                 app:srcCompat="@drawable/travlendar_logo" />
 
             <ImageView
-                android:id="@+id/image_logo"
+                android:id="@+id/image_star"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"

@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
@@ -32,6 +33,7 @@ import java.util.TimerTask;
 
 import biasiellicapodifatta.travlendar.R;
 import biasiellicapodifatta.travlendar.data.Data;
+import biasiellicapodifatta.travlendar.data.user.FavouritePosition;
 import biasiellicapodifatta.travlendar.network.NetworkLayer;
 import biasiellicapodifatta.travlendar.response.responseaddactivity.ResponseAddActivity;
 
@@ -46,7 +48,7 @@ public class NewActActivity extends AppCompatActivity {
     private int mStartMin;
     private int mEndHour;
     private int mEndMin;
-    private static String[] userTags = new String[Data.getUser().getFavPositions().size()];
+    private static String[] userTags;
     private static String selectedStartTag = "";
     private static String selectedEndTag = "";
 
@@ -79,6 +81,7 @@ public class NewActActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_act);
 
+        userTags = new String[Data.getUser().getFavPositions().size()];
         for(int i=0; i < Data.getUser().getFavPositions().size(); i++){
             userTags[i] = Data.getUser().getFavPositions().get(i).getTag();
         }

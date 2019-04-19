@@ -17,9 +17,9 @@ import travlendarplus.travel.*;
 
 public class APIManager {
     /**Our Google API directions key **/
-    private static final String GOOGLE_DIRECTIONS_KEY="AIzaSyD4fwbgFzeyR1QwFAWDkxr9VPhEIu4asb4";
+    private static final String GOOGLE_DIRECTIONS_KEY="REMOVED";
     /**Our Google API geocoding key **/
-    private static final String GOOGLE_GEOCODING_KEY="AIzaSyAwj27Z9huHhxLe1LWW5-gzx8iOcJf78QE";
+    private static final String GOOGLE_GEOCODING_KEY="REMOVED";
 
     /**
      * Public method that masks the http request that is done to the Google Directions service to get the travel options.
